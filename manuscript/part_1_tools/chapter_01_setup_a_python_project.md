@@ -1,4 +1,6 @@
-# Virtual environments
+# Setup a Python Project
+
+## Virtual environments
 
 One of the first things you have to learn as a Python programmer is how to create, manage, and use your virtual environments. A virtual environment is nothing more than a directory (with many subdirectories) that mirrors a Python installation as the one that you can find in your operating system. This is a good way to isolate a specific version of Python and of the packages that are not part of the standard library.
 
@@ -14,7 +16,7 @@ I used to create my virtual environments inside the directory of my Python proje
 
 If you create the virtual environment in the project directory you have to configure your version control and other tools to ignore it. In particular, add it to `.gitignore` if you use Git and to `pytest.ini` if you use the pytest testing framework (like I do in the rest of the book). You can find the documentation about the `.gitignore` file at TODO and the documentation about the configuration of pytest at TODO.
 
-# Python projects with Cookiecutter
+## Python projects with Cookiecutter
 
 Creating a Python project from scratch is not easy. There are many things to configure and manually writing all the files is something I may only if you strongly desire to understand how the Python distribution code works. If you want to focus on your project, instead, you'd better use a template.
 

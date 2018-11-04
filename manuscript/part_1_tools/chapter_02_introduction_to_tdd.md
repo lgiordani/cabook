@@ -1,4 +1,6 @@
-# Introduction
+# Introduction to TDD
+
+## Introduction
 
 "Test-Driven Development" (TDD) is fortunately one of the names that I can spot most frequently when people talk about methodologies. Unfortunately, many programmers still do not follow it, fearing that it will impose a further burden on the already difficult life of the developer.
 
@@ -8,7 +10,7 @@ TDD is a methodology, something that can help you to create better code. But it 
 
 Keep also in mind that testing is a broader concept that doesn't end with TDD. This latter focuses a lot on unit testing, which is a specific type of test that helps you to develop the API of your library/package. There are other types of tests, like integration or functional ones, that are not specifically part of the TDD methodology, strictly speaking, even though the TDD approach can be extended to any testing activity.
 
-# A real-life example
+## A real-life example
 
 Let's start with a simple example taken from a programmer's everyday life.
 
@@ -52,7 +54,7 @@ As you can see there are many things that are tested by this statement. It tests
 
 As we will see with a practical example in the next chapter, what I explained in this section will become a set of rules of the methodology.
 
-# A simple TDD project
+## A simple TDD project
 
 The project we are going to develop is contained in the TODO directory in the book repository.
 
@@ -60,7 +62,7 @@ This project is purposefully extremely simple. You don't need to be an experienc
 
 Methodologies are like sports: you cannot learn them just by reading their description on a book. You have to practice them. Thus, you should avoid as much as possible to just follow this chapter reading the code passively. Instead, you should try to write the code and to try new solutions to the problems that I discuss. This is very important, as it actually makes you use TDD. This way, at the end of the chapter you will have a personal experience of what TDD is like.
 
-# Setup the project
+## Setup the project
 
 Following the instructions that you can find in the first chapter, create a virtual environment for the project, install Cookiecutter, and then create a project using the recommended template. After you created the project, enter the directory and install the requirements with `pip install -r requirements/dev.txt`. You should be able to run
 
@@ -85,13 +87,13 @@ tests/test_calc.py::test_content PASSED
 
 If you use a different template or create the project manually you may need to install pytest explicitly and to properly format the project structure. I strongly recommend to use the template if you are a beginner, as the proper setup can be tricky to achieve.
 
-# Requirements
+## Requirements
 
 The goal of the project is to write a class `Calc` that performs calculations: addition, subtraction, multiplication, and division. Addition and multiplication shall accept multiple arguments. Division shall return a float value, and division by zero shall return the string `"inf"`. Multiplication by zero must raise a `ValueError` exception. The class will also provide a function to compute the average of an iterable like a list. This function gets two optional upper and lower thresholds and should remove from the computation the values that fall outside these boundaries.
 
 As you can see the requirements are pretty simple, and a couple of them are definitely not "good" requirements, like the behaviour of division and multiplication. I added those requirements for the sake of example, to show how to deal with exceptions when developing in TDD.
 
-# Step 1 - Adding two numbers
+## Step 1 - Adding two numbers
 
 The first test we are going to write is one that checks if the `Calc` class can perform an addition. Create the file `tests/test_calc.py` that will contain all the tests and insert this code
 
@@ -287,7 +289,7 @@ I know this sound weird, but think about it: if your code works, for now you don
 
 Run again the test suite to check that no tests fail, after which you can move on to the second step.
 
-# Step 2 - Adding three numbers
+## Step 2 - Adding three numbers
 
 The requirements state that "Addition and multiplication shall accept multiple arguments". This means that we should be able to execute not only `add(4, 5)` like we did, but also `add(4, 5, 11)`, `add(4, 5, 11, 2)`, and so on. We can start testing this behaviour with the following test
 
@@ -367,12 +369,12 @@ def test_add_two_numbers():
     assert res == 9
 
 
-# def test_add_three_numbers():
-#     c = Calc()
+## def test_add_three_numbers():
+##     c = Calc()
 
-#     res = c.add(4, 5, 6)
+##     res = c.add(4, 5, 6)
 
-#     assert res == 15
+##     assert res == 15
 ```
 
 And running the test suite returns only one failure
@@ -425,7 +427,7 @@ class Calc:
 
 This solution makes both tests pass, so the entire suite runs without errors.
 
-# Step 3 - Adding multiple numbers
+## Step 3 - Adding multiple numbers
 
 The requirements are not yet satisfied, however, as they mention "multiple" numbers and not just three. How can we test that we can add a generic amount of numbers? We might add a `test_add_four_numbers`, a `test_add_five_numbers`, and so on, but this will cover specific cases and will never cover all of them. Sad to say, it is impossible to test that generic condition, or, at least in this case, so complex that it is not worth trying to do it.
 
@@ -484,7 +486,7 @@ Part of the TDD methodology, then, deals with "refactoring", which means changin
 
 TDD RULE NUMBER 4 - Write code that passes the test. Then refactor it.
 
-# Step 4 - Subtraction
+## Step 4 - Subtraction
 
 From the requirements we know that we have to implement a function to subtract numbers, but this doesn't mention multiple arguments (as it would be complex to define what subtracting 3 of more numbers actually means). The tests that implements this requirements is
 
@@ -520,7 +522,7 @@ Now that you understood the TDD process, and that you know you should avoid over
 
 which makes the test suite pass.
 
-# Step 5 - Multiplication
+## Step 5 - Multiplication
 
 It's time to move to multiplication, which has many similarities to addition. The requirements state that we have to provide a function to multiply numbers and that this function shall allow us to multiply multiple arguments. In TDD you should try to tackle problems one by one, possibly dividing a bigger requirement in multiple smaller ones.
 
@@ -635,7 +637,7 @@ So, after this considerations, we can be happy that the second test already pass
 
 TDD RULE NUMBER 5 - A test should fail the first time you run it. If it doesn't, ask yourself why you are adding it.
 
-# Step 6 - A first example of refactoring
+## Step 6 - A first example of refactoring
 
 Previously, I introduced the concept of refactoring, which means changing the code without altering the results. How can you be sure you are not altering the behaviour of your code? Well, this is what the tests are for. If the new code keeps passing the test suite you can be sure that you didn't remove any feature.
 
@@ -662,7 +664,7 @@ where I define an anonymous function that accepts two inputs `x, y` and returns 
 
 TDD RULE NUMBER 6 - Never refactor without tests.
 
-# Step 7 - Division
+## Step 7 - Division
 
 The requirements state that there shall be a division function, and that it has to return a float value. This is a simple condition to test, as it is sufficient to divide two numbers that do not give an integer result
 
@@ -744,7 +746,7 @@ and the second one is to intercept the exception with a `try/except` block
 
 Both solutions make the test suite pass, so both are correct. I leave to you the decision about which is the best one, syntactically speaking.
 
-# Step 8 - Testing exceptions
+## Step 8 - Testing exceptions
 
 A further requirement is that multiplication by zero must raise a `ValueError` exception. This means that we need a way to test if our code raises an exception, which is the opposite of what we did until now. In the previous tests, the condition to pass was that there was no exception in the code, while in this test the condition will be that an exception has been raised.
 
@@ -788,7 +790,7 @@ The code that makes the test pass needs to test if one of the inputs of the `mul
 
 and make the test suite pass. The if condition checks that there are no false values in the `args` tuples, that is there are no zeros.
 
-# Step 9 - A more complex set of requirements
+## Step 9 - A more complex set of requirements
 
 Until now the requirements were pretty simple, so it's time to try to tackle a more complex problem. The remaining requirements say that the class has to provide a function to compute the average of an iterable, and that this function shall accepts two optional upper and lower thresholds to remove outliers.
 
@@ -807,7 +809,7 @@ As you can see a simple requirement can produce multiple tests. Some of these ar
 
 There is a fourth category of tests, which are the ones that come from bugs that you discover. We will discuss about those later in this chapter.
 
-# Step 9.1 - Average of an iterable
+## Step 9.1 - Average of an iterable
 
 Let's start adding a test for requirement number 1
 
@@ -844,7 +846,7 @@ class Calc:
         return sum(it)/len(it)
 ```
 
-# Step 9.2 - Upper threshold
+## Step 9.2 - Upper threshold
 
 The second requirement mentions an upper threshold, but we are free with regards to the API, i.e. the requirement doesn't specify how the threshold is supposed to be specified or named. I decided to call the upper threshold parameter `ut`, so the test becomes
 
@@ -887,7 +889,7 @@ There are two problems now that we have to solve, as it happened for the second 
 
 The idea here is that `ut` is used to filter the iterable keeping all the elements that are less than or equal to the threshold. This means that the default value for the threshold has to be neutral with regards to this filtering operation. Using the maximum value of the iterable makes the whole algorithm work in every case, while for example using a big fixed value like `9999` would introduce a bug, as one of the elements of the iterable might be bigger than that value.
 
-# Step 9.3 - Lower threshold
+## Step 9.3 - Lower threshold
 
 The lower threshold is the mirror of the upper threshold, so it doesn't require many explanations. The test is
 
@@ -915,7 +917,7 @@ and the code of the `avg` function now becomes
         return sum(_it)/len(_it)
 ```
 
-# Step 9.4 and 9.5 - Boundary inclusion
+## Step 9.4 and 9.5 - Boundary inclusion
 
 As you can see from the code of the `avg` function, the upper and lower threshold are included in the comparison, so we might consider the requirements as already satisfied. TDD, however, pushes you to write a test for each requirement (as we saw it's not unusual to actually have multiple tests per requirements), and this is what we are going to do. 
 
@@ -945,7 +947,7 @@ def test_avg_lower_threshold_is_included():
 
 And, as expected, both pass without any change in the code.
 
-# Step 9.6 - Empty list
+## Step 9.6 - Empty list
 
 Requirement number 6 is something that wasn't clearly specified in the project description so we decided to return 0 as the average of an empty list. You are free to change the requirement and decide to raise an exception, for example.
 
@@ -1003,7 +1005,7 @@ The `min` function that we used to compute the default lower threshold doesn't w
 
 As you can see the `avg` function is already pretty rich, but at the same time it is well structured and understandable. This obviously happens because the example is trivial, but cleaner code is definitely among the benefits of TDD.
 
-# Step 9.7 - Empty list after applying the thresholds
+## Step 9.7 - Empty list after applying the thresholds
 
 The next requirement deals with the case in which the outlier removal process empties the list. The test is the following
 
@@ -1092,7 +1094,7 @@ After some attempts I found this solution
 
 which looks reasonably clean, and makes the whole test suite pass.
 
-# Step 9.8 - Empty list before applying the thresholds
+## Step 9.8 - Empty list before applying the thresholds
 
 The last requirement checks another boundary case, which happens when the list is empty and we specify one of or both the thresholds. This test will check that the outlier removal code doesn't assume the list contains elements.
 
@@ -1107,7 +1109,7 @@ def test_avg_manages_empty_list_before_outlier_removal():
 
 This test doesn't fail. So, according to the TDD methodology, we should justify the reason why it doesn't fail, and decide if we want to keep it. The reason why it doesn't fail is because the two list comprehensions used to filter the elements work perfectly with empty lists. As for the test, it comes directly from a corner case, and it checks a behaviour which is not already covered by other tests. This makes me decide to keep the test.
 
-# Recap of the TDD rules
+## Recap of the TDD rules
 
 Through this very simple example we learned 6 important rules of the TDD methodology. Let us review them, now that we have some experience that can make the words meaningful
 
@@ -1118,7 +1120,7 @@ Through this very simple example we learned 6 important rules of the TDD methodo
 5. A test should fail the first time you run it. If it doesn't ask yourself why you are adding it.
 6. Never refactor without tests.
 
-# How to manage bugs or missing features
+## How to manage bugs or missing features
 
 In this chapter we developed the project from scratch, so the challenge was to come up with a series of small tests starting from the requirements. At a certain point in the life of your project you will have a stable version in production (Note: this expression has many definitions, but in general it means "used by someone other than you") and you will need to maintain it. This means that people will file bug reports and feature requests, and TDD gives you a clear strategy to deal with those.
 
@@ -1132,6 +1134,6 @@ At this point you can move on and try to change the code. Remember that you shou
 
 Once you reach a point where the test suite passes without errors stop and try to run the code in the environment where the bug was first discovered (for example sharing a branch with the user that created the ticket) and iterate the process.
 
-# Recap
+## Recap
 
 TODO
