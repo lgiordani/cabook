@@ -75,8 +75,9 @@ py.test -svv
 and get an output like
 
 ``` txt
-================================================= test session starts =================================================
-platform linux -- Python 3.6.5, pytest-3.0.7, py-1.5.4, pluggy-0.4.0 -- /home/leo/devel/cabook/venv3/bin/python3
+=============================== test session starts ===============================
+platform linux -- Python 3.6.5, pytest-3.0.7, py-1.5.4, pluggy-0.4.0 --
+/home/leo/devel/cabook/venv3/bin/python3
 cachedir: .cache
 rootdir: /home/leo/devel/cabook/calc, inifile: pytest.ini
 plugins: cov-2.4.0
@@ -84,7 +85,7 @@ collected 1 items
 
 tests/test_calc.py::test_content PASSED
 
-============================================== 1 passed in 0.01 seconds ===============================================
+============================ 1 passed in 0.01 seconds =============================
 ```
 
 If you use a different template or create the project manually you may need to install pytest explicitly and to properly format the project structure. I strongly recommend to use the template if you are a beginner, as the proper setup can be tricky to achieve.
@@ -122,29 +123,32 @@ And this is how pytest works: if your code doesn't raise any exception the test 
 Save the file and go back to the terminal. Execute `py.test -svv` and you should receive the following error message
 
 ``` txt
-================================================= test session starts =================================================
-platform linux -- Python 3.6.5, pytest-3.0.7, py-1.5.4, pluggy-0.4.0 -- /home/leo/devel/cabook/venv3/bin/python3
+=============================== test session starts ===============================
+platform linux -- Python 3.6.5, pytest-3.0.7, py-1.5.4, pluggy-0.4.0 --
+/home/leo/devel/cabook/venv3/bin/python3
 cachedir: .cache
 rootdir: /home/leo/devel/cabook/calc, inifile: pytest.ini
 plugins: cov-2.4.0
 collected 0 items / 1 errors 
 
-======================================================= ERRORS ========================================================
-_________________________________________ ERROR collecting tests/test_calc.py _________________________________________
-ImportError while importing test module '/home/leo/devel/cabook/calc/tests/test_calc.py'.
+===================================== ERRORS ======================================
+_______________________ ERROR collecting tests/test_calc.py _______________________
+ImportError while importing test module
+'/home/leo/devel/cabook/calc/tests/test_calc.py'.
 Hint: make sure your test modules/packages have valid Python names.
 Traceback:
 ../venv3/lib/python3.6/site-packages/_pytest/python.py:418: in _importtestmodule
     mod = self.fspath.pyimport(ensuresyspath=importmode)
 ../venv3/lib/python3.6/site-packages/py/_path/local.py:668: in pyimport
     __import__(modname)
-../venv3/lib/python3.6/site-packages/_pytest/assertion/rewrite.py:216: in load_module
+../venv3/lib/python3.6/site-packages/_pytest/assertion/rewrite.py:216:
+    in load_module
     py.builtin.exec_(co, mod.__dict__)
 tests/test_calc.py:4: in <module>
     from calc.calc import Calc
 E   ImportError: cannot import name 'Calc'
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Interrupted: 1 errors during collection !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-=============================================== 1 error in 0.20 seconds ===============================================
+!!!!!!!!!!!!!!!!!!!!! Interrupted: 1 errors during collection !!!!!!!!!!!!!!!!!!!!!
+============================= 1 error in 0.20 seconds =============================
 ```
 
 No surprise here, actually, as we just tried to use something that doesn't exist. This is good, the test is showing us that something we suppose exists actually doesn't.
@@ -167,7 +171,7 @@ TDD RULE NUMBER 2 - Add the reasonably TODO(-ly?) minimum amount of code you nee
 Run the test again, and this time you should receive a different error, that is
 
 ``` txt
-================================================= test session starts =================================================
+=============================== test session starts ===============================
 platform linux -- Python 3.6.5, pytest-3.0.7, py-1.5.4, pluggy-0.4.0 -- /home/leo/devel/cabook/venv3/bin/python3
 cachedir: .cache
 rootdir: /home/leo/devel/cabook/calc, inifile: pytest.ini
@@ -176,7 +180,7 @@ collected 1 items
 
 tests/test_calc.py::test_add_two_numbers FAILED
 
-====================================================== FAILURES =======================================================
+==================================== FAILURES =====================================
 ________________________________________________ test_add_two_numbers _________________________________________________
 
     def test_add_two_numbers():
@@ -186,13 +190,13 @@ ________________________________________________ test_add_two_numbers __________
 E       AttributeError: 'Calc' object has no attribute 'add'
 
 tests/test_calc.py:10: AttributeError
-============================================== 1 failed in 0.04 seconds ===============================================
+============================ 1 failed in 0.04 seconds =============================
 ```
 
 Since the last one is the first proper pytest failure report that we meet, it's time to learn how to read them. The first lines show you general information about the system where the tests are run
 
 ```txt
-================================================= test session starts =================================================
+=============================== test session starts ===============================
 platform linux -- Python 3.6.5, pytest-3.0.7, py-1.5.4, pluggy-0.4.0 -- /home/leo/devel/cabook/venv3/bin/python3
 cachedir: .cache
 rootdir: /home/leo/devel/cabook/calc, inifile: pytest.ini
@@ -218,7 +222,7 @@ pytest -svv tests/test_calc.py::test_add_two_numbers
 The third part shows details on the failing tests, if any.
 
 ``` txt
-________________________________________________ test_add_two_numbers _________________________________________________
+______________________________ test_add_two_numbers _______________________________
 
     def test_add_two_numbers():
         c = Calc()
@@ -242,7 +246,7 @@ class Calc:
 And again, as you notice, we made the smallest possible addition to the code to pass the test. Running this latter again the error message will be
 
 ```
-________________________________________________ test_add_two_numbers _________________________________________________
+_______________________________ test_add_two_numbers _______________________________
 
     def test_add_two_numbers():
         c = Calc()
@@ -264,7 +268,7 @@ class Calc:
 Run the test again, and you will receive another error
 
 ```
-________________________________________________ test_add_two_numbers _________________________________________________
+______________________________ test_add_two_numbers _______________________________
 
     def test_add_two_numbers():
         c = Calc()
@@ -307,7 +311,7 @@ def test_add_three_numbers():
 This test fails when we run the test suite
 
 ``` txt
-_______________________________________________ test_add_three_numbers ________________________________________________
+_____________________________ test_add_three_numbers ______________________________
 
     def test_add_three_numbers():
 >       assert Calc().add(4, 5, 6) == 15
@@ -329,7 +333,7 @@ class Calc:
 which solves the previous error, but creates a new one. If that wasn't enough, it also makes the first test fail!
 
 ``` txt
-________________________________________________ test_add_two_numbers _________________________________________________
+______________________________ test_add_two_numbers _______________________________
 
     def test_add_two_numbers():
         c = Calc()
@@ -338,7 +342,7 @@ ________________________________________________ test_add_two_numbers __________
 E       TypeError: add() missing 1 required positional argument: 'c'
 
 tests/test_calc.py:10: TypeError
-_______________________________________________ test_add_three_numbers ________________________________________________
+_____________________________ test_add_three_numbers ______________________________
 
     def test_add_three_numbers():
         c = Calc()
@@ -382,7 +386,7 @@ def test_add_two_numbers():
 And running the test suite returns only one failure
 
 ``` txt
-________________________________________________ test_add_two_numbers _________________________________________________
+______________________________ test_add_two_numbers _______________________________
 
     def test_add_two_numbers():
         c = Calc()
@@ -404,7 +408,7 @@ class Calc:
 And this makes the failing test pass. At this point we can uncomment the second test and see what happens.
 
 ``` txt
-_______________________________________________ test_add_three_numbers ________________________________________________
+_____________________________ test_add_three_numbers ______________________________
 
     def test_add_three_numbers():
         c = Calc()
@@ -459,7 +463,7 @@ def test_add_many_numbers():
 which creates an array (Note: strictly speaking this creates a `range`, which is an iterable) of all the numbers from 0 to 99. The sum of all those numbers is 4950, which is what the algorithm shall return. The test suite fails because we are giving the function too many arguments
 
 ``` txt
-________________________________________________ test_add_many_numbers ________________________________________________
+______________________________ test_add_many_numbers ______________________________
 
     def test_add_many_numbers():
         s = range(100)
@@ -504,7 +508,7 @@ def test_subtract_two_numbers():
 which doesn't pass with the following error
 
 ``` txt
-______________________________________________ test_subtract_two_numbers ______________________________________________
+____________________________ test_subtract_two_numbers ____________________________
 
     def test_subtract_two_numbers():
         c = Calc()
@@ -542,7 +546,7 @@ def test_mul_two_numbers():
 And the test suite fails as expected with the following error
 
 ``` txt
-________________________________________________ test_mul_two_numbers _________________________________________________
+______________________________ test_mul_two_numbers _______________________________
                                                                                                                                                                         
     def test_mul_two_numbers():
         c = Calc()
@@ -705,7 +709,7 @@ def test_div_by_zero_returns_inf():
 And the test suite fails now with this message
 
 ``` txt
-____________________________________________ test_div_by_zero_returns_inf _____________________________________________
+__________________________ test_div_by_zero_returns_inf ___________________________
 
     def test_div_by_zero_returns_inf():
         c = Calc()
@@ -713,7 +717,7 @@ ____________________________________________ test_div_by_zero_returns_inf ______
 >       res = c.div(5, 0)
 
 tests/test_calc.py:62: 
-_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 
 self = <calc.calc.Calc object at 0x7f56c3dddb70>, a = 5, b = 0
 
@@ -767,7 +771,7 @@ def test_mul_by_zero_raises_exception():
 In this case, thus, pytest runs the line `c.mul(3, 0)`. If it doesn't raise the `ValueError` exception the test will fail. Indeed, if you run the test suite now, you will get the following failure
 
 ``` txt
-__________________________________________ test_mul_by_zero_raises_exception __________________________________________
+________________________ test_mul_by_zero_raises_exception ________________________
 
     def test_mul_by_zero_raises_exception():
         c = Calc()
@@ -827,7 +831,7 @@ def test_avg_correct_average():
 We feed the `avg` function a list of generic numbers, which average we calculated with an external tool. The first run of the test suite fails with the usual complaint about a missing function
 
 ``` txt
-______________________________________________ test_avg_correct_average _______________________________________________
+____________________________ test_avg_correct_average _____________________________
 
     def test_avg_correct_average():
         c = Calc()
@@ -866,7 +870,7 @@ As you can see the `ut=90` parameter is supposed to remove the element `98` from
 The test suite fails because the `avg` function doesn't accept the `ut` parameter
 
 ``` txt
-___________________________________________ test_avg_removes_upper_outliers ___________________________________________
+_________________________ test_avg_removes_upper_outliers _________________________
 
     def test_avg_removes_upper_outliers():
         c = Calc()
@@ -967,7 +971,7 @@ def test_avg_empty_list():
 and the test suite fails with the following error
 
 ``` txt
-_________________________________________________ test_avg_empty_list _________________________________________________
+_______________________________ test_avg_empty_list _______________________________
 
     def test_avg_empty_list():
         c = Calc()
@@ -975,7 +979,7 @@ _________________________________________________ test_avg_empty_list __________
 >       res = c.avg([])
 
 tests/test_calc.py:119: 
-_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 
 self = <calc.calc.Calc object at 0x7f732ce8f6d8>, it = [], lt = None, ut = None
 
@@ -1023,7 +1027,7 @@ def test_avg_manages_empty_list_after_outlier_removal():
 and the test suite fails with a `ZeroDivisionError`, because the length of the iterable is now 0.
 
 ``` txt
-__________________________________ test_avg_manages_empty_list_after_outlier_removal __________________________________
+________________ test_avg_manages_empty_list_after_outlier_removal ________________
 
     def test_avg_manages_empty_list_after_outlier_removal():
         c = Calc()
@@ -1031,7 +1035,7 @@ __________________________________ test_avg_manages_empty_list_after_outlier_rem
 >       res = c.avg([12, 98], lt=15, ut=90)
 
 tests/test_calc.py:127: 
-_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 
 self = <calc.calc.Calc object at 0x7f6f687a0a58>, it = [12, 98], lt = 15, ut = 90
 

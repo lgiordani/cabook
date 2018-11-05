@@ -1,4 +1,6 @@
-# On methodologies
+# Introduction
+
+## On methodologies
 
 This book is about a software design methodology. A methodology is a set of guidelines that help you reach your goal effectively, thus avoiding to waste time, implement short-sighted solutions, or in general rediscover the wheel again and again.
 
@@ -18,7 +20,7 @@ In these cases, break the rules. You are always free to keep the parts you consi
 
 I will try as much as possible to give reasons for the proposed solutions, so you might judge if those reasons are valid in your case, but in general let's consider whatever I say as a possible contribution to your job, and definitely not as an attempt to dictate THE best way to do it. Spoiler alert: there is no such a thing.
 
-# What is an architecture?
+## What is an architecture?
 
 Every production system, be it a software, a mechanical device, or a simple procedure, is made of components and connections between them. The purpose of the connections is to use the output of some components as inputs of other components, in order to perform a certain action or set of actions.
 
@@ -44,7 +46,7 @@ This example can easily be translated into the software realm. Our shop is a pro
 
 Remember that an architecture tries to detail how a process is implemented at a certain granularity, given certain assumptions or requirements. The quality of an architecture can then be judged on the basis of parameters like its cost, the quality of the outputs, its simplicity or "elegance", the amount of effort required to change it, and so on.
 
-# Why is it called "clean" architecture?
+## Why is it called "clean" architecture?
 
 The architecture explained in this book has many names, but the one that is mainly in use nowadays is "clean architecture". This is the name used by Robert Martin in his seminal post [^robert-martin-post] where he clearly states this structure is not a novelty, but has been pushed by many software designers through the years. I believe the adjective "clean" describes one of the fundamental aspects of both the software structure and the development approach pushed by this architecture. It is clean, that is, it is easy to understand what happens.
 
@@ -54,7 +56,7 @@ The clean architecture is the opposite of spaghetti code, where everything is in
 
 The clean architecture is not the perfect architecture and cannot be applied without thinking. As any other solution, it addresses a set of problems and tries to solve them, but there is no panacea that will solve all issues. As already stated you have to understand how the clean architecture solves some problems and decide if the solution suits your need.
 
-# Why Python?
+## Why Python?
 
 I have been working with Python for 20 years, along with other languages, but I got to love its simplicity and power and so I ended up using it in many projects. When I was first introduced to the clean architecture I was working on a Python application that was meant to glue together and expose a processing chain for satellite imagery, so my journey with the concepts I will explain started with this language.
 

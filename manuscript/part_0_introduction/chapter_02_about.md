@@ -1,4 +1,6 @@
-# A brief history of this book
+# About the book
+
+## A brief history of this book
 
 In 2015 I was introduced to the clean architecture by Roberto Ciatti, who is the first person I have to acknowledge for this book. I started working with him following a strict TDD approach and learning or better understanding many things I consider pillars of my programming knowledge now.
 
@@ -17,7 +19,7 @@ This is why this book comes for free. Download it, use it, and if you find mista
 
 Errors... There will be many, be warned. I'm not a native English speaker and I can't afford a proof reader, since I'm not planning to earn much from the book. If things will go in a different way on that side, obviously, I will consider having it reviewed by a professional. For the time being I can only apologise in advance for my mistakes and hope they will not prevent you to enjoy the book and use it effectively.
 
-# How this book is structured
+## How this book is structured
 
 This book is divided in three parts.
 
@@ -27,7 +29,7 @@ The second part introduces **the clean architecture**. The first chapter discuss
 
 The third part shows how the **Gaudi** library works, and how it can simplify creating a clean architecture in Python. The first chapter discusses the **components of the library**, while chapter 2 analyses a **full project** built using the library.
 
-# Why this book comes for free
+## Why this book comes for free
 
 The first reason I started writing a technical blog was to share with others my discoveries, and to save them the hassle of going through processes I already cracked. Moreover, I always enjoy the fact that explaining something makes me better understand that topic, and writing requires a great deal of study to get things clear in my mind, before attempting to introduce other people to the subject.
 
