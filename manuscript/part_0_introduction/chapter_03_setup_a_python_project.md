@@ -1,5 +1,3 @@
-# Part 1 - Tools #
-
 # Setup a Python Project
 
 ## Virtual environments
@@ -16,7 +14,7 @@ In general, I advise to have a different virtual environment for each Python pro
 
 I used to create my virtual environments inside the directory of my Python projects. Since I started using Cookiecutter (see next section) to create new projects, however, I switched to a different setup. Keeping the virtual environment outside the project allows me to install Cookiecutter in the virtualenv, instead of being forced to install it system-wide, which sometimes prevents me to use the latest version.
 
-If you create the virtual environment in the project directory you have to configure your version control and other tools to ignore it. In particular, add it to `.gitignore` if you use Git and to `pytest.ini` if you use the pytest testing framework (like I do in the rest of the book). You can find the documentation about the `.gitignore` file at TODO and the documentation about the configuration of pytest at TODO.
+If you create the virtual environment in the project directory you have to configure your version control and other tools to ignore it. In particular, add it to `.gitignore` if you use Git and to `pytest.ini` if you use the pytest testing framework (like I do in the rest of the book). You can find the documentation about the `.gitignore` file at https://git-scm.com/docs/gitignore and the documentation about the configuration of pytest at https://docs.pytest.org/en/latest/reference.html#confval-norecursedirs.
 
 ## Python projects with Cookiecutter
 
