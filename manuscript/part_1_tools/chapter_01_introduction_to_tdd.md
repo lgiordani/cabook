@@ -153,8 +153,8 @@ E   ImportError: cannot import name 'Calc'
 
 No surprise here, actually, as we just tried to use something that doesn't exist. This is good, the test is showing us that something we suppose exists actually doesn't.
 
-T> ## Test first, code later
-T> TDD rule number 1
+T> **TDD rule number 1**
+T> Test first, code later
 
 This, by the way, is not yet an error in a test. The error happens very soon, in the tests collection phase (as shown by the message in the bottom line `Interrupted: 1 errors during collection`). Given this, the methodology is still valid, as we wrote a test and it fails because an error or a missing feature in the code.
 
