@@ -1,4 +1,8 @@
-# Layers and data flow
+# Part 2 - The Clean Architecture #
+
+# Components of a clean architecture
+
+## Layers and data flow
 
 A clean architecture is a layered architecture, which means that the various elements of your system are categorised and have a specific place where to be, according to the category you assigned them. A clean architecture is also a spherical architecture, with inner (lower) layers completely encompassed by outer (higher) ones, and the former ones being oblivious of the existence of the latter ones.
 
@@ -10,11 +14,11 @@ Your elements should talk inwards, that is pass data to more abstract elements, 
 
 You elements should talk outwards using interfaces, that is using only the expected API of a component, without referring to a specific implementation. When an outer layer is created, elements living there will plug themselves into those interfaces and provide a practical implementation.
 
-# Main layers
+## Main layers
 
 Let's have a look at the main layers of a clean architecture, keeping in mind that your implementation may require to create new layers or to split some of these into multiple ones.
 
-## Entities
+### Entities
 
 This layer of the clean architecture contains a representation of the domain models, that is everything your project need to interact with and is sufficiently complex to require a specific representation. For example, strings in Python are complex and very powerful objects. They provide many methods out of the box, so in general it is useless to create a domain model for them. If your project is a tool to analyse medieval manuscripts, however, you might need to isolate sentences and at this point maybe you need a specific domain model.
 
@@ -22,7 +26,7 @@ Since we work in Python, this layer will contain classes, with methods that simp
 
 This is the inmost layer. Entities have a mutual knowledge since they live in the same layer, so the architecture allows them to interact directly. This means that one of your Python classes can use another one directly, instantiating it and calling its methods. Entities don't know anything that lives in outer layers, however. For example, entities don't know details about the external interfaces, and they only work with interfaces.
   
-## Use cases
+### Use cases
 
 This layer contains the use cases implemented by the system. Use cases are the processes that happen in your application, where you use you domain models to work on real data. Examples can be a user logging in, a search with specific filters being performed, or a bank transaction happening when the user wants to buy the content of the cart.
 
@@ -30,11 +34,11 @@ A use case should be as small a possible. It is very important to isolate small 
 
 Use cases know the entities, so they can instantiate them directly and use them. They can also call each other, and it is common to create complex use cases that put together other simpler ones.
 
-## External systems
+### External systems
 
 This part of the architecture is made by external systems that implement the interfaces defined in the previous layer. Examples of these systems can be a specific framework that exposes an HTTP API, or a specific database.
 
-# APIs and shades of grey
+## APIs and shades of grey
 
 The word API is of uttermost importance in a clean architecture. Every layer may be accessed by elements living in inner layers by an API, that is a fixed collection of entry points (methods or objects). (Note: here "fixed" means "the same among every implementation". An API may obviously change in time).
 

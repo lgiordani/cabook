@@ -1,4 +1,6 @@
-# Project overview
+# A basic example
+
+## Project overview
 
 The goal of the "Rent-o-matic" project (fans of Day of the Tentacle may get the reference) is to create a simple search engine on top of a dataset of objects which are described by some quantities. The search engine shall allow to set some filters to narrow the search.
  
@@ -17,11 +19,11 @@ I will follow the TDD methodology, but I will not show all the single steps to a
 
 Remember that there are multiple ways to implement the clean architecture concepts, and the code you can come up with strongly depends on what your language of choice allows you to do. The following is an example of clean architecture in Python, and the implementation of the models, use cases and other components that I will show is just one of the possible solutions.
 
-# Project setup
+## Project setup
 
 Follow the instructions I gave in the first chapter and create a virtual environment for the project, install Cookiecutter, and then create a project using the recommended template. For this first project use the name `rentomatic` as I did, so you can use the same code that I will show without having to change the name of the imported modules.
 
-# Domain models
+## Domain models
 
 Let us start with a simple definition of the `Room` model. As said before, the clean architecture models are very lightweight, or at least they are lighter than their counterparts in common web frameworks.
 
@@ -95,7 +97,7 @@ while the implementation is
 
 As you can see one of the benefits of a clean architecture is that each layer contains small pieces of code that, being isolated, shall perform simple tasks. In this case the model provides an initialisation API and stores the information inside the class.
 
-# Serializers
+## Serializers
 
 Outer layers can use the `Room` model, but if you want to return the model as a result of an API call you need a serializer.
 
@@ -158,7 +160,7 @@ class RoomJsonEncoder(json.JSONEncoder):
 
 Providing a class that inherits from `json.JSONEncoder` let us use the `json.dumps(room, cls=RoomEncoder)` syntax to serialize the model.
 
-# Use cases
+## Use cases
 
 It's time to implement the actual business logic that runs inside our application. Use cases are the places where this happens, and they might or might not be directly linked to the external API of the system. 
 
@@ -240,7 +242,7 @@ class RoomListUseCase:
 
 This might seem too simple, but this particular use case is just a wrapper around a specific function of the repository. As a matter of fact, this use case doesn't contain any error check, which is something we didn't take into account yet. In the next chapter we will discuss requests and responses, and the use case will become slightly more complicated.
 
-# The storage system
+## The storage system
 
 During the development of the use case we assumed it would receive an object that contains the data and exposes a `list` function. This object is generally speaking nicknamed "repository", being the source of information for the use case. It has nothing to do with the Git repository, though, so be careful not to mix the two nomenclatures.
 
@@ -317,7 +319,7 @@ class MemRepo:
 
 You can easily imagine this class being the wrapper around a real database or any other storage type. While the code might become more complex, the structure of the repository is the same, with a single public method `list`.
 
-# A command line interface
+## A command line interface
 
 So far we created the domain models, the serializers, the use cases and the repository, but we are still missing a system that glues everything together. This system has to get the call parameters from the user, initialise a use case with a repository, run the use case that fetches the domain models from the repository, and return them to the user.
 
@@ -408,7 +410,7 @@ $ ./cli.py
 [{'code': 'f853578c-fc0f-4e65-81b8-566c5dffa35a', 'size': 215, 'price': 39, 'longitude': '-0.09998975', 'latitude': '51.75436293'}, {'code': 'fe2c3195-aeff-487a-a08f-e0bdc0ec6e9a', 'size': 405, 'price': 66, 'longitude': '0.18228006', 'latitude': '51.74640997'}, {'code': '913694c6-435a-4366-ba0d-da5334a611b2', 'size': 56, 'price': 60, 'longitude': '0.27891577', 'latitude': '51.45994069'}]
 ```
 
-# An HTTP API
+## An HTTP API
 
 In this section I will go through the creation of an HTTP endpoint for the room list use case. An HTTP endpoint is a URL exposed by a Web server that runs a specific logic and returns values, often formatted as JSON, which is a widely used format for this type of API.
 
@@ -459,7 +461,7 @@ import os
 class Config(object):
     """Base configuration."""
 
-    APP_DIR = os.path.abspath(os.path.dirname(__file__))  # This directory
+    #APP_DIR = os.path.abspath(os.path.dirname(__file__))  # This directory
     PROJECT_ROOT = os.path.abspath(os.path.join(APP_DIR, os.pardir))
 
 
@@ -663,13 +665,13 @@ which is exactly the same code that we run in the command line interface. The re
                     status=200)
 ```
 
-# The HTTP server in action
+## The HTTP server in action
 
 Now that we defined the endpoint we can try to run the web server and access the former witha  browser. Create a `manager.py` file for Flask in the main directory of the `rentomatic` project (i.e. in the same directory that contains `cli.py`).
 
 ``` python
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
+## -*- coding: utf-8 -*-
 
 from flask_script import Manager, Server
 from flask_script.commands import Clean, ShowUrls
@@ -702,7 +704,7 @@ Rule                     Endpoint
 
 And running the `server` command should give us a proper HTTP server that listen for connections. Run `python manage.py server` and visit `http://localhost:5000/rooms` with your browser. You should receive a JSON file that contains the data you defined in the repository.
 
-# Conclusions
+## Conclusions
 
 I hope you can now appreciate the power of the layered architecture that we created. We definitely wrote a lot of code to "just" print out a list of models, but the code we wrote is a skeleton that can easily be extended and modified. It is also fully tested, which is a part of the implementation that many software projects struggle with.
 

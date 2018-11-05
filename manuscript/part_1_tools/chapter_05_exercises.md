@@ -1,4 +1,6 @@
-# How to use this chapter
+# Exercises
+
+## How to use this chapter
 
 Methodologies cannot be learned just by reading their description on a book. You have to practice them. Thus, you should avoid as much as possible to just follow this chapter reading the code. Instead, you should try to write the code and to try new solutions to the problems that I discuss.
 

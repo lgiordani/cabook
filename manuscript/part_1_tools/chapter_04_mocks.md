@@ -1,4 +1,6 @@
-# Basic concepts
+# Mocks
+
+## Basic concepts
 
 As we saw in the previous chapter the relationship between the component that we are testing and other components of the system can be complex. Sometimes idempotency and isolation are not easy to achieve, and testing outgoing commands requires to check the parameters sent to the external component, which is not trivial.
 
@@ -8,7 +10,7 @@ So, you face a complex issue. On the one hand your code is connected to the exte
 
 This problem can be solved with the use of mocks. A mock, in the testing jargon, is an object that simulates the behaviour of another (more complex) object. Wherever your code connects to an external system, during testing you can replace the latter with a mock, pretending the external system is there and properly checking that your component behaves like intended.
 
-# First steps
+## First steps
 
 Let us try and work with a mock in Python and see what it can do. First of all fire up a Python shell and import the library 
 
@@ -54,7 +56,7 @@ Mock objects are callables, which means that they may act both as attributes and
 
 As you can understand, such objects are the perfect tool to mimic other objects or systems, since they may expose any API without raising exceptions. To use them in tests, however, we need them to behave just like the original, which implies returning sensible values or performing real operations.
  
-# Simple return values
+## Simple return values
 
 The simplest thing a mock can do for you is to return a given value every time you call one of its methods. This is configured setting the `return_value` attribute of a mock object
 
@@ -80,7 +82,7 @@ Pay attention that what the mock returns is exactly the object that it is instru
 
 As you can see calling `some_attribute()` just returns the value stored in `return_value`, that is the function itself. To make the mock call the object that we use as a return value we have to use a slightly more complex attribute called `side_effect`.
 
-# Complex return values
+## Complex return values
 
 The `side_effect` parameter of mock objects is a very powerful tool. It accepts three different flavours of objects, callables, iterables, and exceptions, and changes its behaviour accordingly.
 
@@ -158,7 +160,7 @@ As you can see the arguments passed to the attribute are directly used as argume
 Value: 26
 ```
 
-# Asserting calls
+## Asserting calls
 
 As I explained in the previous chapter outgoing commands shall be tested checking the correctness of the message argument. This can be easily done with mocks, as these objects record every call that they receive and the argument passed to it.
 
@@ -232,7 +234,7 @@ Which I consider a very clear explanation of what went wrong during the test exe
 
 As you can read in the official documentation, the `Mock` object provides other methods and attributes, like `assert_called_once_with`, `assert_any_call`, `assert_has_calls`, `assert_not_called`, `called`, `call_count`, and many others. Each of those explores a different aspect of the mock behaviour concerning calls, make sure to read their description and go through the examples.
 
-# A simple example
+## A simple example
 
 To learn how to use mocks in a practical case, let's work together on a new module in the TODO package. The target is to write a class that downloads a JSON file with data on meteorites and computes some statistics on the dataset using the `Calc` class. The file is available at https://raw.githubusercontent.com/lgiordani/pytest_workshop/master/earth-meteorite-landings.json and is a copy of the file provided by NASA at https://data.nasa.gov/resource/y77d-th95.json (very slow server).
 
@@ -388,13 +390,13 @@ class MeteoriteStats:
 
 Please note that we are not testing the `get_data` method itself. That method uses the function `urllib.request.urlopen` that opens an Internet connection without passing through any other public object that we can replace at run time during the test. We need then a tool to replace "internal" parts of our objects when we run them, and this is provided by patching.
 
-# Patching
+## Patching
 
 Mocks are very simple to introduce in your tests whenever your objects accept classes or instances from outside. In that case, as shown in the previous sections, you just have to instantiate the `Mock` class and pass the resulting object to your system. However, when the external classes instantiated by your library are hardcoded this simple trick does not work. In this case you have no chance to pass a fake object instead of the real one.
 
 This is exactly the case addressed by patching. Patching, in a testing framework, means to replace a globally reachable object with a mock, thus achieving the target of having the code run unmodified, while part of it has been hot swapped, that is, replaced at run time.
 
-## A warm-up example
+### A warm-up example
 
 Let us start with a very simple example. Patching can be complex to grasp at the beginning so it is better to learn it with trivial code.
 
@@ -502,7 +504,7 @@ It is worth at this point discussing outgoing messages again. The code that we a
 
 Obviously to write the test you have to know that you are going to use the `os.path.abspath` function, so patching is somehow a "less pure" practice in TDD. In pure OOP/TDD you are only concerned with the external behaviour of the object, and not with its internal structure. This example, however, shows that this pure approach has some limitations that you have to cope with, and patching is a clean way to do it.
 
-# The patching decorator
+## The patching decorator
 
 The `patch` function we imported from the `unittest.mock` module is very powerful, as it can temporarily replace an external object. If the replacement has to or can be active for the whole test, there is a cleaner way to inject your mocks, which is to use `patch` as a function decorator.
 
@@ -525,7 +527,7 @@ def test_get_info(abspath_mock):
 
 As you can see the `patch` decorator works like a big `with` statement for the whole function. The `abspath_mock` argument passed to the test becomes internally the mock that replaces `os.path.abspath`. Obviously this way you replace `os.path.abspath` for the whole function, so you have to decide case by case which form of the `patch` function you need to use.
 
-# Multiple patches
+## Multiple patches
 
 You can patch more that one object in the same test. For example, consider the case where the `get_info` method calls `os.path.getsize` in addition to `os.path.abspath`, because it needs it to return the size of the file. You have at this point two different outgoing queries, and you have to replace both with mocks to make your class working during the test.
 
@@ -598,7 +600,7 @@ def test_get_info():
 
 Using more than one `with` statement, however, makes the code difficult to read, in my opinion, so in general I prefer to avoid complex `with` trees if I do not need to force a limited scope of the patching.
 
-# Patching immutable objects
+## Patching immutable objects
 
 The most widespread version of Python is CPython, which is written, as the name suggests, in C. Part of the standard library is also written in C, while the rest is written in Python itself.
 
@@ -689,7 +691,7 @@ Another possible solution to this problem is to create a function that invokes t
 
 This solution, however, requires to change the source code to allow testing, which is far from being optimal. Obviously it is better to introduce a small change in the code and have it tested than to leave it untested, but whenever is possible I try as much as possible to avoid solutions that introduce code which wouldn't be required without tests.
 
-# Recap
+## Recap
 
 Mocks are a very powerful tool that allows us to test code that contains outgoing messages, in particular allows us to test the arguments of outgoing commands. Patching is a good way to overcome the fact that some external components are hardcoded in our code and are thus unreachable through the arguments passed to the classes or the methods under analysis.
 

@@ -1,3 +1,5 @@
+# Part 3 - Gaudi: a helper library for clean architectures #
+
 # Introduction
 
 A clean architecture is not a framework in the common sense. From a certain point of view it is the opposite of a framework, as it pushes a structure that is modelled after your application and not the opposite. This doesn't mean however that everything has to be written from scratch every time.
@@ -10,7 +12,7 @@ In this part I will develop a board game engine with a clean architecture using 
 
 # The gaudi library
 
-# Domain models
+## Domain models
 
 Gaudi provides the the `Model` class which is used to represent a domain model.
 
@@ -88,7 +90,7 @@ All Gaudi model classes expose the `from_mappin` method that instantiates the mo
 i = Item.from_mapping({'price': 1200})
 ```
 
-# Testing models
+## Testing models
 
 The models created by Gaudi have a different way to specify the attributes, but apart from that they are standard Python classes, so you can test them with the usual pytest functions
 
@@ -160,7 +162,7 @@ This last version, for example, tests that the class can be instantiated with `p
 
 By default the `create_model_init_tests` function uses `__init__` to instantiate the model, calling the class directly, but if you want to test another initialization function you can use `create_model_initialisation_tests` specifying `init_function=your_function` when you call it. If you are using Gaudi models you can use `create_model_from_mapping_tests` which uses `from_mapping` instead of `__init__`.
 
-# Use cases
+## Use cases
 
 Gaudi's use cases are built on top of the `gaudi.use_cases.use_case.UseCase` class. The use cases system in Gaudi uses both a global register and class attributes to simplify request validation and the business logic execution. The request structure is defined together with the use case, thus it doesn't require an external class, but can be expressed with a simple dictionary.
 
@@ -196,7 +198,7 @@ The `parameters` class attribute is used to validate incoming requests, and in t
 
 If the `process_request` method is executed we are sure that the request complies with the parameters that we specified in the class. We can then use those parameters in the business logic, in this example to instantiate the `Item` class. The return value of the method has to be a response, in this case an instance of `gaudi.response_object.ResponseSuccess`.
 
-# Responses
+## Responses
 
 Gaudi defines 4 categories of responses out of the box, `DEFAULT_SUCCESS`, `USE_CASE_ERROR`, `PARAMETERS_ERROR`, and `EXCEPTION_ERROR`. The first one is the only category of successful response, while the remaining three are the different categories of failure that we can have.
 
@@ -210,7 +212,7 @@ In particular, `PARAMETERS_ERROR` responses will contain a list of tuples `(para
 
 Gaudi use cases accept two arguments `exception_on_failure` and `no_traceback`. The first one is used to store an exception that will be automatically raised in case of failure, overriding any exception that was raised inside the code of the use case. The `no_traceback` argument, instead, changes the way exceptions are returned in the response (again, read the documentation for details on exceptions).
 
-# Registering use cases
+## Registering use cases
 
 Gaudi use cases are registered when they are imported, so the easiest thing to do is to import them in the `__init__.py` file of your module. This is not strictly compliant with PEP8, as you import them without using them, but it allows you to use the powerful `UseCaseRegister`, `UseCaseCreator`, and `UseCaseExecutor` objects.
 
@@ -249,7 +251,7 @@ request = {...}
 response = executor.ItemInitUseCase(request)
 ```
 
-# Specialised use cases
+## Specialised use cases
 
 Gaudi provides some specialised use cases that may be handy in standard situations. As it happens for other parts of the library, you can completely ignore these use cases if they don't suit your needs, or subclass them to expand their functionalities.
 
@@ -257,7 +259,7 @@ The first use case is `RepositoryUseCase`, contained in `gaudi.use_cases.reposit
 
 Gaudi then provides four use cases that cover standard actions with models, `ModelCreateUseCase`, `ModelGetUseCase`, `ModelListUseCase`, and `ModelDeleteUseCase`. All these use cases are subclasses of `RepositoryUseCase` and require you to specify the `model` class attribute with the class of the model you want them to work with.
 
-# Creating models
+## Creating models
 
 The `ModelCreateUseCase` provides a `process_request` method that calls a creation function of the repository passing to it the whole request. The creation function name is derived from the model name, appending `_create` to its lower case name. The response will contain the created object under a key that is the lower case name of the model.
 
@@ -276,15 +278,15 @@ res = ItemCreateUseCase({'repository': repo, 'price': 250})
 
 The last line of this example calls `repo.item_create({'price': 250})` and returns a response with an `'item'` key which value is the newly created object.
 
-# Find models
+## Find models
 
 The `ModelGetUseCase` class is very similar to `ModelCreateUseCase`, but it calls the `<model_name>_get` method of the repository. The result has to be unique, otherwise this use case will return a `ResponseFailure` with a use case error. The response contains the requested model under the key `<model_name>`
 
-# Deleting=g models
+## Deleting models
 
 `ModelDeleteUseCase` has a similar constraints to `ModelGetUseCase`. It catches a `DeleteMultipleResultsError` exception raised by the repository and returns a user case error. This relies on the repository to provide such an exception in case the given request didn't narrow enough the results. The result of the delete operation is returned under the key `<model_name>`.
 
-# Listing models
+## Listing models
 
 The last class provided by Gaudi is `ModelListUseCase`, which accepts a `filters` parameter. The use case calls the `<model_name>_list` method of the repository passing the `filters` parameter as a named argument and returning a response with the results as values of the `<model_name>_list` key.
 

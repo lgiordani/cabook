@@ -1,5 +1,7 @@
 # Error management
 
+## Introduction
+
 In every software project, a great part of the code is dedicated to error management, and this code has to be rock solid. Error management is a complex topic, and there is always a corner case that we left out, or a condition that we supposed could never fail, while it does.
 
 In a clean architecture, the main process is the creation of use cases and their execution. This is therefore the main source of errors, and the use cases layer is where we have to implement the error management. Errors can obviously come from the domain models layer, but since those models are created by the use cases the errors that are not managed by the models themselves automatically become errors of the use cases.
@@ -16,7 +18,7 @@ More specifically, requests are objects created from incoming API calls, thus th
 
 The actual implementation of request and response objects is completely free, the clean architecture says nothing about them. The decision on how to pack and represent data is up to us.
 
-# Basic requests and responses
+## Basic requests and responses
 
 We can implement structures requests before we expand the use case to accept filters. We just need a `RoomListRequestObject` that can be initialised without parameters, so let us create the file `tests/request_objects/test_room_list_request_objects.py` and put there a test for this object.
 
@@ -70,7 +72,7 @@ class ResponseSuccess:
         return True
 ```
 
-# Requests and responses in a use case
+## Requests and responses in a use case
 
 Let's implement the request and response objects that we developed into the use case. The new version of `tests/use_cases/test_room_list_use_case.py` is the following
 
@@ -152,7 +154,7 @@ class RoomListUseCase:
 
 Now we have a standard way to pack input and output values, and the above pattern is valid for every use case we can create. We are still missing some features however, because so far requests and responses are not used to perform error management.
 
-# Request validation
+## Request validation
 
 The `filters` parameter that we want to add to the use case allows the caller to add conditions to narrow the results of the model list operation. For example specifying `filters={'price_lt': 100}` should return all the results with a price lower than 100.
 
@@ -274,7 +276,7 @@ Second, the `RoomListRequestObject` accepts an optional `filters` parameter when
 
 Last, the `from_dict()` method performs the validation of the `filters` parameter, if it is present. I leverage the `collections.Mapping` abstract base class to check if the incoming parameter is a dictionary-like object and return either an `InvalidRequestObject` or a `RoomListRequestObject` instance (which is a subclass of `ValidRequestObject`).
 
-# Responses and failures
+## Responses and failures
 
 There is a wide range of errors that can happen while the use case code is executed. Validation errors, as we just discussed in the previous section, but also business logic errors or errors that come from the repository layer or other external systems that the use case interfaces with. Whatever the error, the use case shall always return an object with a known structure (the response), so we need a new object that provides a good support for different types of failures.
 
@@ -569,7 +571,7 @@ Through the `_format_message()` method we enable the class to accept both string
 
 As explained before, the `PARAMETERS_ERROR` type encompasses all those errors that come from an invalid set of parameters, which is the case of this function, that shall be called whenever the request is wrong, which means that some parameters contain errors or are missing.
 
-# Error management in a use case
+## Error management in a use case
 
 Our implementation of requests and responses is finally complete, so now we can implement the last version of our use case. The `RoomListUseCase` class is still missing a proper validation of the incoming request.
 
@@ -666,6 +668,6 @@ class RoomListUseCase(object):
 
 As you can see the first thing that the `execute()` method does is to check if the request is valid, otherwise it returns a `ResponseFailure` built with the same request object. Then the actual business logic is implemented, calling the repository and returning a successful response. If something goes wrong in this phase the exception is caught and returned as an aptly formatted `ResponseFailure`.
 
-# Conclusions
+## Conclusions
 
 We now have a very robust system to manage input validation and error conditions. This system is generic enough to be used with any possible use case. Obviously we are free to add new types of errors to increase he granularity with which we manage failures, but the present version already covers everything that can happen inside a use case.
