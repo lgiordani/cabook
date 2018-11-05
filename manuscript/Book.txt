@@ -1,5 +1,6 @@
-part_0_introduction/01_introduction.md
-part_1_tools/chapter_01_setup_a_python_project.md
+part_0_introduction/chapter_01_introduction.md
+part_0_introduction/chapter_02_about.md
+part_0_introduction/chapter_03_setup_a_python_project.md
 part_1_tools/chapter_02_introduction_to_tdd.md
 part_1_tools/chapter_03_on_unit_testing.md
 part_1_tools/chapter_04_mocks.md
