@@ -60,7 +60,7 @@ As we will see with a practical example in the next chapter, what I explained in
 
 The project we are going to develop is contained in the TODO directory in the book repository.
 
-This project is purposefully extremely simple. You don't need to be an experienced Python programmer to follow this chapter, but you need to know the basics of the language. The goal of this chapter is not that of make TODO(make or making) you write the best Python code, but that of making TODO(same) you learn the TDD work flow, so don't be too worried if your code is not perfect.
+This project is purposefully extremely simple. You don't need to be an experienced Python programmer to follow this chapter, but you need to know the basics of the language. The goal of this chapter is not that of making you write the best Python code, but that of allowing you learn the TDD work flow, so don't be too worried if your code is not perfect.
 
 Methodologies are like sports: you cannot learn them just by reading their description on a book. You have to practice them. Thus, you should avoid as much as possible to just follow this chapter reading the code passively. Instead, you should try to write the code and to try new solutions to the problems that I discuss. This is very important, as it actually makes you use TDD. This way, at the end of the chapter you will have a personal experience of what TDD is like.
 
@@ -153,7 +153,8 @@ E   ImportError: cannot import name 'Calc'
 
 No surprise here, actually, as we just tried to use something that doesn't exist. This is good, the test is showing us that something we suppose exists actually doesn't.
 
-TDD RULE NUMBER 1 - Test first, code later
+T> # TDD RULE NUMBER 1
+T> Test first, code later
 
 This, by the way, is not yet an error in a test. The error happens very soon, in the tests collection phase (as shown by the message in the bottom line `Interrupted: 1 errors during collection`). Given this, the methodology is still valid, as we wrote a test and it fails because an error or a missing feature in the code.
 
@@ -166,7 +167,8 @@ class Calc:
 
 But, I hear you scream, this class doesn't implement any of the requirements that are in the project. Yes, this is the hardest lesson you have to learn when you start using TDD. The development is rules by the tests, not by the requirements. The requirements are used to write the tests, the tests are used to write the code. You shouldn't worry about something that is more than one level above the current one.
 
-TDD RULE NUMBER 2 - Add the reasonably TODO(-ly?) minimum amount of code you need to pass the tests
+T> # TDD RULE NUMBER 2
+T> Add the reasonably minimum amount of code you need to pass the tests
 
 Run the test again, and this time you should receive a different error, that is
 
@@ -359,7 +361,8 @@ The first test now fails because the new `add` method requires three arguments a
 
 When multiple tests fail it's easy to feel discomforted and lost. Where are you supposed to start fixing this? Well, one possible solution is to undo the previous change and to try a different solution, but in general you should try to get to a situation in which only one test fails.
 
-TDD RULE NUMBER 3 - You shouldn't have more than one failing test at a time
+T> # TDD RULE NUMBER 3
+T> You shouldn't have more than one failing test at a time
 
 This is very important as it allows you to focus on one single test and thus one single problem. And remember, commenting tests to make them inactive is a perfectly valid way to have only one failing test. In this case I will comment the second test, so my tests file is now
 
@@ -490,7 +493,8 @@ Note: yes, you can test it running a function and measuring the execution time. 
 
 Part of the TDD methodology, then, deals with "refactoring", which means changing the code in a way that doesn't change the outputs, which in turns means that all your tests keep passing. Once you have a proper test suite in place, you can focus on the beauty of the code, or you can introduce smart solutions according to which the language allows you to do.
 
-TDD RULE NUMBER 4 - Write code that passes the test. Then refactor it.
+T> # TDD RULE NUMBER 4
+T> Write code that passes the test. Then refactor it.
 
 ## Step 4 - Subtraction
 
@@ -641,7 +645,8 @@ In this case, however, we know why the test already passes. We implemented a sma
 
 So, after this considerations, we can be happy that the second test already passes.
 
-TDD RULE NUMBER 5 - A test should fail the first time you run it. If it doesn't, ask yourself why you are adding it.
+T> # TDD RULE NUMBER 5
+T> A test should fail the first time you run it. If it doesn't, ask yourself why you are adding it.
 
 ## Step 6 - A first example of refactoring
 
@@ -668,7 +673,8 @@ class Calc:
 
 where I define an anonymous function that accepts two inputs `x, y` and returns their multiplication `x*y`. Running the test suite I can see that all the test pass, so my refactoring is correct.
 
-TDD RULE NUMBER 6 - Never refactor without tests.
+T> # TDD RULE NUMBER 6
+T> Never refactor without tests.
 
 ## Step 7 - Division
 
