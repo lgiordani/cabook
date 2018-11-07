@@ -68,12 +68,14 @@ Methodologies are like sports: you cannot learn them just by reading their descr
 
 Following the instructions that you can find in the first chapter, create a virtual environment for the project, install Cookiecutter, and then create a project using the recommended template. After you created the project, enter the directory and install the requirements with `pip install -r requirements/dev.txt`. You should be able to run
 
+{line-numbers=off}
 ``` sh
 py.test -svv
 ```
 
 and get an output like
 
+{line-numbers=off}
 ``` txt
 =============================== test session starts ===============================
 platform linux -- Python 3.6.5, pytest-3.0.7, py-1.5.4, pluggy-0.4.0 --
@@ -122,6 +124,7 @@ And this is how pytest works: if your code doesn't raise any exception the test 
 
 Save the file and go back to the terminal. Execute `py.test -svv` and you should receive the following error message
 
+{line-numbers=off}
 ``` txt
 =============================== test session starts ===============================
 platform linux -- Python 3.6.5, pytest-3.0.7, py-1.5.4, pluggy-0.4.0 --
@@ -172,6 +175,7 @@ T> Add the reasonably minimum amount of code you need to pass the tests
 
 Run the test again, and this time you should receive a different error, that is
 
+{line-numbers=off}
 ``` txt
 =============================== test session starts ===============================
 platform linux -- Python 3.6.5, pytest-3.0.7, py-1.5.4, pluggy-0.4.0 -- /home/leo/devel/cabook/venv3/bin/python3
@@ -197,7 +201,8 @@ tests/test_calc.py:10: AttributeError
 
 Since the last one is the first proper pytest failure report that we meet, it's time to learn how to read them. The first lines show you general information about the system where the tests are run
 
-```txt
+{line-numbers=off}
+``` txt
 =============================== test session starts ===============================
 platform linux -- Python 3.6.5, pytest-3.0.7, py-1.5.4, pluggy-0.4.0 -- /home/leo/devel/cabook/venv3/bin/python3
 cachedir: .cache
@@ -209,6 +214,7 @@ In this case you can see that I'm using `linux` with `Python 3.6.5`, the version
 
 The second part of the output shows the list of files containing tests and the result of each test
 
+{line-numbers=off}
 ``` txt
 collected 1 items 
 
@@ -217,12 +223,14 @@ tests/test_calc.py::test_add_two_numbers FAILED
 
 This list is formatted with a syntax that can be given directly to pytest to run a single test. In this case we already have only one test, but later you might run a single failing test giving the name shown here on the command line, like for example
 
+{line-numbers=off}
 ``` sh
 pytest -svv tests/test_calc.py::test_add_two_numbers
 ```
 
 The third part shows details on the failing tests, if any.
 
+{line-numbers=off}
 ``` txt
 ______________________________ test_add_two_numbers _______________________________
 
@@ -247,6 +255,7 @@ class Calc:
 
 And again, as you notice, we made the smallest possible addition to the code to pass the test. Running this latter again the error message will be
 
+{line-numbers=off}
 ```
 _______________________________ test_add_two_numbers _______________________________
 
@@ -269,6 +278,7 @@ class Calc:
 
 Run the test again, and you will receive another error
 
+{line-numbers=off}
 ```
 ______________________________ test_add_two_numbers _______________________________
 
@@ -312,6 +322,7 @@ def test_add_three_numbers():
 
 This test fails when we run the test suite
 
+{line-numbers=off}
 ``` txt
 _____________________________ test_add_three_numbers ______________________________
 
@@ -334,6 +345,7 @@ class Calc:
 
 which solves the previous error, but creates a new one. If that wasn't enough, it also makes the first test fail!
 
+{line-numbers=off}
 ``` txt
 ______________________________ test_add_two_numbers _______________________________
 
@@ -388,6 +400,7 @@ def test_add_two_numbers():
 
 And running the test suite returns only one failure
 
+{line-numbers=off}
 ``` txt
 ______________________________ test_add_two_numbers _______________________________
 
@@ -410,6 +423,7 @@ class Calc:
 
 And this makes the failing test pass. At this point we can uncomment the second test and see what happens.
 
+{line-numbers=off}
 ``` txt
 _____________________________ test_add_three_numbers ______________________________
 
@@ -465,6 +479,7 @@ def test_add_many_numbers():
 
 which creates an array (Note: strictly speaking this creates a `range`, which is an iterable) of all the numbers from 0 to 99. The sum of all those numbers is 4950, which is what the algorithm shall return. The test suite fails because we are giving the function too many arguments
 
+{line-numbers=off}
 ``` txt
 ______________________________ test_add_many_numbers ______________________________
 
@@ -511,6 +526,7 @@ def test_subtract_two_numbers():
 
 which doesn't pass with the following error
 
+{line-numbers=off}
 ``` txt
 ____________________________ test_subtract_two_numbers ____________________________
 
@@ -549,6 +565,7 @@ def test_mul_two_numbers():
 
 And the test suite fails as expected with the following error
 
+{line-numbers=off}
 ``` txt
 ______________________________ test_mul_two_numbers _______________________________
                                                                                                                                                                         
@@ -714,6 +731,7 @@ def test_div_by_zero_returns_inf():
 
 And the test suite fails now with this message
 
+{line-numbers=off}
 ``` txt
 __________________________ test_div_by_zero_returns_inf ___________________________
 
@@ -776,6 +794,7 @@ def test_mul_by_zero_raises_exception():
 
 In this case, thus, pytest runs the line `c.mul(3, 0)`. If it doesn't raise the `ValueError` exception the test will fail. Indeed, if you run the test suite now, you will get the following failure
 
+{line-numbers=off}
 ``` txt
 ________________________ test_mul_by_zero_raises_exception ________________________
 
@@ -836,6 +855,7 @@ def test_avg_correct_average():
 
 We feed the `avg` function a list of generic numbers, which average we calculated with an external tool. The first run of the test suite fails with the usual complaint about a missing function
 
+{line-numbers=off}
 ``` txt
 ____________________________ test_avg_correct_average _____________________________
 
@@ -875,6 +895,7 @@ As you can see the `ut=90` parameter is supposed to remove the element `98` from
 
 The test suite fails because the `avg` function doesn't accept the `ut` parameter
 
+{line-numbers=off}
 ``` txt
 _________________________ test_avg_removes_upper_outliers _________________________
 
@@ -976,6 +997,7 @@ def test_avg_empty_list():
 
 and the test suite fails with the following error
 
+{line-numbers=off}
 ``` txt
 _______________________________ test_avg_empty_list _______________________________
 
@@ -1032,6 +1054,7 @@ def test_avg_manages_empty_list_after_outlier_removal():
 
 and the test suite fails with a `ZeroDivisionError`, because the length of the iterable is now 0.
 
+{line-numbers=off}
 ``` txt
 ________________ test_avg_manages_empty_list_after_outlier_removal ________________
 
