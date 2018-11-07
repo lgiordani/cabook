@@ -4,7 +4,7 @@
 
 A clean architecture is not a framework in the common sense. From a certain point of view it is the opposite of a framework, as it pushes a structure that is modelled after your application and not the opposite. This doesn't mean however that everything has to be written from scratch every time.
 
-After I wrote many applications following the clean architecture approach, I realised that many parts of the code that I was writing could be abstracted and isolated, and I started doing it consistently. The result is the gaudi library TODO LINK, which is an initial attempt to provide helper classes and functions to Python programmers who want to implement a project based on the clean architecture.
+After I wrote many applications following the clean architecture approach, I realised that many parts of the code that I was writing could be abstracted and isolated, and I started doing it consistently. The result is the [gaudi](https://github.com/lgiordani/gaudi) library, which is an initial attempt to provide helper classes and functions to Python programmers who want to implement a project based on the clean architecture.
 
 The main concern of gaudi is to provide useful abstractions, keeping the compatibility with a custom system that the author may have already created. This means that you can introduce gaudi gradually, and even use it for just some parts of your architecture. You might define the domain models using gaudi's base `Model` class and implement use cases by yourself, or do the opposite, using the `UseCase` class provided by gaudi with your models. You can obviously just discard gaudi at all and implement everything from scratch like we did in the previous chapter.
 

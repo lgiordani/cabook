@@ -24,7 +24,7 @@ The main object that the library provides is `Mock` and you can instantiate it w
 >>> m = mock.Mock()
 ```
 
-This object has the peculiar property of creating methods and attributes on the fly when you require them. Let us first look inside the object to take a glance TODO at what it provides
+This object has the peculiar property of creating methods and attributes on the fly when you require them. Let us first look inside the object to get an idea of what it provides
 
 ``` python
 >>> dir(m)
@@ -398,14 +398,11 @@ This is exactly the case addressed by patching. Patching, in a testing framework
 
 ### A warm-up example
 
-Let us start with a very simple example. Patching can be complex to grasp at the beginning so it is better to learn it with trivial code.
+Let us start with a very simple example. Patching can be complex to grasp at the beginning so it is better to start learning it with trivial use cases.
 
 Create a new project following the instructions at the beginning of the previous chapter, calling this project `fileinfo`. The purpose of this library is to develop a simple class that returns information about a given file. The class shall be instantiated with the file path, which can be relative.
 
-TODO Usage example
-We avoid testing outgoing queries, but giving mocks return values is helpful to make the whole process work as intended.
-
-If you want you can develop the class following TDD, but for the sake of brevity I will not show here all the steps that I did. This is the set of tests I have
+If you want you can develop the class using TDD, but for the sake of brevity I will not show here all the steps that I followed. This is the set of tests I have
 
 ``` python
 from fileinfo import FileInfo
@@ -436,7 +433,7 @@ class FileInfo:
         self.filename = os.path.basename(path)
 ```
 
-As you can see the class is extremely simple, and the tests are straightforward. So far I didn't introduce anything new in what we discussed in the previous chapter.
+As you can see the class is extremely simple, and the tests are straightforward. So far I didn't add anything new to what we discussed in the previous chapter.
 
 Now I want the `get_info()` function to return a tuple with the file name, the original path the class was instantiated with, and the absolute path of the file. Pretending we are in the `/some/absolute/path` directory, the class should work as shown here
 
@@ -446,7 +443,7 @@ Now I want the `get_info()` function to return a tuple with the file name, the o
 ('book_list.txt', '../book_list.txt', '/some/absolute')
 ```
 
-You immediately realise that you have an issue in writing the test. There is no way to easily test something as "the absolute path", since the outcome of the function called in the test is supposed to vary with the path of the test itself. Let us try to write part of the test
+You can immediately realise that you have an issue in writing the test. There is no way to easily test something as "the absolute path", since the outcome of the function called in the test is supposed to vary with the path of the test itself. Let us try to write part of the test
 
 ``` python
 def test_get_info():
@@ -665,13 +662,11 @@ When you try to execute this test you will get the following error
 TypeError: can't set attributes of built-in/extension type 'datetime.datetime'
 ```
 
-TODO CHECK THE CODE which is exactly the problem that immutability poses to patching TODO.
+which is raised because patching tries to replace the `now` function in `datetime.datetime` with a mock, and being the module immutable this operation fails.
 
 There are several ways to address this problem, but all of them leverage the fact that, when you import of subclass an immutable object what you get is a "copy" of that is now mutable.
 
-The easiest example in this case is the module `datetime` itself. In the `test_log` function we tried to patch directly the `datetime.datetime.now` object, affecting the builtin module `datetime`. The file `logger.py`, however, does import `datetime`, so that this latter becomes a local symbol in the `logger` module. This is exactly the key for our patching. Let us change the code to
-
-TODO Patching should always be done where the object is used!!!!
+The easiest example in this case is the module `datetime` itself. In the `test_log` function we tried to patch directly the `datetime.datetime.now` object, affecting the builtin module `datetime`. The file `logger.py`, however, does import `datetime`, so this latter becomes a local symbol in the `logger` module. This is exactly the key for our patching. Let us change the code to
 
 ``` python
 @patch('logger.datetime.datetime')
@@ -685,11 +680,9 @@ def test_log(mock_datetime):
     assert l.messages == [(test_now, test_message)]
 ```
 
-As you see running the test now the patching works. What we did was to patch `logger.datetime.datetime` instead of `datetime.datetime.now`. Two things changed, thus, in our test. First, we are patching the module imported in the `logger.py` file and not the module provided globally by the Python interpreter. Second, we have to patch the whole module because this is what is imported by the `logger.py` file. If you try to patch `logger.datetime.datetime.now` you will find that it is still immutable.
+If you run the test now, you can see that the patching works. What we did was to inject our mock in `logger.datetime.datetime` instead of `datetime.datetime.now`. Two things changed, thus, in our test. First, we are patching the module imported in the `logger.py` file and not the module provided globally by the Python interpreter. Second, we have to patch the whole module because this is what is imported by the `logger.py` file. If you try to patch `logger.datetime.datetime.now` you will find that it is still immutable.
 
-Another possible solution to this problem is to create a function that invokes the immutable object and returns its value. This last function can be easily patched, because it just uses the builtin objects and thus is not immutable. 
-
-This solution, however, requires to change the source code to allow testing, which is far from being optimal. Obviously it is better to introduce a small change in the code and have it tested than to leave it untested, but whenever is possible I try as much as possible to avoid solutions that introduce code which wouldn't be required without tests.
+Another possible solution to this problem is to create a function that invokes the immutable object and returns its value. This last function can be easily patched, because it just uses the builtin objects and thus is not immutable. This solution, however, requires to change the source code to allow testing, which is far from being optimal. Obviously it is better to introduce a small change in the code and have it tested than to leave it untested, but whenever is possible I try as much as possible to avoid solutions that introduce code which wouldn't be required without tests.
 
 ## Recap
 

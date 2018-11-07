@@ -167,7 +167,7 @@ class Calc:
 
 But, I hear you scream, this class doesn't implement any of the requirements that are in the project. Yes, this is the hardest lesson you have to learn when you start using TDD. The development is rules by the tests, not by the requirements. The requirements are used to write the tests, the tests are used to write the code. You shouldn't worry about something that is more than one level above the current one.
 
-T> # TDD RULE NUMBER 2
+T> **TDD rule number 2**
 T> Add the reasonably minimum amount of code you need to pass the tests
 
 Run the test again, and this time you should receive a different error, that is
@@ -361,7 +361,7 @@ The first test now fails because the new `add` method requires three arguments a
 
 When multiple tests fail it's easy to feel discomforted and lost. Where are you supposed to start fixing this? Well, one possible solution is to undo the previous change and to try a different solution, but in general you should try to get to a situation in which only one test fails.
 
-T> # TDD RULE NUMBER 3
+T> **TDD rule number 3**
 T> You shouldn't have more than one failing test at a time
 
 This is very important as it allows you to focus on one single test and thus one single problem. And remember, commenting tests to make them inactive is a perfectly valid way to have only one failing test. In this case I will comment the second test, so my tests file is now
@@ -493,7 +493,7 @@ Note: yes, you can test it running a function and measuring the execution time. 
 
 Part of the TDD methodology, then, deals with "refactoring", which means changing the code in a way that doesn't change the outputs, which in turns means that all your tests keep passing. Once you have a proper test suite in place, you can focus on the beauty of the code, or you can introduce smart solutions according to which the language allows you to do.
 
-T> # TDD RULE NUMBER 4
+T> **TDD rule number 4**
 T> Write code that passes the test. Then refactor it.
 
 ## Step 4 - Subtraction
@@ -645,7 +645,7 @@ In this case, however, we know why the test already passes. We implemented a sma
 
 So, after this considerations, we can be happy that the second test already passes.
 
-T> # TDD RULE NUMBER 5
+T> **TDD rule number 5**
 T> A test should fail the first time you run it. If it doesn't, ask yourself why you are adding it.
 
 ## Step 6 - A first example of refactoring
@@ -673,7 +673,7 @@ class Calc:
 
 where I define an anonymous function that accepts two inputs `x, y` and returns their multiplication `x*y`. Running the test suite I can see that all the test pass, so my refactoring is correct.
 
-T> # TDD RULE NUMBER 6
+T> **TDD rule number 6**
 T> Never refactor without tests.
 
 ## Step 7 - Division
@@ -1145,7 +1145,3 @@ You shouldn't write down all al them at once. Write the first test that you thin
 At this point you can move on and try to change the code. Remember that you shouldn't have more than one failing test at a time, so start doing this as soon as you discover a test case that shows there is a problem in the code.
 
 Once you reach a point where the test suite passes without errors stop and try to run the code in the environment where the bug was first discovered (for example sharing a branch with the user that created the ticket) and iterate the process.
-
-## Recap
-
-TODO

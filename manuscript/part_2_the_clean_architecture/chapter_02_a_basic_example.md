@@ -702,7 +702,7 @@ Rule                     Endpoint
 /static/<path:filename>  static   
 ```
 
-And running the `server` command should give us a proper HTTP server that listen for connections. Run `python manage.py server` and visit `http://localhost:5000/rooms` with your browser. You should receive a JSON file that contains the data you defined in the repository.
+And running the `server` command should give us a proper HTTP server that listen for connections. Run `python manage.py server` and visit http://localhost:5000/rooms with your browser. You should receive a JSON file that contains the data you defined in the repository.
 
 ## Conclusions
 
