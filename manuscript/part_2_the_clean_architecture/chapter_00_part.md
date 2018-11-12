@@ -1,1 +1,1 @@
-# Part 2 - The Clean Architecture #
+# Part 2 - The clean architecture #
