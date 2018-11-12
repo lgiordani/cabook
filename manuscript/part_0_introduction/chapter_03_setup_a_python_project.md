@@ -14,17 +14,17 @@ In general, I advise to have a different virtual environment for each Python pro
 
 I used to create my virtual environments inside the directory of my Python projects. Since I started using Cookiecutter (see next section) to create new projects, however, I switched to a different setup. Keeping the virtual environment outside the project allows me to install Cookiecutter in the virtualenv, instead of being forced to install it system-wide, which sometimes prevents me to use the latest version.
 
-If you create the virtual environment in the project directory you have to configure your version control and other tools to ignore it. In particular, add it to `.gitignore` if you use Git and to `pytest.ini` if you use the pytest testing framework (like I do in the rest of the book). You can find the documentation about the `.gitignore` file at https://git-scm.com/docs/gitignore and the documentation about the configuration of pytest at https://docs.pytest.org/en/latest/reference.html#confval-norecursedirs.
+If you create the virtual environment in the project directory you have to configure your version control and other tools to ignore it. In particular, add it to [`.gitignore`](https://git-scm.com/docs/gitignore) if you use Git and to [`pytest.ini`](https://docs.pytest.org/en/latest/reference.html#confval-norecursedirs) if you use the pytest testing framework (like I do in the rest of the book).
 
 ## Python projects with Cookiecutter
 
-Creating a Python project from scratch is not easy. There are many things to configure and manually writing all the files is something I may only if you strongly desire to understand how the Python distribution code works. If you want to focus on your project, instead, you'd better use a template.
+Creating a Python project from scratch is not easy. There are many things to configure and manually writing all the files is something I suggest only if you strongly desire to understand how the Python distribution code works. If you want to focus on your project, instead, you'd better use a template.
 
 [Cookiecutter](https://cookiecutter.readthedocs.io/en/latest/) is a simple but very powerful Python software created by Audrey Roy Greenfeld that creates files and directories from a template. It creates directories and files, and manages to create very complex set-ups just asking you a handful of questions. There are already templates for Python (obviously), C, Scala, LaTeX, Go, and other languages, and creating your own template is very simple.
 
-The official Python template is maintained by the same author of Cookiecutter, and you can find it [here](https://github.com/audreyr/cookiecutter-pypackage). Other authors provide Python templates, however, that have different set-ups or that rely on different tools.
+The [official Python template](https://github.com/audreyr/cookiecutter-pypackage) is maintained by the same author of Cookiecutter. Other Python templates with different set-ups or that rely on different tools are available, and some of them are linked in the Cokkiecutter README file.
 
-I maintain a Python project template that I will use throughout the book. You are not forced to use it, actually I encourage you to fork it and change what you don't like as soon as you get comfortable with the structure and the role that the various files have. You can find the template [here](https://github.com/lgiordani/cookiecutter-pypackage).
+I maintain [a Python project template](https://github.com/lgiordani/cookiecutter-pypackage) that I will use throughout the book. You are not forced to use it, actually I encourage you to fork it and change what you don't like as soon as you get comfortable with the structure and the role that the various files have.
 
 These templates work perfectly for open source projects. If you are creating a closed source project you will not need some of the files (like the license or the instructions for programmers who want to collaborate), but you can always delete them after you applied the template. If you need to do this more than once, you can fork the template and change it to suit your needs.
 

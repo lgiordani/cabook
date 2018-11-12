@@ -1,5 +1,3 @@
-# Part 2 - The Clean Architecture #
-
 # Components of a clean architecture
 
 ## Layers and data flow
@@ -40,7 +38,9 @@ This part of the architecture is made by external systems that implement the int
 
 ## APIs and shades of grey
 
-The word API is of uttermost importance in a clean architecture. Every layer may be accessed by elements living in inner layers by an API, that is a fixed collection of entry points (methods or objects). (Note: here "fixed" means "the same among every implementation". An API may obviously change in time).
+The word API is of uttermost importance in a clean architecture. Every layer may be accessed by elements living in inner layers by an API, that is a fixed[^fixed] collection of entry points (methods or objects).
+
+[^fixed]: here "fixed" means "the same among every implementation". An API may obviously change in time.
 
 The separation between layers and the content of each layer are not always fixed and immutable. A well-designed system shall also cope with practical world issues such as performances, for example, or other specific needs. When designing an architecture it is very important to know "what is where and why", and this is even more important when you "bend" the rules. Many issues do not have a black-or-white answer, and many decisions are "shades of grey", that is it is up to you to justify why you put something in a given place.
 

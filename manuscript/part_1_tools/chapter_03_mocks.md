@@ -602,7 +602,9 @@ Using more than one `with` statement, however, makes the code difficult to read,
 
 The most widespread version of Python is CPython, which is written, as the name suggests, in C. Part of the standard library is also written in C, while the rest is written in Python itself.
 
-The objects (classes, modules, functions, etc) that are implemented in C are shared between interpreters (Note: having multiple interpreters is something that you achieve embedding the Python interpreter in a C program, for example), and this requires those objects to be immutable, so that you cannot alter them at runtime from a single interpreter.
+The objects (classes, modules, functions, etc) that are implemented in C are shared between interpreters[^interpreters], and this requires those objects to be immutable, so that you cannot alter them at runtime from a single interpreter.
+
+[^interpreters]: having multiple interpreters is something that you achieve embedding the Python interpreter in a C program, for example.
 
 An example of this immutability can be given easily using a Python console
 

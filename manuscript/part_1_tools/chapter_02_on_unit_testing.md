@@ -38,11 +38,13 @@ Too many times developers confuse integration tests with unit tests. One simple 
 
 ## Focus on messages
 
-I will never recommend enough Sandi Metz's talk "The Magic Tricks of Testing" (Note: https://speakerdeck.com/skmetz/magic-tricks-of-testing-railsconf) where she considers the different messages that a software component has to deal with. She comes up with 3 different origins for messages (incoming, sent to self, and outgoing) and 2 types (query and command). The very interesting conclusion she reaches is that you should only test half of them, and I believe this is one of the most useful results you can learn as a software developer. In this section I will shamelessly start from Sandi Metz's categorisations and give a personal view of the matter. I absolutely recommend to watch the original talk as it is both short and very effective.
+I will never recommend enough Sandi Metz's talk ["The Magic Tricks of Testing"](https://speakerdeck.com/skmetz/magic-tricks-of-testing-railsconf) where she considers the different messages that a software component has to deal with. She comes up with 3 different origins for messages (incoming, sent to self, and outgoing) and 2 types (query and command). The very interesting conclusion she reaches is that you should only test half of them, and I believe this is one of the most useful results you can learn as a software developer. In this section I will shamelessly start from Sandi Metz's categorisations and give a personal view of the matter. I absolutely recommend to watch the original talk as it is both short and very effective.
 
 Testing is all about the behaviour of a component when it is used, i.e. when it is connected to other components that interact with it. This interaction is well represented by the word "message", which has hereafter the simple meaning of "data exchanged between two actors".
 
-We can then classify the interactions happening in our system, and thus to our components, by flow (Note: Sandi Metz speaks of "origin") and by type.
+We can then classify the interactions happening in our system, and thus to our components, by flow[^flow] and by type.
+
+[^flow]: Sandi Metz speaks of _origin_.
 
 ### Message flow
 

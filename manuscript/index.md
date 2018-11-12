@@ -41,3 +41,15 @@ A practical approach to better software design
 * Part
     - Chapter
         + Section #
+
+Example
+
+To my wife and children, and to the many readers who have helped make this book a reality.
+Cover photograph and illustration © 2011 Jeff Geerling
+Ansible is a software product distributed under the GNU GPLv3 open source license.
+Editing by Margie Newman and Katherine Geerling.
+
+
+To my father, who taught me to be attentive, curious, and passionate. He succeeded.
+To my mother, who taught me to be smart, cautious, and careful. She didn't succeed.
+Cover photograph by pxhere (https://pxhere.com/en/photo/760437).

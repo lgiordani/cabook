@@ -1,5 +1,3 @@
-# Part 1 - Tools #
-
 # Introduction to TDD
 
 ## Introduction
@@ -18,11 +16,11 @@ Let's start with a simple example taken from a programmer's everyday life.
 
 The programmer is in the office with other colleagues, trying to nail down an issue in some part of the software. Suddenly the boss storms into the office, and addresses the programmer:
 
-Boss: I just met with the rest of the board. Our clients are not happy, we didn't fix enough bugs in the last two months.
-Programmer: I see. How many bugs did we fix?
-Boss: Well, not enough!
-Programmer: OK, so how many bugs do we have to fix every month?
-Boss: More!
+**Boss**: I just met with the rest of the board. Our clients are not happy, we didn't fix enough bugs in the last two months.
+**Programmer**: I see. How many bugs did we fix?
+**Boss**: Well, not enough!
+**Programmer**: OK, so how many bugs do we have to fix every month?
+**Boss**: More!
 
 I guess you feel very sorry for the poor programmer. Apart from the aggressive attitude of the boss, what is the real issue in this conversation? At the end of it there is no hint for the programmer and their colleagues about what to do next. They don't have any clue about what they have to change. They can definitely try to work harder, but the boss didn't refer to actual figures, so it will be definitely hard for the developers to understand if they improved "enough".
 
@@ -38,7 +36,7 @@ So one grain is a heap of sand.
 
 Where is the issue? The concept expressed by the word "heap" is nebulous, it is not clearly defined.
 
-When you write a software you face that same challenge. You cannot conceive a function and just expect it "to work", because this is not clearly defined. How do you test if the function that you wrote "works"? What do you mean with "work"? TDD enforces you to clearly state your goal before you write the code. Actually the TDD mantra is "Test first, code later", and we will shortly see a practical example of this.
+When you write a software you face that same challenge. You cannot conceive a function and just expect it "to work", because this is not clearly defined. How do you test if the function that you wrote "works"? What do you mean with "works"? TDD enforces you to clearly state your goal before you write the code. Actually the TDD mantra is "Test first, code later", and we will shortly see a practical example of this.
 
 For the time being, consider that this is a valid practice also outside the realm of software creation. Whoever runs a business knows that you need to be able to extract some numbers (KPIs) from the activity of your company, because it is comparing those numbers with some predefined thresholds that you can easily tell if the business is healthy or not. KPIs are a form of test, and you have to define them in advance, according to the expectations or needs that you have. 
 
@@ -52,7 +50,13 @@ sum(4, 5) == 9
 
 Let me read this test for you: there will be a `sum` function available in the system that accepts two integers. If the two integers are 4 and 5 the function will return 9.
 
-As you can see there are many things that are tested by this statement. It tests that the function exists, that it accepts two integers, and that it performs the correct sum of 4 and 5. Pay attention that at this stage there is no code that implements the `sum` function, the tests will fail for sure.
+As you can see there are many things that are tested by this statement.
+
+* It tests that the function exists and can be imported
+* It tests that the function accepts two integers
+* It tests that giving 4 and 5 as inputs the output will be 9.
+
+Pay attention that at this stage there is no code that implements the `sum` function, the tests will fail for sure.
 
 As we will see with a practical example in the next chapter, what I explained in this section will become a set of rules of the methodology.
 
@@ -454,11 +458,13 @@ This solution makes both tests pass, so the entire suite runs without errors.
 
 The requirements are not yet satisfied, however, as they mention "multiple" numbers and not just three. How can we test that we can add a generic amount of numbers? We might add a `test_add_four_numbers`, a `test_add_five_numbers`, and so on, but this will cover specific cases and will never cover all of them. Sad to say, it is impossible to test that generic condition, or, at least in this case, so complex that it is not worth trying to do it.
 
-What you shall do in TDD is to test boundary cases. In general you should always try to find the so-called "corner cases" of your algorithm and write tests that show that the code covers them. For example, if you are testing some code that accepts inputs from 1 to 100, you need a test that runs it with a generic number like 42 (Note: which is far from being generic, but don't panic!), but you definitely want to have a specific test that runs the algorithm with the number 1 and one that runs with the number 100. You also want to have tests that show the algorithm doesn't work with 0 and 101 arguments, but we will talk later about testing error conditions.
+What you shall do in TDD is to test boundary cases. In general you should always try to find the so-called "corner cases" of your algorithm and write tests that show that the code covers them. For example, if you are testing some code that accepts inputs from 1 to 100, you need a test that runs it with a generic number like 42[^42], but you definitely want to have a specific test that runs the algorithm with the number 1 and one that runs with the number 100. You also want to have tests that show the algorithm doesn't work with 0 and 101 arguments, but we will talk later about testing error conditions.
 
-In our example there is no real limitation to the number of arguments that you pass to your function. Before Python 3.7 there was a limit of 256 arguments, which has been removed in that version of the language, but these are limitations enforced by an external system, and they are not real boundaries of your algorithm.
+[^42]: which is far from being generic, but don't panic!
 
-Note: the definition of "external system" depends on what you are testing, obviously. If you are implementing a programming language you want to have tests that show how many arguments you can pass to a function, or that check the amount of memory used by certain language features. In this case we accept the Python language as the environment in which we work, so we don't want to test its features.
+In our example there is no real limitation to the number of arguments that you pass to your function. Before Python 3.7 there was a limit of 256 arguments, which has been removed in that version of the language, but these are limitations enforced by an external system[^external], and they are not real boundaries of your algorithm.
+
+[^external]: the definition of "external system" obviously depends on what you are testing. If you are implementing a programming language you want to have tests that show how many arguments you can pass to a function, or that check the amount of memory used by certain language features. In this case we accept the Python language as the environment in which we work, so we don't want to test its features.
 
 The solution, in this case, might be to test a reasonable high amount of input arguments, to check that everything works. In particular, we should have a concern for a generic solution, which cannot rely on default arguments. To be clear, we easily realise that we cannot come up with a function like
 
@@ -477,7 +483,9 @@ def test_add_many_numbers():
     assert Calc().add(*s) == 4950
 ```
 
-which creates an array (Note: strictly speaking this creates a `range`, which is an iterable) of all the numbers from 0 to 99. The sum of all those numbers is 4950, which is what the algorithm shall return. The test suite fails because we are giving the function too many arguments
+which creates an array[^iterable] of all the numbers from 0 to 99. The sum of all those numbers is 4950, which is what the algorithm shall return. The test suite fails because we are giving the function too many arguments
+
+[^iterable]: strictly speaking this creates a `range`, which is an iterable.
 
 {line-numbers=off}
 ``` txt
@@ -502,9 +510,9 @@ class Calc:
 
 At that point we can use the `sum` built-in function to sum all the arguments. This solution makes the whole test suite pass without errors, so it is correct.
 
-Pay attention here, please. In TDD a solution is not correct when it is beautiful, when it is smart, or when it uses the latest feature of the language. All these things are good, but TDD wants your code to pass the tests. So, your code might be ugly, convoluted, and slow, but if it passes the test it is correct. This in turn means that TDD doesn't cover all the needs of your software project. Delivering fast routines, for example, might be part of the advantage you have on your competitors, but it is not really testable with the TDD methodology.
+Pay attention here, please. In TDD a solution is not correct when it is beautiful, when it is smart, or when it uses the latest feature of the language. All these things are good, but TDD wants your code to pass the tests. So, your code might be ugly, convoluted, and slow, but if it passes the test it is correct. This in turn means that TDD doesn't cover all the needs of your software project. Delivering fast routines, for example, might be part of the advantage you have on your competitors, but it is not really testable with the TDD methodology[^testit].
 
-Note: yes, you can test it running a function and measuring the execution time. This however, depends too much on external conditions, so typically performance testing is done in a completely different way.
+[^testit]: yes, you can test it running a function and measuring the execution time. This however, depends too much on external conditions, so typically performance testing is done in a completely different way.
 
 Part of the TDD methodology, then, deals with "refactoring", which means changing the code in a way that doesn't change the outputs, which in turns means that all your tests keep passing. Once you have a proper test suite in place, you can focus on the beauty of the code, or you can introduce smart solutions according to which the language allows you to do.
 
@@ -623,7 +631,7 @@ The steps followed by the algorithm will be
 7. Apply the function to 384 (result of the previous step) and 3 (first element of the array). The new result is `384 * 3`, that is 1152
 8. Remove the first element, the array is now empty and the procedure ends
 
-Going back to our `Calc` class, we might import `reduce` form the `functools` module and use it on the `args` array. We need to provide a function that we can define in the `mul` function itself.
+Going back to our `Calc` class, we might import `reduce`[^reduce] form the `functools` module and use it on the `args` array. We need to provide a function[^closure] that we can define in the `mul` function itself.
 
 ``` python
 from functools import reduce
@@ -639,9 +647,9 @@ class Calc:
         return reduce(mul2, args)
 ```
 
-Note: more info on the `reduce` algorithm can be found [here](https://en.wikipedia.org/wiki/MapReduce). The Python function documentation is [here](https://docs.python.org/3.6/library/functools.html#functools.reduce).
+[^reduce]: More information about the `reduce` algorithm can be found on the MapReduce Wikipedia page [https://en.wikipedia.org/wiki/MapReduce](https://en.wikipedia.org/wiki/MapReduce). The Python function documentation can be found at [https://docs.python.org/3.6/library/functools.html#functools.reduce](https://docs.python.org/3.6/library/functools.html#functools.reduce).
 
-Note: did you know you can define functions inside functions? Dig the Internet for "closures", and you will learn something extremely powerful and interesting.
+[^closure]: We are actually defining a function inside a function. Dig the Internet for "closures", and you will learn something extremely powerful and interesting. TODO
 
 The above code makes the test suite pass, so we can move on and address the next problem. As happened with addition we cannot properly test that the function accepts a potentially infinite number of arguments, so we can test a reasonably high number of inputs.
 
@@ -667,9 +675,9 @@ T> A test should fail the first time you run it. If it doesn't, ask yourself why
 
 ## Step 6 - A first example of refactoring
 
-Previously, I introduced the concept of refactoring, which means changing the code without altering the results. How can you be sure you are not altering the behaviour of your code? Well, this is what the tests are for. If the new code keeps passing the test suite you can be sure that you didn't remove any feature.
+Previously, I introduced the concept of refactoring, which means changing the code without altering the results. How can you be sure you are not altering the behaviour of your code? Well, this is what the tests are for. If the new code keeps passing the test suite you can be sure that you didn't remove any feature[^refactoring].
 
-Note: In theory, refactoring shouldn't add any new behaviour to the code, as it should be an idempotent transformation. There is no real practical way to check this, and we will not bother with it now. You should be concerned with this if you are discussing security, as your code shouldn't add any entry point you don't want to be there. In this case you will need tests that check not the presence of some feature, but the absence of them.
+[^refactoring]: In theory, refactoring shouldn't add any new behaviour to the code, as it should be an idempotent transformation. There is no real practical way to check this, and we will not bother with it now. You should be concerned with this if you are discussing security, as your code shouldn't add any entry point you don't want to be there. In this case you will need tests that check not the presence of some feature, but the absence of them.
 
 This means that if you have no tests you shouldn't refactor. But, after all, if you have no tests you shouldn't have any code, either, so refactoring shouldn't be a problem you have. If you have some code without tests (I know you have it, I do), you should seriously consider writing tests for it, at least before changing it. More on this in a later section.
 
@@ -1157,7 +1165,9 @@ Through this very simple example we learned 6 important rules of the TDD methodo
 
 ## How to manage bugs or missing features
 
-In this chapter we developed the project from scratch, so the challenge was to come up with a series of small tests starting from the requirements. At a certain point in the life of your project you will have a stable version in production (Note: this expression has many definitions, but in general it means "used by someone other than you") and you will need to maintain it. This means that people will file bug reports and feature requests, and TDD gives you a clear strategy to deal with those.
+In this chapter we developed the project from scratch, so the challenge was to come up with a series of small tests starting from the requirements. At a certain point in the life of your project you will have a stable version in production[^production] and you will need to maintain it. This means that people will file bug reports and feature requests, and TDD gives you a clear strategy to deal with those.
+
+[^production]: this expression has many definitions, but in general it means "used by someone other than you".
 
 From the TDD point of view both a bug and a missing feature are a case not currently covered by a test, so I will refer to them collectively as bugs, but don't forget that I'm talking about the second ones as well. 
 

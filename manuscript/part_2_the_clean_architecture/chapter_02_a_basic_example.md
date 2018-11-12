@@ -19,6 +19,8 @@ I will follow the TDD methodology, but I will not show all the single steps to a
 
 Remember that there are multiple ways to implement the clean architecture concepts, and the code you can come up with strongly depends on what your language of choice allows you to do. The following is an example of clean architecture in Python, and the implementation of the models, use cases and other components that I will show is just one of the possible solutions.
 
+The full project is available at TODO
+
 ## Project setup
 
 Follow the instructions I gave in the first chapter and create a virtual environment for the project, install Cookiecutter, and then create a project using the recommended template. For this first project use the name `rentomatic` as I did, so you can use the same code that I will show without having to change the name of the imported modules.

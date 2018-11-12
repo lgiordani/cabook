@@ -11,7 +11,7 @@ The project unfortunately was later cancelled, but the clean architecture ideas 
 
 In 2013 I started writing a personal blog, [The Digital Cat](http://blog.thedigitalcatonline.com/), and after having published many Python-related posts I began working on a post that would show other programmers the beauty of the clean architecture concepts. This post is "Clean Architectures in Python: a step by step example", published in 2016, and it was well received by the Python community. For a couple of years I considered expanding the post, but I couldn't find the time to do it, and in the meanwhile I realised that many things I wrote had to be corrected, clarified, or simply updated.
 
-When I finally began doing it I also realised that other posts that I wrote could clarify parts of the methodology used in developing a project based on the clean architecture, like the introductions to TDD. So I thought that maybe a book could be the best way to present the whole picture in a proper way, and from that moment I started working on what you are reading now.
+When I finally began doing it I also realised that other posts that I wrote could clarify parts of the methodology used in developing a project based on the clean architecture, like the introduction to TDD. So I thought that maybe a book could be the best way to present the whole picture in a proper way, and from that moment I started working on what you are reading now.
 
 This book is the product of many hours spent thinking, experimenting, studying, and making mistakes. I couldn't have written it without the help of many people, some of whom I don't even know, who provided free documentation, free software, free help.
 
@@ -23,9 +23,9 @@ Errors... There will be many, be warned. I'm not a native English speaker and I 
 
 This book is divided in three parts.
 
-The first part is about **Test-driven Development (TDD)**, a programming technique that will help you to create software which is more reliable and easier to modify. I will first guide you through a **very simple example** (chapter 1), demonstrating how to use TDD to approach a project, and how to properly create tests from requirements. I will then discuss unit testing from a more theoretical point of view, categorising functions and their tests (chapter 2). Chapter 3 will introduce **mocks**, a powerful tool that helps testing complex scenarios. Last, chapter 4 contains exercises and solutions.
+The first part is about **Test-driven Development (TDD)**, a programming technique that will help you to create software which is more reliable and easier to modify. I will first guide you through a **very simple example** (chapter 1), demonstrating how to use TDD to approach a project, and how to properly create tests from requirements. I will then discuss unit testing from a more theoretical point of view, categorising functions and their tests (chapter 2). Chapter 3 will introduce **mocks**, a powerful tool that helps testing complex scenarios.
 
-The second part introduces **the clean architecture**. The first chapter discusses briefly the **components** and the ideas behind this software structure, while chapter 2 runs through *a concrete example* of a clean architecture for a very simple Web service. Chapter 3 discusses **error management** and improvements to the Python code developed in the previous chapter.
+The second part introduces **the clean architecture**. The first chapter discusses briefly the **components** and the ideas behind this software structure, while chapter 2 runs through **a concrete example** of a clean architecture for a very simple Web service. Chapter 3 discusses **error management** and improvements to the Python code developed in the previous chapter.
 
 The third part shows how the **Gaudi** library works, and how it can simplify creating a clean architecture in Python. The first chapter discusses the **components of the library**, while chapter 2 analyses a **full project** built using the library.
 

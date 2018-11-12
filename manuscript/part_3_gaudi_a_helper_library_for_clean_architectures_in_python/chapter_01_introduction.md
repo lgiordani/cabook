@@ -1,5 +1,3 @@
-# Part 3 - Gaudi: a helper library for clean architectures #
-
 # Introduction
 
 A clean architecture is not a framework in the common sense. From a certain point of view it is the opposite of a framework, as it pushes a structure that is modelled after your application and not the opposite. This doesn't mean however that everything has to be written from scratch every time.

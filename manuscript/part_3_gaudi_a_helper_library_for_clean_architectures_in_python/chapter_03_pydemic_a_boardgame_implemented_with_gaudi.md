@@ -1,4 +1,4 @@
-# The game
+# Pydemic: a boardgame implemented with gaudi
 
 The game we are going to develop is called PyDemic, and it is a Python version of the beautiful Pandemic game by Matt Leacock. I will create the main engine, without discussing any external interface like Web clients, graphics and so on, as these topics are outside the scope of this book.
 
@@ -64,7 +64,7 @@ test_board_model_init = model_tests.create_model_init_tests(
 )
 ```
 
-and the code uses the `gaudi.domain.model.Model` class
+and the code uses the `gaudi.domain.model.Model` class[^dataclasses]
 
 ``` python
 from gaudi.domain import model
@@ -99,7 +99,7 @@ class Board(model.Model):
     ]
 ```
 
-(Note: dataclasses may be the official way to do this in the future, but for now they are available in Python 3.7 only). This shows however that `gaudi` tries to provide classes that can be replaced by custom solutions at any time.
+[^dataclasses]: dataclasses may be the official way to do this in the future, but for now they are available in Python 3.7 only. This shows however that `gaudi` tries to provide classes that can be replaced by custom solutions at any time.
 
 The test relies on a `pydemic/constants.py` file that shall contain the following code
 
