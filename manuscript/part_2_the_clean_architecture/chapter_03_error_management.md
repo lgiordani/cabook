@@ -1,4 +1,4 @@
-# Error management
+# Chapter 3 - Error management
 
 ## Introduction
 

@@ -1,4 +1,4 @@
-# Database repositories
+# Chapter 4 - Database repositories
 
 The basic in-memory repository I implemented for the project is enough to show the concept of the repository layer abstraction, as any other type of repository will follow the same idea. In the spirit of providing a simple but realistic solution, however, I believe it is worth reimplementing the repository layer with a proper database.
 

@@ -1,4 +1,4 @@
-# A basic example
+# Chapter 2 - A basic example
 
 ## Project overview
 

@@ -1,4 +1,4 @@
-# Components of a clean architecture
+# Chapter 1 - Components of a clean architecture
 
 ## Layers and data flow
 

@@ -1,4 +1,4 @@
-# Introduction
+# Chapter 1 - Components of the library
 
 A clean architecture is not a framework in the common sense. From a certain point of view it is the opposite of a framework, as it pushes a structure that is modelled after your application and not the opposite. This doesn't mean however that everything has to be written from scratch every time.
 
@@ -7,8 +7,6 @@ After I wrote many applications following the clean architecture approach, I rea
 The main concern of gaudi is to provide useful abstractions, keeping the compatibility with a custom system that the author may have already created. This means that you can introduce gaudi gradually, and even use it for just some parts of your architecture. You might define the domain models using gaudi's base `Model` class and implement use cases by yourself, or do the opposite, using the `UseCase` class provided by gaudi with your models. You can obviously just discard gaudi at all and implement everything from scratch like we did in the previous chapter.
 
 In this part I will develop a board game engine with a clean architecture using gaudi. This is meant to demonstrate once again how to use a clean architecture in a project, and to show how gaudi can simplify the code.
-
-# The gaudi library
 
 ## Domain models
 

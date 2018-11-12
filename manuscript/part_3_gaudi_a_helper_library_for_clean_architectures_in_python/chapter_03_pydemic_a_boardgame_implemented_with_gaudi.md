@@ -1,4 +1,4 @@
-# Pydemic: a boardgame implemented with gaudi
+# Chapter 2 - Pydemic
 
 The game we are going to develop is called PyDemic, and it is a Python version of the beautiful Pandemic game by Matt Leacock. I will create the main engine, without discussing any external interface like Web clients, graphics and so on, as these topics are outside the scope of this book.
 
@@ -6,7 +6,7 @@ You can find the Pandemic rules on the Z-Man Games site, and many videos and tut
 
 The full project is available at TODO
 
-# The board model
+## The board model
 
 Let's start implementing the domain model to represent the board. I will work with two files, one for the tests (`tests/domain/test_board.py`) and one for the code (`pydemic/domain/board.py`).
 
@@ -126,7 +126,7 @@ tests/domain/test_board.py::test_board_model_init[Args: {'__defaults': {'outbrea
 
 This set of tests is not exhaustive of all the possible combinations of inputs. I don't consider such a broad range of combinations worth testing, at least until I discover some issue in the code with further tests. It is worth mentioning, however, that with `gaudi` it is very simple to set up initialisation tests for standard models, requiring only a dictionary of the input parameters.
 
-# Managing events
+## Managing events
 
 According to the requirements, the `Board` model needs a method to set the active event card so the test for this is
 
@@ -175,7 +175,7 @@ and the code in the class
         return events
 ```
 
-# Outbreaks
+## Outbreaks
 
 The board needs a method to record an outbreak event. The test is
 
@@ -221,7 +221,7 @@ This method uses the `constants` file created before, that you have to import. Y
 MAX_OUTBREAKS = 8
 ```
 
-# Infections
+## Infections
 
 The infection mechanism in PyDemic is not complex, but it has a lot of corner cases, which translates in a big amount of tests. My recommendation is that you copy the tests one by one, trying to write code that passes the whole test suite, moving to the next test only when everything works. I won't comment here the tests line by line as I consider them very straightforward, I will just mention briefly the purpose of each of them.
 
@@ -421,7 +421,7 @@ CONNECTIONS = {
     [...]
 ```
 
-# Other models
+## Other models
 
 The remaining two models we need are `Deck` and `Player`.
 
@@ -429,7 +429,7 @@ The remaining two models we need are `Deck` and `Player`.
 
 The `Player` model has many attributes and a single method. The attributes are `name`, `role`, `city`, `hand`, and `single_use`. The `hand` attribute represents the city cards that the player has at at a certain time, and `single_use` represents the event cards. I decided to keep them separate but since cards have a type these two lists may be merges in one.
 
-# Use cases
+## Use cases
 
 When you define a use case you can store it in `gaudi`. The library keeps a global register of use cases and thus you can use `UseCaseRegister`, `UseCaseCreator`, or `UseCaseExecutor`.
 
