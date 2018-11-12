@@ -44,6 +44,7 @@ Pay attention. Nothing prevents you from changing the thresholds as a reaction t
 
 Going back to software and TDD, following this methodology you are forced to state clear goals like
 
+{line-numbers: false}
 ```
 sum(4, 5) == 9
 ```
@@ -182,7 +183,8 @@ Run the test again, and this time you should receive a different error, that is
 {line-numbers: false}
 ``` txt
 =============================== test session starts ===============================
-platform linux -- Python 3.6.5, pytest-3.0.7, py-1.5.4, pluggy-0.4.0 -- /home/leo/devel/cabook/venv3/bin/python3
+platform linux -- Python 3.6.5, pytest-3.0.7, py-1.5.4, pluggy-0.4.0 --
+/home/leo/devel/cabook/venv3/bin/python3
 cachedir: .cache
 rootdir: /home/leo/devel/cabook/calc, inifile: pytest.ini
 plugins: cov-2.4.0
@@ -191,7 +193,7 @@ collected 1 items
 tests/test_calc.py::test_add_two_numbers FAILED
 
 ==================================== FAILURES =====================================
-________________________________________________ test_add_two_numbers _________________________________________________
+______________________________ test_add_two_numbers _______________________________
 
     def test_add_two_numbers():
         c = Calc()
@@ -208,7 +210,8 @@ Since the last one is the first proper pytest failure report that we meet, it's 
 {line-numbers: false}
 ``` txt
 =============================== test session starts ===============================
-platform linux -- Python 3.6.5, pytest-3.0.7, py-1.5.4, pluggy-0.4.0 -- /home/leo/devel/cabook/venv3/bin/python3
+platform linux -- Python 3.6.5, pytest-3.0.7, py-1.5.4, pluggy-0.4.0 --
+/home/leo/devel/cabook/venv3/bin/python3
 cachedir: .cache
 rootdir: /home/leo/devel/cabook/calc, inifile: pytest.ini
 plugins: cov-2.4.0
@@ -848,7 +851,7 @@ As you can see a simple requirement can produce multiple tests. Some of these ar
 
 There is a fourth category of tests, which are the ones that come from bugs that you discover. We will discuss about those later in this chapter.
 
-## Step 9.1 - Average of an iterable
+### Step 9.1 - Average of an iterable
 
 Let's start adding a test for requirement number 1
 
@@ -886,7 +889,7 @@ class Calc:
         return sum(it)/len(it)
 ```
 
-## Step 9.2 - Upper threshold
+### Step 9.2 - Upper threshold
 
 The second requirement mentions an upper threshold, but we are free with regards to the API, i.e. the requirement doesn't specify how the threshold is supposed to be specified or named. I decided to call the upper threshold parameter `ut`, so the test becomes
 
@@ -930,7 +933,7 @@ There are two problems now that we have to solve, as it happened for the second 
 
 The idea here is that `ut` is used to filter the iterable keeping all the elements that are less than or equal to the threshold. This means that the default value for the threshold has to be neutral with regards to this filtering operation. Using the maximum value of the iterable makes the whole algorithm work in every case, while for example using a big fixed value like `9999` would introduce a bug, as one of the elements of the iterable might be bigger than that value.
 
-## Step 9.3 - Lower threshold
+### Step 9.3 - Lower threshold
 
 The lower threshold is the mirror of the upper threshold, so it doesn't require many explanations. The test is
 
@@ -958,7 +961,7 @@ and the code of the `avg` function now becomes
         return sum(_it)/len(_it)
 ```
 
-## Step 9.4 and 9.5 - Boundary inclusion
+### Step 9.4 and 9.5 - Boundary inclusion
 
 As you can see from the code of the `avg` function, the upper and lower threshold are included in the comparison, so we might consider the requirements as already satisfied. TDD, however, pushes you to write a test for each requirement (as we saw it's not unusual to actually have multiple tests per requirements), and this is what we are going to do. 
 
@@ -988,7 +991,7 @@ def test_avg_lower_threshold_is_included():
 
 And, as expected, both pass without any change in the code.
 
-## Step 9.6 - Empty list
+### Step 9.6 - Empty list
 
 Requirement number 6 is something that wasn't clearly specified in the project description so we decided to return 0 as the average of an empty list. You are free to change the requirement and decide to raise an exception, for example.
 
@@ -1047,7 +1050,7 @@ The `min` function that we used to compute the default lower threshold doesn't w
 
 As you can see the `avg` function is already pretty rich, but at the same time it is well structured and understandable. This obviously happens because the example is trivial, but cleaner code is definitely among the benefits of TDD.
 
-## Step 9.7 - Empty list after applying the thresholds
+### Step 9.7 - Empty list after applying the thresholds
 
 The next requirement deals with the case in which the outlier removal process empties the list. The test is the following
 
@@ -1137,7 +1140,7 @@ After some attempts I found this solution
 
 which looks reasonably clean, and makes the whole test suite pass.
 
-## Step 9.8 - Empty list before applying the thresholds
+### Step 9.8 - Empty list before applying the thresholds
 
 The last requirement checks another boundary case, which happens when the list is empty and we specify one of or both the thresholds. This test will check that the outlier removal code doesn't assume the list contains elements.
 
