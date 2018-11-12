@@ -1,3 +1,5 @@
 #!/bin/bash
 
-find manuscript/part* -iname "*.md" | sort > manuscript/Book.txt
+path=manuscript
+
+find manuscript -iname "*.md" -printf "%P\n" | sort > ${path}/Book.txt
