@@ -225,7 +225,7 @@ If we change the `setup` method to
 
 the test will fail with the following error
 
-{line-numbers=off}
+{line-numbers: false}
 ``` sh
 E           AssertionError: Expected call: setup(cache=True, max_connections=256)
 E           Actual call: setup(cache=True)
@@ -661,7 +661,7 @@ def test_log(mock_now):
 
 When you try to execute this test you will get the following error
 
-{line-numbers=off}
+{line-numbers: false}
 ``` txt
 TypeError: can't set attributes of built-in/extension type 'datetime.datetime'
 ```

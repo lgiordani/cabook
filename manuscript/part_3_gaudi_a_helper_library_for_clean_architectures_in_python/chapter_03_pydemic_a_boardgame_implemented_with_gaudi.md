@@ -114,7 +114,7 @@ I consider worth having tests for the model even if it its structure is generate
 
 Please note that the tests created with this factory are verbose and tell you the parameters that were used
 
-{line-numbers=off}
+{line-numbers: false}
 ``` sh
 $ py.test -svv
 

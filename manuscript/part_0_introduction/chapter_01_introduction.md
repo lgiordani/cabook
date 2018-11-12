@@ -66,4 +66,5 @@ I will thus use Python in this book, but the main concepts are valid for any oth
 
 The clean architecture concepts are independent from the language, but the implementation obviously leverages what a specific language allows to do, so this book is about the clean architecture and an implementation of it that I devised using Python. I really look forward to seeing more books about the clean architecture that explore other implementations in Python and in other languages.
 
-_Cover photograph by pxhere (https://pxhere.com/en/photo/760437)._
+_Cover photograph by pxhere (https://pxhere.com/en/photo/760437)_
+_Cover font Lato by Łukasz Dziedzic (http://www.latofonts.com)_

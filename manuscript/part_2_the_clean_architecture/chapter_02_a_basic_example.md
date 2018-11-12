@@ -346,7 +346,7 @@ print(result)
 
 You can execute this file with `python cli.py` or, if you prefer, run `chmod +x cli.py` (which make it executable) and then run it with `./cli.py` directly. The expected result is an empty list
 
-{line-numbers=off}
+{line-numbers: false}
 ``` sh
 $ ./cli.py
 []
@@ -408,7 +408,7 @@ Again, remember that this is due to the trivial nature of our storage, and not t
 
 If you run the command line tool now, you will get a richer result
 
-{line-numbers=off}
+{line-numbers: false}
 ``` sh
 $ ./cli.py 
 [{'code': 'f853578c-fc0f-4e65-81b8-566c5dffa35a', 'size': 215, 'price': 39, 'longitude': '-0.09998975', 'latitude': '51.75436293'}, {'code': 'fe2c3195-aeff-487a-a08f-e0bdc0ec6e9a', 'size': 405, 'price': 66, 'longitude': '0.18228006', 'latitude': '51.74640997'}, {'code': '913694c6-435a-4366-ba0d-da5334a611b2', 'size': 56, 'price': 60, 'longitude': '0.27891577', 'latitude': '51.45994069'}]
@@ -698,7 +698,7 @@ You can read the documentation about Flask-script files [here](https://flask-scr
 
 Now, if we run the `urls` command we should see the API endpoint that we defined
 
-{line-numbers=off}
+{line-numbers: false}
 ``` sh
 $ python manage.py urls
 Rule                     Endpoint 
