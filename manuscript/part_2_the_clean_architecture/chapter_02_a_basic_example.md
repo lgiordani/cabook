@@ -23,7 +23,18 @@ The full project is available at TODO
 
 ## Project setup
 
-Follow the instructions I gave in the first chapter and create a virtual environment for the project, install Cookiecutter, and then create a project using the recommended template. For this first project use the name `rentomatic` as I did, so you can use the same code that I will show without having to change the name of the imported modules.
+Follow the instructions I gave in the first chapter and create a virtual environment for the project, install Cookiecutter, and then create a project using the recommended template. For this first project use the name `rentomatic` as I did, so you can use the same code that I will show without having to change the name of the imported modules. You also want to use pytest, so answer yes to that question.
+
+After you created the project install the requirements with
+
+{line-numbers: false}
+``` sh
+$ pip install -r requirements/dev.txt
+```
+
+Try to run `py.test -svv` to check that everything is working correctly, and then remove the files `tests/test_rentomatic.py` and `rentomatic/rentomatic.py`.
+
+In this chapter I will not explicitly state that I run the test suite, as I consider it part of the standard workflow. Every time we write a test you should run the suite and check that you get an error (or more), and the code that I give as a solution should make the test suite pass. You are free to try to implement your own code before copying my solution, obvioously.
 
 ## Domain models
 
@@ -48,7 +59,9 @@ def test_room_model_init():
     assert room.latitude == 51.75436293
 ```
 
-This test ensures that the model can be initialised with the correct values. All the parameters of the model are mandatory. Later we could want to make some of them optional, and in that case we will have to add the relevant tests.
+TODO(longitude string??)
+
+Remember to create an `__init__.py` file in subdirectory of `tests/`, so in this case create `tests/domain/__init__.py`. This test ensures that the model can be initialised with the correct values. All the parameters of the model are mandatory. Later we could want to make some of them optional, and in that case we will have to add the relevant tests.
 
 Now let's write the `Room` class in the `rentomatic/domain/room.py` file.
 
@@ -67,7 +80,7 @@ The model is very simple, and requires no further explanation. Given that we wil
 ``` python
 def test_room_model_from_dict():
     code = uuid.uuid4()
-    room = m.Room.from_dict(
+    room = r.Room.from_dict(
         {
             'code': code,
             'size': 200,
@@ -83,7 +96,7 @@ def test_room_model_from_dict():
     assert room.latitude == 51.75436293
 ```
 
-while the implementation is
+while the implementation inside the `Room` class is
 
 ``` python
     @classmethod
@@ -169,6 +182,8 @@ It's time to implement the actual business logic that runs inside our applicatio
 The simplest use case we can create is one that fetches all the rooms stored in the repository and returns them. The repository is our storage component, and according to the clean architecture it will be implemented in an outer level (external systems). We will access it as an interface, which in Python means that we will receive an object that we expect will expose a certain API.
 
 From the testing point of view the best way to run code that accesses an interface is to mock this latter. Put this code in the `tests/use_cases/test_room_list_use_case.py`
+
+TODO point to fixtures documentation
 
 ``` python
 import pytest
@@ -418,29 +433,24 @@ $ ./cli.py
 
 In this section I will go through the creation of an HTTP endpoint for the room list use case. An HTTP endpoint is a URL exposed by a Web server that runs a specific logic and returns values, often formatted as JSON, which is a widely used format for this type of API.
 
-The semantic of the URLs in this system, that is the structure of a URL and the requests it can accept, comes from the REST recommendations. REST is however not part of the clean architecture, which means that you can choose to model your URLs according to whatever scheme you might prefer.
+The semantic of URLs, that is their structure and the requests they can accept, comes from the REST recommendations. REST is however not part of the clean architecture, which means that you can choose to model your URLs according to whatever scheme you might prefer.
 
 To expose the HTTP endpoint we need a web server written in Python, and in this case I chose Flask. Flask is a lightweight web server with a modular structure that provides just the parts that the user needs. In particular, we will not use any database/ORM, since we already implemented our own repository layer. The clean architecture works perfectly with other frameworks, like Django, web2py, Pylons, and so on.
 
-Let us start updating the requirements files. The `requirements/prod.txt` file shall contain Flask, as this package is used to serve the HTTP connections in production
+Let us start updating the requirements files. The `requirements/dev.txt` file shall contain Flask, as this package contains a script that runs a local webserver that we can use to expose the endpoint
 
 ```text
+-r test.txt
+pip
+punch.py
+wheel
+watchdog
+flake8
+Sphinx
 Flask
 ```
 
-The `dev.txt` file will contain the [Flask-Script extension](https://flask-script.readthedocs.io/en/latest/) TODO WHICH WE USE BECAUSE... 
-
-``` text
--r test.txt
-
-pip
-wheel
-flake8
-Sphinx
-Flask-Script
-```
-
-And the `test.txt` file will contain the pytest extension to work with Flask (more on this later)
+The `requirements/test.txt` file will contain the pytest extension to work with Flask (more on this later)
 
 ``` text
 -r prod.txt
@@ -452,32 +462,26 @@ pytest-cov
 pytest-flask
 ```
 
-Remember to run `pip install -r requirements/dev.txt` again after those changes to actually install the new packages in your virtual environment.
+Remember to run `pip install -r requirements/dev.txt` again after those changes to install the new packages in your virtual environment.
 
 The setup of a Flask application is not complex, but a lot of concepts are involved, and since this is not a tutorial on Flask I will run quickly through these steps. I will however provide links to the Flask documentation for every concept.
 
 I usually define different configurations for my testing, development, and production environments. Since the Flask application can be configured using a plain Python object ([documentation](http://flask.pocoo.org/docs/latest/api/#flask.Config.from_object)), I created the file `rentomatic/flask_settings.py` to host those objects
 
 ``` python
-import os
-
-
 class Config(object):
     """Base configuration."""
-
-    #APP_DIR = os.path.abspath(os.path.dirname(__file__))  # This directory
-    PROJECT_ROOT = os.path.abspath(os.path.join(APP_DIR, os.pardir))
 
 
 class ProdConfig(Config):
     """Production configuration."""
-    ENV = 'prod'
+    ENV = 'production'
     DEBUG = False
 
 
 class DevConfig(Config):
     """Development configuration."""
-    ENV = 'dev'
+    ENV = 'development'
     DEBUG = True
 
 
@@ -490,7 +494,7 @@ class TestConfig(Config):
 
 Read [this page](http://flask.pocoo.org/docs/latest/config/) to know more about Flask configuration parameters.
 
-Now we need a function that initialises the Flask application ([documentation](http://flask.pocoo.org/docs/latest/patterns/appfactories/)), configures it, and registers the blueprints ([documentation](http://flask.pocoo.org/docs/latest/blueprints/)). The file `rentomatic/app.py` contains the following code
+Now we need a function that initialises the Flask application ([documentation](http://flask.pocoo.org/docs/latest/patterns/appfactories/)), configures it, and registers the blueprints ([documentation](http://flask.pocoo.org/docs/latest/blueprints/)). The file `rentomatic/app.py` contains the following code, which is an app factory
 
 ``` python
 from flask import Flask
@@ -506,9 +510,34 @@ def create_app(config_object=DevConfig):
     return app
 ```
 
-The application endpoints need to return a Flask `Response` object, with the actual results and an HTTP status. The content of the response, in this case, is the JSON serialization of the use case result.
+Before we create the proper setup of the webserver we want to create the endpoint that will be exposed. Endpoints are ultimately functions that are run when a use sends a request to a certain URL, so we can still work with TDD, as the final goal is to have code that produces certain results.
 
-The test for the REST endpoint goes into the file `tests/rest/test_get_rooms_list.py`
+The problem we have testing an endpoint is that we need the webserver to be up and running when we hit the test URLs. This time the webserver is not an external system, that we can mock to test the correct use of its API, but is part of our system, so we need to run it. This is what the `pytest-flask` extension provides, in the form of pytest fixtures, in particular the `client` fixture.
+
+This fixture hides a lot of automation, so it might be considered a bit "magic" at a first glance. When you install the `pytest-flask` extension the fixture is available automatically, so you don't need to import it. Moreover, it tries to access another fixture named `app` that you have to define. This is thus the first thing to do.
+
+Fixtures can be defined directly in your tests file, but if we want a fixture to be globally available the best place to define it is the file `conftest.py` which is automatically loaded by pytest. As you can see there is a great deal of automation, and if you are not aware of it you might be surprised by the results, or frustrated by the errors. To be honest, this second case is the TODO most likely.
+
+Lets create the file `tests/conftest.py`
+
+``` python
+import pytest
+
+
+from rentomatic.app import create_app
+from rentomatic.flask_settings import TestConfig
+
+
+@pytest.yield_fixture(scope='function')
+def app():
+    return create_app(TestConfig)
+```
+
+First of all the fixture has been defined with the scope of a function, which means that it will be recreated for each test. This is good, as tests should be isolated, and we do not want to resuse the application that another test has already tainted TODO.
+
+The function itself runs the app factory to create a Flask app, using the `TestConfig` configuration from `flask_settings`, which sets the `TESTING` flag to `True` TODO(documentation)
+
+At this point we can write the test for our endpoint. Create the file `tests/rest/test_get_rooms_list.py`
 
 ``` python
 import json
@@ -569,7 +598,7 @@ The first part contains imports and sets up a room from a dictionary. This way w
 def test_get(mock_use_case, client):
 ```
 
-This is the only test that we have for the time being. During the whole test we mock the whole use case, as we are not interested in running it. We are however interested in checking the arguments it is called with, and a mock can provide this information. The test receives the mock from the the `patch` decorator and `client`, which is one of the fixtures provided by `pytest-flask`. The `client` fixture automatically loads the `app` one, which we defined in `conftst.py`, and is an object that simulates an HTTP client that can access the API endpoints and store the responses of the server.
+This is the only test that we have for the time being. During the whole test we mock the use case, as we are not interested in running it. We are however interested in checking the arguments it is called with, and a mock can provide this information. The test receives the mock from the the `patch` decorator and `client`, which is one of the fixtures provided by `pytest-flask`. The `client` fixture automatically loads the `app` one, which we defined in `conftst.py`, and is an object that simulates an HTTP client that can access the API endpoints and store the responses of the server.
 
 ``` python
     mock_use_case().execute.return_value = rooms
@@ -588,7 +617,7 @@ The central part of the test is the line where we `get` the API endpoint, which 
 
 After this we check that the data contained in the response is actually a JSON that represents the `room_dict` structure, that the `execute` method has been called without any parameters, that the HTTP response status code is 200, and last that the server sends the correct mimetype back.
 
-It's time to write the endpoint, where we will finally see all the pieces of the architecture working together. The minimal Flask endpoint we can put in `rentomatic/rest/room.py` is
+It's time to write the endpoint, where we will finally see all the pieces of the architecture working together. The minimal Flask endpoint we can create is something like
 
 ``` python
 blueprint = Blueprint('room', __name__)
@@ -604,7 +633,7 @@ def room():
 
 As you can see the structure is really simple. Apart from setting the blueprint, which is the way Flask registers endpoints, we create a simple function that runs the endpoint, and we decorate it assigning the `/rooms` endpoint that serves `GET` requests. The function will run some logic and eventually return a `Response` that contains JSON data, the correct mimetype, and an HTTP status that represents the success or failure of the logic.
 
-The above template becomes the following code
+The above template becomes the following code that you can put in `rentomatic/rest/room.py`
 
 ``` python
 import json
@@ -671,43 +700,26 @@ which is exactly the same code that we run in the command line interface. The re
 
 ## The HTTP server in action
 
-Now that we defined the endpoint we can try to run the web server and access the former witha  browser. Create a `manager.py` file for Flask in the main directory of the `rentomatic` project (i.e. in the same directory that contains `cli.py`).
+Now that we defined the endpoint we can finalise the configuration of the webserver, so that we can access the endpoint with a browser. This is not strictly part of the clean architecture, but as already happened for the CLI interface I want you to see the final result, to get the whole picture and also to enjoy the effort you put in following the whole discussion up to this point.
+
+Create a `wsgi.py` file in the main folder of the project, i.e. in the same directory of the `cli.py` file
 
 ``` python
-#!/usr/bin/env python
-## -*- coding: utf-8 -*-
-
-from flask_script import Manager, Server
-from flask_script.commands import Clean, ShowUrls
-
 from rentomatic.app import create_app
 
 
 app = create_app()
-manager = Manager(app)
-
-manager.add_command('server', Server())
-manager.add_command('urls', ShowUrls())
-manager.add_command('clean', Clean())
-
-if __name__ == '__main__':
-    manager.run()
 ```
 
-You can read the documentation about Flask-script files [here](https://flask-script.readthedocs.io/en/latest/) TODO change this to Flask CLI http://flask.pocoo.org/docs/1.0/cli/.
+When the Flask Command Line Interface (http://flask.pocoo.org/docs/1.0/cli/) runs it looks for a file named `wsgi.py` and lods it, expecting it to contain an `app` variable that is an instance of the `Flask` object. As the `create_app` is a factory we just need to execute it.
 
-Now, if we run the `urls` command we should see the API endpoint that we defined
+At this point you can execute `flask run` in the directory that contains this file and you should see a nice message like
 
-{line-numbers: false}
-``` sh
-$ python manage.py urls
-Rule                     Endpoint 
-----------------------------------
-/rooms                   room.room
-/static/<path:filename>  static   
+``` txt
+ * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
 ```
 
-And running the `server` command should give us a proper HTTP server that listen for connections. Run `python manage.py server` and visit http://localhost:5000/rooms with your browser. You should receive a JSON file that contains the data you defined in the repository.
+At this point you can point your browser to `http://localhost:5000/rooms` and enjoy the JSON returned by the first endpoint of your web application.
 
 ## Conclusions
 

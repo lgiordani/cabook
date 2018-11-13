@@ -80,11 +80,13 @@ When you redefine the `__init__` method of a Gaudi model you have to make it acc
         [your code]
 ```
 
-All Gaudi model classes expose the `from_mappin` method that instantiates the model with the values contained in a dictionary-like object.
+All Gaudi model classes expose the `from_mapping` method that instantiates the model with the values contained in a dictionary-like object.
 
 ``` python
 i = Item.from_mapping({'price': 1200})
 ```
+
+TODO(what about serializers?)
 
 ## Testing models
 
