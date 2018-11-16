@@ -2,7 +2,7 @@
 
 ## Project overview
 
-The goal of the "Rent-o-matic" project (fans of Day of the Tentacle may get the reference) is to create a simple search engine on top of a dataset of objects which are described by some quantities. The search engine shall allow to set some filters to narrow the search.
+The goal of the "Rent-o-matic" project (fans of "Day of the Tentacle" may get the reference) is to create a simple search engine on top of a dataset of objects which are described by some quantities. The search engine shall allow to set some filters to narrow the search. TODO the repository can return domain models
  
 The objects in the dataset are houses for rent described by the following quantities:
  
@@ -179,9 +179,9 @@ Providing a class that inherits from `json.JSONEncoder` let us use the `json.dum
 
 It's time to implement the actual business logic that runs inside our application. Use cases are the places where this happens, and they might or might not be directly linked to the external API of the system. 
 
-The simplest use case we can create is one that fetches all the rooms stored in the repository and returns them. The repository is our storage component, and according to the clean architecture it will be implemented in an outer level (external systems). We will access it as an interface, which in Python means that we will receive an object that we expect will expose a certain API.
+The simplest use case we can create is one that fetches all the rooms stored in the repository and returns them. In this first part we will not implement the filters to narrow the search. That part will be introduced in the next chapter when we will discuss error management.
 
-From the testing point of view the best way to run code that accesses an interface is to mock this latter. Put this code in the `tests/use_cases/test_room_list_use_case.py`
+The repository is our storage component, and according to the clean architecture it will be implemented in an outer level (external systems). We will access it as an interface, which in Python means that we will receive an object that we expect will expose a certain API. From the testing point of view the best way to run code that accesses an interface is to mock this latter. Put this code in the `tests/use_cases/test_room_list_use_case.py`
 
 TODO point to fixtures documentation
 

@@ -1,5 +1,7 @@
 # Chapter 1 - Introduction to TDD
 
+TODO(how many asserts in a test?)
+
 ## Introduction
 
 "Test-Driven Development" (TDD) is fortunately one of the names that I can spot most frequently when people talk about methodologies. Unfortunately, many programmers still do not follow it, fearing that it will impose a further burden on the already difficult life of the developer.
@@ -1165,6 +1167,20 @@ Through this very simple example we learned 6 important rules of the TDD methodo
 4. Write code that passes the test. Then refactor it.
 5. A test should fail the first time you run it. If it doesn't ask yourself why you are adding it.
 6. Never refactor without tests.
+
+## How many assertions?
+
+I am frequently asked "How many assertions do you put in a test?", and I consider this question important enough to discuss it in a dedicated section. To answer this question I want to briefly go back to the nature of TDD and the role of the test suite that we run.
+
+The whole point of automated tests is to run through a set of checkpoints that can quickly reveal that there is a problem in a specific area. Mind the words "quickly" and "specific". When I run the test suite and an error occurs I'd like to be able to understand as fast as possible where the problem lies. This doesn't (always) mean that the problem will have a quick resolution, but at least I can be immediately aware of which part of the system is misbehaving.
+
+On the other side, we don't want to have too many test for the same condition, on the contrary we want to avoid testing the same condition more than once as tests have to be maintained. A test suite that is too fine-grained might result in too many tests failing because of the same problem in the code which might be daunting TODO(?) and not very informative.
+
+My advice is to group together assertions that can be done after the same setup, if they test the same process. For example, you might consider the two functions `add` and `sub` TODO(check) that we tested in this chapter. They require the same setup, which is to instantiate the `Calc` class (a setup that they share with many other tests), but they are actually testing two different processes. A good sign of this is that you should rename the test to `test_add_or_sub`, and a failure in this test would require a further investigation in the test output to check which method of the class is failing.
+
+If you had to test that a method returns positive even numbers, instead, you might consider running the method and then writing two assertions, one that checks that the number is positive, and one that checks it is even. This makes sense, as a failure in one of the two means a failure of the whole process.
+
+As a quick rule of thumb, then, consider if the test is a logical `AND` between conditions or a logical `OR`. In the former case go for multiple assertions, in the latter create multiple test functions.
 
 ## How to manage bugs or missing features
 

@@ -688,6 +688,16 @@ If you run the test now, you can see that the patching works. What we did was to
 
 Another possible solution to this problem is to create a function that invokes the immutable object and returns its value. This last function can be easily patched, because it just uses the builtin objects and thus is not immutable. This solution, however, requires to change the source code to allow testing, which is far from being optimal. Obviously it is better to introduce a small change in the code and have it tested than to leave it untested, but whenever is possible I try as much as possible to avoid solutions that introduce code which wouldn't be required without tests.
 
+## Mocks and proper TDD
+
+Following a strict TDD methodology means writing a test before writing the code that passes that test. This can be done because we use the object under test as a black box, interacting with it through its API, and thus not knowing anything of its internal structure.
+
+When we mock systems we break this assumption, in particular we need to open the black box every time we need to patch an hardcoded external system. Let's say, for example, that the object under test creates a temporary directory to perform some data processing. This is a detail of the implementation and we are not supposed to know it while testing the object, but since we need to mock the file creation to avoid interaction with the external system (storage) we need to become aware of what happens internally.
+
+This also means that writing a test for the object before writing the implementation of the object itself is difficult. Pretty often, thus, such objects are built with TDD but iteratively, where mocks are often introduced after the code has been written.
+
+While this is a violation of the strict TDD methodology, I don't consider it a bad practice. TDD helps us to write code that doesn't solve a real problem, but this can be done even without tests, which means that breaking it for a small part of the code (patching objects) will not undermine the correctness of the outcome, a test suite capable of detecting regressions or the removal of important features in the future.
+
 ## Recap
 
 Mocks are a very powerful tool that allows us to test code that contains outgoing messages, in particular allows us to test the arguments of outgoing commands. Patching is a good way to overcome the fact that some external components are hardcoded in our code and are thus unreachable through the arguments passed to the classes or the methods under analysis.
