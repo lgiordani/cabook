@@ -72,51 +72,54 @@ class ResponseSuccess:
         return True
 ```
 
+With these two object we just laid the foundations for a richer management of input and outputs of the use case, especially in the case of error conditions.
+
 ## Requests and responses in a use case
 
 Let's implement the request and response objects that we developed into the use case. The new version of `tests/use_cases/test_room_list_use_case.py` is the following
 
 ``` python
 import pytest
+import uuid
 from unittest import mock
 
 from rentomatic.domain import room as r
-from rentomatic.request_objects import room_list_request_object as req
 from rentomatic.use_cases import room_list_use_case as uc
+from rentomatic.request_objects import room_list_request_object as req
 
 
 @pytest.fixture
 def domain_rooms():
     room_1 = r.Room(
-        code='f853578c-fc0f-4e65-81b8-566c5dffa35a',
+        code=uuid.uuid4(),
         size=215,
         price=39,
-        longitude='-0.09998975',
-        latitude='51.75436293',
+        longitude=-0.09998975,
+        latitude=51.75436293,
     )
 
     room_2 = r.Room(
-        code='fe2c3195-aeff-487a-a08f-e0bdc0ec6e9a',
+        code=uuid.uuid4(),
         size=405,
         price=66,
-        longitude='0.18228006',
-        latitude='51.74640997',
+        longitude=0.18228006,
+        latitude=51.74640997,
     )
 
     room_3 = r.Room(
-        code='913694c6-435a-4366-ba0d-da5334a611b2',
+        code=uuid.uuid4(),
         size=56,
         price=60,
-        longitude='0.27891577',
-        latitude='51.45994069',
+        longitude=0.27891577,
+        latitude=51.45994069,
     )
 
     room_4 = r.Room(
-        code='eed76e77-55c1-41ce-985d-ca49bf6c0585',
+        code=uuid.uuid4(),
         size=93,
         price=48,
-        longitude='0.33894476',
-        latitude='51.39916678',
+        longitude=0.33894476,
+        latitude=51.39916678,
     )
 
     return [room_1, room_2, room_3, room_4]
@@ -214,7 +217,7 @@ def test_build_room_list_request_object_from_dict_with_invalid_filters():
     assert bool(request) is False
 ```
 
-As you can see I added the `assert request.filters is None` check to the original two tests, then I added 5 tests to check that filters can be specified and to test the behaviour of the object when the `filter` parameter is given an invalid value.
+As you can see I added the `assert request.filters is None` check to the original two tests, then I added 5 tests to check that filters can be specified and to test the behaviour of the object when the `filter` parameter is given an invalid value. Remember that if you are following TDD you should add these tests one at a time and change the code accordingly, here I am only showing you the final result of the process.
 
 The core idea is that requests are customised for use cases, so they can contain the logic that validates the arguments used to instantiate them. The request is valid or invalid before it reaches the use case, so it is not responsibility of this latter to check that the input values have proper values or a proper format.
 
@@ -595,6 +598,10 @@ def test_room_list_without_parameters(domain_rooms):
 There are three new tests that we can add to check the behaviour of the use case when `filters` is not `None`. The first one checks that the value of the `filters` key in the dictionary used to create the request is actually used when calling the repository. This last two tests check the behaviour of the use case when the repository raises an exception or when the request is badly formatted.
 
 ``` python
+from rentomatic.response_objects import response_objects as res
+
+[...]
+
 def test_room_list_with_filters(domain_rooms):
     repo = mock.Mock()
     repo.list.return_value = domain_rooms
@@ -670,6 +677,8 @@ As you can see the first thing that the `execute()` method does is to check if t
 
 ## Conclusions
 
-We now have a very robust system to manage input validation and error conditions. This system is generic enough to be used with any possible use case. Obviously we are free to add new types of errors to increase he granularity with which we manage failures, but the present version already covers everything that can happen inside a use case.
+We now have a very robust system to manage input validation and error conditions. This system is generic enough to be used with any possible use case. Obviously we are free to add new types of errors to increase the granularity with which we manage failures, but the present version already covers everything that can happen inside a use case.
 
-TODO The repository has not been changed to match the filters API
+The repository, however, has not yet been modified to expose the right API. The `list` method doesn't accept the `filters` attribute, and the `RoomListUseCase` passes all the tests because we mocked the repository. This shows you why we need other types of tests like integration tests, as mocking and isolating do not take into account the consistency of the whole system.
+
+In the next chapter we will have a look at proper repositories based on real database engines, where we can easily implement the `list` method exposing an API that accepts and uses the `filters` dictionary.

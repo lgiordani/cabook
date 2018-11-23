@@ -50,16 +50,14 @@ from rentomatic.domain import room as r
 def test_room_model_init():
     code = uuid.uuid4()
     room = r.Room(code, size=200, price=10,
-                  longitude='-0.09998975',
-                  latitude='51.75436293')
+                  longitude=-0.09998975,
+                  latitude=51.75436293)
     assert room.code == code
     assert room.size == 200
     assert room.price == 10
     assert room.longitude == -0.09998975
     assert room.latitude == 51.75436293
 ```
-
-TODO(longitude string??)
 
 Remember to create an `__init__.py` file in subdirectory of `tests/`, so in this case create `tests/domain/__init__.py`. This test ensures that the model can be initialised with the correct values. All the parameters of the model are mandatory. Later we could want to make some of them optional, and in that case we will have to add the relevant tests.
 
@@ -71,8 +69,8 @@ class Room:
         self.code = code
         self.size = size
         self.price = price
-        self.latitude = float(latitude)
-        self.longitude = float(longitude)
+        self.latitude = latitude
+        self.longitude = longitude
 ```
 
 The model is very simple, and requires no further explanation. Given that we will receive data to initialise this model from other layers, and that this data is likely to be a dictionary, it is useful to create a method that initialises the model from this type of structure. The test for this method is 
@@ -85,8 +83,8 @@ def test_room_model_from_dict():
             'code': code,
             'size': 200,
             'price': 10,
-            'longitude': '-0.09998975',
-            'latitude': '51.75436293'
+            'longitude': -0.09998975,
+            'latitude': 51.75436293
         }
     )
     assert room.code == code
@@ -112,6 +110,62 @@ while the implementation inside the `Room` class is
 
 As you can see one of the benefits of a clean architecture is that each layer contains small pieces of code that, being isolated, shall perform simple tasks. In this case the model provides an initialisation API and stores the information inside the class.
 
+It is often useful to compare models, and we will use this feature later in the project. The comparison operator can be added to any Python object through the `__eq__` method that receives another object and returns either `True` or `False`. Comparing `Room` fields might however result in a very big `and` chain of statements, so the first things I will do is to write a method to convert the object in a dictionary. The test goes in `tests/domain/test_room.py`
+
+``` python
+def test_room_model_to_dict():
+    room_dict = {
+        'code': uuid.uuid4(),
+        'size': 200,
+        'price': 10,
+        'longitude': -0.09998975,
+        'latitude': 51.75436293
+    }
+
+    room = r.Room.from_dict(room_dict)
+
+    assert room.to_dict == room_dict
+```
+
+and the implementation of the `to_dict` method is
+
+``` python
+    def to_dict(self):
+        return {
+            'code': self.code,
+            'size': self.size,
+            'price': self.price,
+            'latitude': self.latitude,
+            'longitude': self.longitude,
+        }
+```
+
+Note that this is not yet a serialisation of the object, as the result is still a Python data structure and not a string.
+
+At this point writing the comparison operator is very simple. The test goes in the same file as the previous test
+
+``` python
+def test_room_model_comparison():
+    room_dict = {
+        'code': uuid.uuid4(),
+        'size': 200,
+        'price': 10,
+        'longitude': -0.09998975,
+        'latitude': 51.75436293
+    }
+    room1 = r.Room.from_dict(room_dict)
+    room2 = r.Room.from_dict(room_dict)
+
+    assert room1 == room2
+```
+
+and the method of the `Room` class is
+
+``` python
+    def __eq__(self, other):
+        return self.to_dict() == other.to_dict()
+```
+
 ## Serializers
 
 Outer layers can use the `Room` model, but if you want to return the model as a result of an API call you need a serializer.
@@ -122,34 +176,39 @@ To test the JSON serialization of our `Room` class put in the `tests/serializers
 
 ``` python
 import json
+import uuid
 
 from rentomatic.serializers import room_json_serializer as ser
 from rentomatic.domain import room as r
 
 
 def test_serialize_domain_room():
+    code = uuid.uuid4()
+
     room = r.Room(
-        code='f853578c-fc0f-4e65-81b8-566c5dffa35a',
+        code=code,
         size=200,
         price=10,
-        longitude='-0.09998975',
-        latitude='51.75436293'
+        longitude=-0.09998975,
+        latitude=51.75436293
     )
 
     expected_json = """
-        {
-            "code": "f853578c-fc0f-4e65-81b8-566c5dffa35a",
+        {{
+            "code": "{}",
             "size": 200,
             "price": 10,
             "longitude": -0.09998975,
             "latitude": 51.75436293
-        }
-    """
+        }}
+    """.format(code)
 
     json_room = json.dumps(room, cls=ser.RoomJsonEncoder)
 
     assert json.loads(json_room) == json.loads(expected_json)
 ```
+
+Here, we create the `Room` object and write the expected JSON output (with some annoying escape sequences like `{{` and `}}` due to the clash with the `{}` syntax of Python strings `format` methos). Then we dump the `Room` object to a JSON string and compare the two. To compare the two we load them again into Python dictionaries, to avoid issues with the order of the attributes. Comparing Python dictionaries, indeed, doesn't consider the order of the dictionary fields, while comparing strings obviously does.
 
 Put in the `rentomatic/serializers/room_json_serializer.py` file the code that makes the test pass
 
@@ -162,18 +221,18 @@ class RoomJsonEncoder(json.JSONEncoder):
     def default(self, o):
         try:
             to_serialize = {
-                'code': o.code,
+                'code': str(o.code),
                 'size': o.size,
                 'price': o.price,
-                "latitude": o.latitude,
-                "longitude": o.longitude,
+                'latitude': o.latitude,
+                'longitude': o.longitude,
             }
             return to_serialize
         except AttributeError:
             return super().default(o)
 ```
 
-Providing a class that inherits from `json.JSONEncoder` let us use the `json.dumps(room, cls=RoomEncoder)` syntax to serialize the model.
+Providing a class that inherits from `json.JSONEncoder` let us use the `json.dumps(room, cls=RoomEncoder)` syntax to serialize the model. Note that we are not using the `to_dict` method, as the UUID code is not directly JSON serialisable. This means that there is a slight degree of code repetition in the two classes, which in my opinion is acceptable, being covered by tests. If you prefer, however, you can call the `to_dict` method and then adjust the code field with the `str` conversion.
 
 ## Use cases
 
@@ -187,6 +246,7 @@ TODO point to fixtures documentation
 
 ``` python
 import pytest
+import uuid
 from unittest import mock
 
 from rentomatic.domain import room as r
@@ -196,35 +256,35 @@ from rentomatic.use_cases import room_list_use_case as uc
 @pytest.fixture
 def domain_rooms():
     room_1 = r.Room(
-        code='f853578c-fc0f-4e65-81b8-566c5dffa35a',
+        code=uuid.uuid4(),
         size=215,
         price=39,
-        longitude='-0.09998975',
-        latitude='51.75436293',
+        longitude=-0.09998975,
+        latitude=51.75436293,
     )
 
     room_2 = r.Room(
-        code='fe2c3195-aeff-487a-a08f-e0bdc0ec6e9a',
+        code=uuid.uuid4(),
         size=405,
         price=66,
-        longitude='0.18228006',
-        latitude='51.74640997',
+        longitude=0.18228006,
+        latitude=51.74640997,
     )
 
     room_3 = r.Room(
-        code='913694c6-435a-4366-ba0d-da5334a611b2',
+        code=uuid.uuid4(),
         size=56,
         price=60,
-        longitude='0.27891577',
-        latitude='51.45994069',
+        longitude=0.27891577,
+        latitude=51.45994069,
     )
 
     room_4 = r.Room(
-        code='eed76e77-55c1-41ce-985d-ca49bf6c0585',
+        code=uuid.uuid4(),
         size=93,
         price=48,
-        longitude='0.33894476',
-        latitude='51.39916678',
+        longitude=0.33894476,
+        latitude=51.39916678,
     )
 
     return [room_1, room_2, room_3, room_4]
@@ -267,7 +327,7 @@ The storage lives in the third layer of the clean architecture, the external sys
 
 To clarify the matter in terms of concrete technologies, SQLAlchemy is a wonderful tool to abstract the access to an SQL database, so the internal implementation of the repository could use it to access a PostgreSQL database, for example. But the external API of the layer is not that provided by SQLAlchemy. The API is a reduced set of functions that the use cases call to get the data, and the internal implementation can use a wide range of solutions to achieve the same goal, from raw SQL queries to a complex system of remote calls through a RabbitMQ network.
 
-A very important feature of the repository is that it always returns domain models, and this is in line with what framework ORMs usually do. The element in the third layer have access to all the elements defined in the internal layers, which means that domain models and use cases can be called and used directly from the repository.
+A very important feature of the repository is that it can return domain models, and this is in line with what framework ORMs usually do. The element in the third layer have access to all the elements defined in the internal layers, which means that domain models and use cases can be called and used directly from the repository.
 
 For the sake of this simple example we will not deploy and use a real database system. Given what we said, we are free to implement the repository with the system that better suits our needs, and in this case I want to keep everything simple. We will thus create a very simple in-memory storage system loaded with some predefined data.
 
@@ -276,49 +336,48 @@ The first thing to do is to write some tests that document the public API of the
 ``` python
 import pytest
 
+from rentomatic.domain import room as r
 from rentomatic.repository import memrepo
 
 
-room1 = {
-    'code': 'f853578c-fc0f-4e65-81b8-566c5dffa35a',
-    'size': 215,
-    'price': 39,
-    'longitude': '-0.09998975',
-    'latitude': '51.75436293',
-}
-
-room2 = {
-    'code': 'fe2c3195-aeff-487a-a08f-e0bdc0ec6e9a',
-    'size': 405,
-    'price': 66,
-    'longitude': '0.18228006',
-    'latitude': '51.74640997',
-}
-
-room3 = {
-    'code': '913694c6-435a-4366-ba0d-da5334a611b2',
-    'size': 56,
-    'price': 60,
-    'longitude': '0.27891577',
-    'latitude': '51.45994069',
-}
-
-room4 = {
-    'code': 'eed76e77-55c1-41ce-985d-ca49bf6c0585',
-    'size': 93,
-    'price': 48,
-    'longitude': '0.33894476',
-    'latitude': '51.39916678',
-}
-
-
 @pytest.fixture
-def rooms():
-    return [room1, room2, room3, room4]
+def room_dicts():
+    return [
+        {
+            'code': 'f853578c-fc0f-4e65-81b8-566c5dffa35a',
+            'size': 215,
+            'price': 39,
+            'longitude': -0.09998975,
+            'latitude': 51.75436293,
+        },
+        {
+            'code': 'fe2c3195-aeff-487a-a08f-e0bdc0ec6e9a',
+            'size': 405,
+            'price': 66,
+            'longitude': 0.18228006,
+            'latitude': 51.74640997,
+        },
+        {
+            'code': '913694c6-435a-4366-ba0d-da5334a611b2',
+            'size': 56,
+            'price': 60,
+            'longitude': 0.27891577,
+            'latitude': 51.45994069,
+        },
+        {
+            'code': 'eed76e77-55c1-41ce-985d-ca49bf6c0585',
+            'size': 93,
+            'price': 48,
+            'longitude': 0.33894476,
+            'latitude': 51.39916678,
+        }
+    ]
 
 
-def test_repository_list_without_parameters(rooms):
-    repo = memrepo.MemRepo(rooms)
+def test_repository_list_without_parameters(room_dicts):
+    repo = memrepo.MemRepo(room_dicts)
+
+    rooms = [r.Room.from_dict(i) for i in room_dicts]
 
     assert repo.list() == rooms
 ```
@@ -326,15 +385,18 @@ def test_repository_list_without_parameters(rooms):
 In this case we need a single test that checks the behaviour of the `list` method. The implementation that passes the test goes in the file `rentomatic/repository/memrepo.py`
 
 ``` python
+from rentomatic.domain import room as r
+
+
 class MemRepo:
     def __init__(self, data):
         self.data = data
 
     def list(self):
-        return self.data
+        return [r.Room.from_dict(i) for i in self.data]
 ```
 
-You can easily imagine this class being the wrapper around a real database or any other storage type. While the code might become more complex, the structure of the repository is the same, with a single public method `list`.
+You can easily imagine this class being the wrapper around a real database or any other storage type. While the code might become more complex, the structure of the repository is the same, with a single public method `list`. I will dig into database repositories in a later chapter.
 
 ## A command line interface
 
@@ -367,7 +429,7 @@ $ ./cli.py
 []
 ```
 
-which is correct as the `MemRepo` class has been initialised with an empty list. The simple in-memory storage that we use has no persistence, so every time we create it we have to load some data in it. This has been done to keep the storage layer simple, but keep in mind that if the storage was a proper database this part of the code would connect to it but there would be no need to load data in it.
+which is correct as the `MemRepo` class in the `cli.py` file has been initialised with an empty list. The simple in-memory storage that we use has no persistence, so every time we create it we have to load some data in it. This has been done to keep the storage layer simple, but keep in mind that if the storage was a proper database this part of the code would connect to it but there would be no need to load data in it.
 
 The important part of the script are the three lines
 
@@ -391,24 +453,24 @@ room1 = {
     'code': 'f853578c-fc0f-4e65-81b8-566c5dffa35a',
     'size': 215,
     'price': 39,
-    'longitude': '-0.09998975',
-    'latitude': '51.75436293',
+    'longitude': -0.09998975,
+    'latitude': 51.75436293,
 }
 
 room2 = {
     'code': 'fe2c3195-aeff-487a-a08f-e0bdc0ec6e9a',
     'size': 405,
     'price': 66,
-    'longitude': '0.18228006',
-    'latitude': '51.74640997',
+    'longitude': 0.18228006,
+    'latitude': 51.74640997,
 }
 
 room3 = {
     'code': '913694c6-435a-4366-ba0d-da5334a611b2',
     'size': 56,
     'price': 60,
-    'longitude': '0.27891577',
-    'latitude': '51.45994069',
+    'longitude': 0.27891577,
+    'latitude': 51.45994069,
 }
 
 repo = mr.MemRepo([room1, room2, room3])
@@ -416,17 +478,20 @@ use_case = uc.RoomListUseCase(repo)
 
 result = use_case.execute()
 
-print(result)
+print([room.to_dict() for room in result])
 ```
 
-Again, remember that this is due to the trivial nature of our storage, and not to the architecture of the system.
+Again, remember that this is due to the trivial nature of our storage, and not to the architecture of the system. Note that I changed the `print` instruction as the repository returns domain models and it printing them would result in a list of strings like `<rentomatic.domain.room.Room object at 0x7fb815ec04e0>`, which is not really helpful.
 
-If you run the command line tool now, you will get a richer result
+If you run the command line tool now, you will get a richer result than before
 
 {line-numbers: false}
 ``` sh
-$ ./cli.py 
-[{'code': 'f853578c-fc0f-4e65-81b8-566c5dffa35a', 'size': 215, 'price': 39, 'longitude': '-0.09998975', 'latitude': '51.75436293'}, {'code': 'fe2c3195-aeff-487a-a08f-e0bdc0ec6e9a', 'size': 405, 'price': 66, 'longitude': '0.18228006', 'latitude': '51.74640997'}, {'code': '913694c6-435a-4366-ba0d-da5334a611b2', 'size': 56, 'price': 60, 'longitude': '0.27891577', 'latitude': '51.45994069'}]
+$ ./cli.py
+[{'code': 'f853578c-fc0f-4e65-81b8-566c5dffa35a', 'size': 215, 'price': 39, 'latitude': 51.75436293,
+    'longitude': -0.09998975}, {'code': 'fe2c3195-aeff-487a-a08f-e0bdc0ec6e9a', 'size': 405, 'price': 66,
+    'latitude': 51.74640997, 'longitude': 0.18228006}, {'code': '913694c6-435a-4366-ba0d-da5334a611b2',
+    'size': 56, 'price': 60, 'latitude': 51.45994069, 'longitude': 0.27891577}]
 ```
 
 ## An HTTP API
@@ -617,7 +682,7 @@ The central part of the test is the line where we `get` the API endpoint, which 
 
 After this we check that the data contained in the response is actually a JSON that represents the `room_dict` structure, that the `execute` method has been called without any parameters, that the HTTP response status code is 200, and last that the server sends the correct mimetype back.
 
-It's time to write the endpoint, where we will finally see all the pieces of the architecture working together. The minimal Flask endpoint we can create is something like
+It's time to write the endpoint, where we will finally see all the pieces of the architecture working together. Let me show you a template for the minimal Flask endpoint we can create
 
 ``` python
 blueprint = Blueprint('room', __name__)
@@ -650,24 +715,24 @@ room1 = {
     'code': 'f853578c-fc0f-4e65-81b8-566c5dffa35a',
     'size': 215,
     'price': 39,
-    'longitude': '-0.09998975',
-    'latitude': '51.75436293',
+    'longitude': -0.09998975,
+    'latitude': 51.75436293,
 }
 
 room2 = {
     'code': 'fe2c3195-aeff-487a-a08f-e0bdc0ec6e9a',
     'size': 405,
     'price': 66,
-    'longitude': '0.18228006',
-    'latitude': '51.74640997',
+    'longitude': 0.18228006,
+    'latitude': 51.74640997,
 }
 
 room3 = {
     'code': '913694c6-435a-4366-ba0d-da5334a611b2',
     'size': 56,
     'price': 60,
-    'longitude': '0.27891577',
-    'latitude': '51.45994069',
+    'longitude': 0.27891577,
+    'latitude': 51.45994069,
 }
 
 
@@ -697,6 +762,8 @@ which is exactly the same code that we run in the command line interface. The re
                     mimetype='application/json',
                     status=200)
 ```
+
+This shows you the power of the clean architecture in a nutshell. Writing a CLI interface or a Web service is different only in the presentation layer, not in the logic, which is contained in the use case.
 
 ## The HTTP server in action
 

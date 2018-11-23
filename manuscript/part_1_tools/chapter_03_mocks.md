@@ -698,10 +698,20 @@ This also means that writing a test for the object before writing the implementa
 
 While this is a violation of the strict TDD methodology, I don't consider it a bad practice. TDD helps us to write code that doesn't solve a real problem, but this can be done even without tests, which means that breaking it for a small part of the code (patching objects) will not undermine the correctness of the outcome, a test suite capable of detecting regressions or the removal of important features in the future.
 
+## A warning
+
+Mocks are a good way to approach parts of the system that are not under test but that are still part of the code that we are running. This is particularly true for parts of the code that we wrote, which internal structure is ultimately known. When the external system is complex and completely detached from our code, mocking starts to become complicated and the risk is that we spend more time faking parts of the system than actually writing code.
+
+In this cases we definitely crossed the barrier between unit testing and integration testing. You may see mocks as the bridge between the two, as they allow you to keep unit-testing parts that are naturally connected ("integrated") with external systems, but there is a point where you need to recognise that you need to change approach.
+
+This threshold is not fixed, and I can't give you a rule to recognise it, but I can give you some advice. First of all keep an eye on how many things you need to mock to make a test run, as an increasing number of mocks in a signle test is definitely a sign of something wrong in the testing approach. My rule of thumb is that when I have to create more than 3 mocks, an alarm goes off in my mind and I start questioning what I am doing.
+
+The second advice is to always consider the complexity of the mocks. You may find yourself patching a class but then having to create monsters like `cls_mock().func1().func2().func3.assert_called_with(x=42)` which is a sign that the part of the system that you are mocking is deep into some code that you cannot really access, because you don't know it's internal mechanisms. This is the case with ORMs, for example, and I will discuss it later in the book.
+
+The third advice is to consider mocks as "hooks" that you throw at the external system, and that break its hull to reach its internal structure. These hooks are obviously against the assumption that we can interact with a system knowing only its external behaviour, or its API. As such, you should keep in mind that each mock you create is a step back from this perfect assumption, thus "breaking the spell" of the decoupled interaction. Doing this you will quickly become annoyed when you have to create too many mocks, and this will contribute in keeping you aware of what you are doing (or overdoing).
+
 ## Recap
 
-Mocks are a very powerful tool that allows us to test code that contains outgoing messages, in particular allows us to test the arguments of outgoing commands. Patching is a good way to overcome the fact that some external components are hardcoded in our code and are thus unreachable through the arguments passed to the classes or the methods under analysis.
+Mocks are a very powerful tool that allows us to test code that contains outgoing messages, in particular they allow us to test the arguments of outgoing commands. Patching is a good way to overcome the fact that some external components are hardcoded in our code and are thus unreachable through the arguments passed to the classes or the methods under analysis.
 
-Mocks are also the most complex part of testing, so don't be surprised if you are still a bit confused by them. Review the chapter once, maybe, but then try to go on, as in later chapters we will use mocks in very simple and practical examples, which may shed a light on the whole matter.
-
-A final warning. It may happen that you find yourself patching three or more external components in a test. Be careful, as this might be the sign that the class or method that you are testing is too complex, and tries to do too many things. This is not a rule, but I generally consider 2 patches a good threshold, above which I start to consider if the method does too much or even if it is worth testing the method.
+Mocks are also the most complex part of testing, so don't be surprised if you are still a bit confused by them. Review the chapter once, maybe, but then try to go on, as in later chapters we will use mocks in very simple and practical examples, which may shed TODO(shed?) a light on the whole matter.
