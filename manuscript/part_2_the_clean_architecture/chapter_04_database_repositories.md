@@ -1,10 +1,13 @@
+TODO(the code changed, the name of the fixtures changed)
+
+
 # Chapter 4 - Database repositories
 
 The basic in-memory repository I implemented for the project is enough to show the concept of the repository layer abstraction, as any other type of repository will follow the same idea. In the spirit of providing a simple but realistic solution, however, I believe it is worth reimplementing the repository layer with a proper database.
 
 This gives me the chance to show you one of the big advantages of a clean architecture, namely the simplicity with which you can replace existing components with others, possibly based on a completely different technology.
 
-## TODO
+## Introduction
 
 The clean architecture we devised in the previous chapters defines a use case that receives a repository instance as an argument and uses its `list` method to retrieve the contained entries. This allows the use case to form a very loose coupling with the repository, being connected only through the API exposed by the object and not to the real implementation. In other words, the use cases are polymorphic in respect of the `list` method.
 
@@ -156,11 +159,12 @@ The first fixture I defined in `tests/conftest.py` contains the information abou
 
 ``` python
 @pytest.fixture(scope='session')
-def postgres_connection_data():
+def pg_setup(docker_ip):
     return {
         'dbname': 'rentomaticdb',
         'user': 'postgres',
-        'password': 'rentomaticdb'
+        'password': 'rentomaticdb',
+        'host': docker_ip
     }
 ```
 
@@ -169,13 +173,13 @@ This way I have a single source of parameters for the connection. If you prefer 
 The second piece of code is not a fixture, but a function that will be used by the docker-compose system to decide if the Postgres container is up and running. Containers take a certain amount of time to become responsive, partly because of the Docker infrastructure itself (possibly downloading the image, running the container, setting up the network, and so on), and partly because of the software they run (in this case the PostgreSQL engine) that needs to be initialised. The `is_responsive` function receives the IP of the container, decided by Docker, and the Postgres connection data.
 
 ``` python
-def is_responsive(ip, postgres_connection_data):
+def is_responsive(ip, pg_setup):
     try:
         conn = psycopg2.connect(
             "host={} user={} password={} dbname={}".format(
                 ip,
-                postgres_connection_data['user'],
-                postgres_connection_data['password'],
+                pg_setup['user'],
+                pg_setup['password'],
                 'postgres'
             )
         )
@@ -196,7 +200,7 @@ def tmpfile():
 
 
 @pytest.fixture(scope='session')
-def docker_compose_file(tmpfile, postgres_connection_data):
+def docker_compose_file(tmpfile, pg_setup):
     postgres = {
         'postgresql': {
             'restart': 'always',
@@ -204,7 +208,7 @@ def docker_compose_file(tmpfile, postgres_connection_data):
             'ports': ["5432:5432"],
             'environment': [
                 'POSTGRES_PASSWORD={}'.format(
-                    postgres_connection_data['password']
+                    pg_setup['password']
                 )
             ]
         }
@@ -221,17 +225,17 @@ Now the proper PostgreSQL container can be run through the `docker_services` fix
 
 ``` python
 @pytest.fixture(scope='session')
-def postgres_engine(docker_ip, docker_services, postgres_connection_data):
+def pg_engine(docker_ip, docker_services, pg_setup):
     docker_services.wait_until_responsive(
         timeout=30.0, pause=0.1,
-        check=lambda: is_responsive(docker_ip, postgres_connection_data)
+        check=lambda: is_responsive(docker_ip, pg_setup)
     )
 
     conn_str = "postgresql+psycopg2://{}:{}@{}/{}".format(
-        postgres_connection_data['user'],
-        postgres_connection_data['password'],
-        docker_ip,
-        postgres_connection_data['dbname']
+        pg_setup['user'],
+        pg_setup['password'],
+        pg_setup['host'],
+        pg_setup['dbname']
     )
     engine = sqlalchemy.create_engine(conn_str)
     sqlalchemy_utils.create_database(engine.url)
@@ -251,23 +255,26 @@ from rentomatic.repository.postgres_objects import Base, Room
 [...]
 
 @pytest.fixture(scope='session')
-def postgres_session(postgres_engine):
-    Base.metadata.create_all(postgres_engine)
+def pg_session_empty(pg_engine):
+    Base.metadata.create_all(pg_engine)
 
-    Base.metadata.bind = postgres_engine
+    Base.metadata.bind = pg_engine
 
-    DBSession = sqlalchemy.orm.sessionmaker(bind=postgres_engine)
+    DBSession = sqlalchemy.orm.sessionmaker(bind=pg_engine)
 
-    return DBSession()
+    session = DBSession()
+
+    yield session
+
+    session.close()
 ```
 
 This new fixture provides access to a SQLAlchemy session on the empty database, if we need it for some tests. Note that we imported `Base` and `Room` that we defined in the `postgres_objects` file
 
 ``` python
 @pytest.fixture(scope='function')
-def postgres_data(postgres_session):
-
-    rooms = [
+def pg_data():
+    return [
         {
             'code': 'f853578c-fc0f-4e65-81b8-566c5dffa35a',
             'size': 215,
@@ -298,7 +305,9 @@ def postgres_data(postgres_session):
         }
     ]
 
-    for r in rooms:
+@pytest.fixture(scope='function')
+def pg_session(pg_session_empty, pg_data):
+    for r in pg_data:
         new_room = Room(
             code=r['code'],
             size=r['size'],
@@ -306,12 +315,12 @@ def postgres_data(postgres_session):
             longitude=r['longitude'],
             latitude=r['latitude']
         )
-        postgres_session.add(new_room)
-        postgres_session.commit()
+        pg_session_empty.add(new_room)
+        pg_session_empty.commit()
 
-    yield postgres_session
+    yield pg_session_empty
 
-    postgres_session.rollback()
+    pg_session_empty.query(Room).delete()
 ```
 
 This last fixture inserts some data in the database using the SQLAlchemy `Room` model. Our dummy test can now actually interact with the database and test that the 4 entries have been added to the database
@@ -327,155 +336,4 @@ def test_dummy(postgres_data):
     assert len(postgres_data.query(Room).all()) == 4
 ```
 
-Note that the `postgres_data` fixture has a `function` scope, thus it is run for every test. This is why we roll back the transaction at the end of the fixture, leaving the database in the same state it had before the test.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-### Create the SQLalchemy file
-
-The database we just created is obviously empty, so we need to create the table we will use to store the `Room` models. Instead of doing it in SQL, however, we can do it with SQLAlchemy, given that we already use it to query the database.
-
-Add the packages `SQLAlchemy` and `psycopg2` to the `prod.txt` requirements file and update the installed packages with
-
-``` sh
-$ pip install -r requirements/dev.txt
-```
-
-The file where we will define the SQLAlchemy models needs to be part of the module, as we will need it to run the repository. Let's create the `rentomatic/repository/postgres_objects.py` file with the following content
-
-``` python
-from sqlalchemy import Column, Integer, String, Float
-from sqlalchemy.ext.declarative import declarative_base
-
-Base = declarative_base()
-
-
-class Room(Base):
-    __tablename__ = 'room'
-
-    id = Column(Integer, primary_key=True)
-
-    code = Column(String(36), nullable=False)
-    size = Column(Integer)
-    price = Column(Integer)
-    longitude = Column(Float)
-    latitude = Column(Float)
-```
-
-Let's comment it section by section
-
-
-``` python
-from sqlalchemy import Column, Integer, String, Float
-from sqlalchemy.ext.declarative import declarative_base
-
-Base = declarative_base()
-```
-
-We need to import many things from the SQLAlchemy package to setup the database and to create the table. Remember that SQLAlchemy has a declarative approach, so we need to instantiate the `Base` object and then use it as a starting point to declare the tables/objects.
-
-``` python
-class Room(Base):
-    __tablename__ = 'room'
-
-    id = Column(Integer, primary_key=True)
-
-    code = Column(String(36), nullable=False)
-    size = Column(Integer)
-    price = Column(Integer)
-    longitude = Column(Float)
-    latitude = Column(Float)
-```
-
-This is the class that represents the `Room` in the database. It is important to understand that this not the class we are using in the business logic, but the class that we want to map in the SQL database. The structure of this class is thus dictated by the needs of the storage layer, and not by the use cases. You might want to store `longitude` and `latitude` in a JSON field, for example, to allow for easier extendibility, of for other reasons, without changing the definition of the domain model.
-
-Obviously this means that you have to keep in sync the storage level with the domain one, and that you need to manage migrations on your own. You can still use tools like Alembic, obviously, the migrations will not come directly from domain model changes. My experience with migrations, however, is that in big production systems is almost always better to separate the two layers, so personally the clean architecture approach doesn't look like a big sacrifice.
-
-Now, the initialisation file `postgres_init.py` can be created in the project main directory, alongside the `wsgi.py` file. As explained previously, this file will be run just once at the very beginning of the project to fill the database with some data. You might initilise the DB manually with another tool, like a graphical interface or the `psql` command, but this is the easiest way I can show you. 
-
-``` python
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-
-from rentomatic.repository.postgres_objects import Base, Room
-
-
-engine = create_engine(
-    'postgresql+psycopg2://postgres:rentomaticdb@localhost/rentomatic')
-
-Base.metadata.create_all(engine)
-
-Base.metadata.bind = engine
-
-DBSession = sessionmaker(bind=engine)
-
-session = DBSession()
-
-rooms = [
-    {
-        'code': 'f853578c-fc0f-4e65-81b8-566c5dffa35a',
-        'size': 215,
-        'price': 39,
-        'longitude': -0.09998975,
-        'latitude': 51.75436293,
-    },
-    {
-        'code': 'fe2c3195-aeff-487a-a08f-e0bdc0ec6e9a',
-        'size': 405,
-        'price': 66,
-        'longitude': 0.18228006,
-        'latitude': 51.74640997,
-    },
-    {
-        'code': '913694c6-435a-4366-ba0d-da5334a611b2',
-        'size': 56,
-        'price': 60,
-        'longitude': 0.27891577,
-        'latitude': 51.45994069,
-    },
-    {
-        'code': 'eed76e77-55c1-41ce-985d-ca49bf6c0585',
-        'size': 93,
-        'price': 48,
-        'longitude': 0.33894476,
-        'latitude': 51.39916678,
-    }
-]
-
-for r in rooms:
-    new_room = Room(
-        code=r['code'],
-        size=r['size'],
-        price=r['price'],
-        longitude=r['longitude'],
-        latitude=r['latitude']
-    )
-    session.add(new_room)
-    session.commit()
-```
-
-Read the SQLAlchemy documentation to understand how `Base` and `sessionmaker` work. For the time being you need to note that we create a connection with the database engine providing username, password, and the database name, and that we create a `Room` SQLAlchemy object for each one of the input dictionaries, adding them to a session and committing.
-
-Bear in mind that in a real application the password would obviously be passed through an environment variable, what you see here is a working setup, but definitely a solution that works during development. Considerations about the deploy in production of a web server are outside the scope of this book.
-
-
-
-
-
-
-
-https://www.pythoncentral.io/introductory-tutorial-python-sqlalchemy/
-https://www.oreilly.com/library/view/essential-sqlalchemy-2nd/9781491916544/ch04.html
-https://github.com/miki725/alchemy-mock
+Note that the `postgres_data` fixture has a `function` scope, thus it is run for every test. This is why we delete all rooms at the end of each test, leaving the database in the same state it had before the test. This is not strictly necessary in this particular case, as we are only reading from the database, so we might add the rooms at the beginning of the test session and just destroy the container at the end of it. This doesn't however work in general, for instance when tests add entries to the database, so I preferred to show you a more generic solution.

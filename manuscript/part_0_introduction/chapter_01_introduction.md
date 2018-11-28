@@ -50,7 +50,7 @@ Remember that an architecture tries to detail how a process is implemented at a 
 
 ## Why is it called "clean" architecture?
 
-The architecture explained in this book has many names, but the one that is mainly in use nowadays is "clean architecture". This is the name used by Robert Martin in his seminal post [^robert-martin-post] where he clearly states this structure is not a novelty, but has been pushed by many software designers over the years. I believe the adjective "clean" describes one of the fundamental aspects of both the software structure and the development approach pushed by this architecture. It is clean, that is, it is easy to understand what happens.
+The architecture explained in this book has many names, but the one that is mainly in use nowadays is "clean architecture". This is the name used by Robert Martin in his seminal post [^robert-martin-post] where he clearly states this structure is not a novelty, but has been promoted by many software designers over the years. I believe the adjective "clean" describes one of the fundamental aspects of both the software structure and the development approach of this architecture. It is clean, that is, it is easy to understand what happens.
 
 [^robert-martin-post]: http://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html
 
@@ -66,5 +66,10 @@ I will therefore speak of Python in this book, but the main concepts are valid f
 
 The clean architecture concepts are independent from the language, but the implementation obviously leverages what a specific language allows you to do, so this book is about the clean architecture and an implementation of it that I devised using Python. I really look forward to seeing more books about the clean architecture that explore other implementations in Python and in other languages.
 
-_Cover photograph by pxhere (https://pxhere.com/en/photo/760437)_
-_Cover font Lato by Łukasz Dziedzic (http://www.latofonts.com)_
+## Acknowledgments
+
+* Eleanor Mary De Veras: proof reading of the introduction.
+* Roberto Ciatti: introducing me to clean architecture.
+* Łukasz Dziedzic: "Lato" cover font (http://www.latofonts.com).
+
+The cover photograph has been provided by pxhere (https://pxhere.com/en/photo/760437). A detail of the Sagrada Familia in Barcelona, one of the best works of art of the contemporary world, a bright example of architecture in which every single element has a meaning and a purpose. Praise to Antoni Gaudí, brilliant architect and man of great faith, who will always inspire me with his works and his life.

@@ -159,11 +159,19 @@ Now we have a standard way to pack input and output values, and the above patter
 
 ## Request validation
 
-The `filters` parameter that we want to add to the use case allows the caller to add conditions to narrow the results of the model list operation. For example specifying `filters={'price_lt': 100}` should return all the results with a price lower than 100.
+The `filters` parameter that we want to add to the use case allows the caller to add conditions to narrow the results of the model list operation, using a notation `<attribute>__<operator>`. For example specifying `filters={'price__lt': 100}` should return all the results with a price lower than 100. 
+
+Since the `Room` model has many attributes the number of possible filters is very high, so for simplicity's sake I will consider the following cases:
+
+* The `code` attribute supports only `__eq`, which finds the room with the specific code, if it exists
+* The `price` attribute supports `__eq`, `__lt`, and `__gt`
+* All other attributes cannot be used in filters
 
 The first thing to do is to change the request object, starting from the test. The new version of the `tests/request_objects/test_room_list_request_object.py` file is the following
 
 ``` python
+import pytest
+
 from rentomatic.request_objects import room_list_request_object as req
 
 
@@ -195,18 +203,12 @@ def test_build_room_list_request_object_from_dict_with_empty_filters():
     assert bool(request) is True
 
 
-def test_build_room_list_request_object_with_filters():
-    request = req.RoomListRequestObject(filters={'a': 1, 'b': 2})
+def test_build_room_list_request_object_from_dict_with_filters_wrong():
+    request = req.RoomListRequestObject.from_dict({'filters': {'a': 1}})
 
-    assert request.filters == {'a': 1, 'b': 2}
-    assert bool(request) is True
-
-
-def test_build_room_list_request_object_from_dict_with_filters():
-    request = req.RoomListRequestObject.from_dict({'filters': {'a': 1, 'b': 2}})
-
-    assert request.filters == {'a': 1, 'b': 2}
-    assert bool(request) is True
+    assert request.has_errors()
+    assert request.errors[0]['parameter'] == 'filters'
+    assert bool(request) is False
 
 
 def test_build_room_list_request_object_from_dict_with_invalid_filters():
@@ -215,11 +217,41 @@ def test_build_room_list_request_object_from_dict_with_invalid_filters():
     assert request.has_errors()
     assert request.errors[0]['parameter'] == 'filters'
     assert bool(request) is False
+
+
+@pytest.mark.parametrize(
+    'key',
+    ['code__eq', 'price__eq', 'price__lt', 'price__gt']
+    )
+def test_build_room_list_request_object_accepted_filters(key):
+    filters = {key: 1}
+
+    request = req.RoomListRequestObject.from_dict({'filters': filters})
+
+    assert request.filters == filters
+    assert bool(request) is True
+
+
+@pytest.mark.parametrize(
+    'key',
+    ['code__lt', 'code__gt']
+    )
+def test_build_room_list_request_object_rejected_filters(key):
+    filters = {key: 1}
+
+    request = req.RoomListRequestObject.from_dict({'filters': filters})
+
+    assert request.has_errors()
+    assert request.errors[0]['parameter'] == 'filters'
+    assert bool(request) is False
+
 ```
 
-As you can see I added the `assert request.filters is None` check to the original two tests, then I added 5 tests to check that filters can be specified and to test the behaviour of the object when the `filter` parameter is given an invalid value. Remember that if you are following TDD you should add these tests one at a time and change the code accordingly, here I am only showing you the final result of the process.
+As you can see I added the `assert request.filters is None` check to the original two tests, then I added 6 tests for the filters syntax. Remember that if you are following TDD you should add these tests one at a time and change the code accordingly, here I am only showing you the final result of the process.
 
-The core idea is that requests are customised for use cases, so they can contain the logic that validates the arguments used to instantiate them. The request is valid or invalid before it reaches the use case, so it is not responsibility of this latter to check that the input values have proper values or a proper format.
+In particular, note that I used the `pytest.mark.parametrize` decorator to run the same test on multiple value, the accepted filters in `test_build_room_list_request_object_accepted_filters` and the filters that we don't consider valid in `test_build_room_list_request_object_rejected_filters`.
+
+The core idea here is that requests are customised for use cases, so they can contain the logic that validates the arguments used to instantiate them. The request is valid or invalid before it reaches the use case, so it is not responsibility of this latter to check that the input values have proper values or a proper format.
 
 To make the tests pass we have to change our `RoomListRequestObject` class. There are obviously multiple possible solutions that you can come up with, and I recommend you to try to find your own. This is the one I usually employ. The file `rentomatic/request_objects/room_list_request_object.py` becomes
 
@@ -254,6 +286,8 @@ class ValidRequestObject:
 
 class RoomListRequestObject(ValidRequestObject):
 
+    accepted_filters = ['code__eq', 'price__eq', 'price__lt', 'price__gt']
+
     def __init__(self, filters=None):
         self.filters = filters
 
@@ -261,9 +295,17 @@ class RoomListRequestObject(ValidRequestObject):
     def from_dict(cls, adict):
         invalid_req = InvalidRequestObject()
 
-        if 'filters' in adict and not isinstance(
-                adict['filters'], collections.Mapping):
-            invalid_req.add_error('filters', 'Is not iterable')
+        if 'filters' in adict:
+            if not isinstance(adict['filters'], collections.Mapping):
+                invalid_req.add_error('filters', 'Is not iterable')
+                return invalid_req
+
+            for key, value in adict['filters'].items():
+                if key not in cls.accepted_filters:
+                    invalid_req.add_error(
+                        'filters',
+                        'Key {} cannot be used'.format(key)
+                    )
 
         if invalid_req.has_errors():
             return invalid_req
@@ -277,7 +319,7 @@ First of all, two helper classes have been introduced, `ValidRequestObject` and 
 
 Second, the `RoomListRequestObject` accepts an optional `filters` parameter when instantiated. There are no validation checks in the `__init__` method because this is considered to be an internal method that gets called when the parameters have already been validated.
 
-Last, the `from_dict()` method performs the validation of the `filters` parameter, if it is present. I leverage the `collections.Mapping` abstract base class to check if the incoming parameter is a dictionary-like object and return either an `InvalidRequestObject` or a `RoomListRequestObject` instance (which is a subclass of `ValidRequestObject`).
+Last, the `from_dict()` method performs the validation of the `filters` parameter, if it is present. I made use of the `collections.Mapping` abstract base class to check if the incoming parameter is a dictionary-like object and return either an `InvalidRequestObject` or a `RoomListRequestObject` instance (which is a subclass of `ValidRequestObject`).
 
 ## Responses and failures
 
@@ -607,7 +649,7 @@ def test_room_list_with_filters(domain_rooms):
     repo.list.return_value = domain_rooms
 
     room_list_use_case = uc.RoomListUseCase(repo)
-    qry_filters = {'a': 5}
+    qry_filters = {'code__eq': 5}
     request_object = req.RoomListRequestObject.from_dict(
         {'filters': qry_filters})
 
