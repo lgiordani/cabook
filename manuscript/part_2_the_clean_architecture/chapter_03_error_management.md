@@ -62,8 +62,10 @@ def test_response_success_is_true():
 
 and the actual response object is in the file `rentomatic/response_objects/response_objects.py`
 
+TODO(this is missing the type, which means that cannot be easily converted into an HTTP code)
 ``` python
 class ResponseSuccess:
+
 
     def __init__(self, value=None):
         self.value = value
@@ -716,6 +718,8 @@ class RoomListUseCase(object):
 ```
 
 As you can see the first thing that the `execute()` method does is to check if the request is valid, otherwise it returns a `ResponseFailure` built with the same request object. Then the actual business logic is implemented, calling the repository and returning a successful response. If something goes wrong in this phase the exception is caught and returned as an aptly formatted `ResponseFailure`.
+
+## The REST server TODO TODO TODO
 
 ## Conclusions
 
