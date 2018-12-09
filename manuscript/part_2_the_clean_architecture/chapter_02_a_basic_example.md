@@ -1,5 +1,7 @@
 # Chapter 2 - A basic example
 
+TODO Add a description of the tags in the Git repo
+
 ## Project overview
 
 The goal of the "Rent-o-matic" project (fans of "Day of the Tentacle" may get the reference) is to create a simple search engine on top of a dataset of objects which are described by some quantities. The search engine shall allow to set some filters to narrow the search. TODO the repository can return domain models
@@ -42,6 +44,7 @@ Let us start with a simple definition of the `Room` model. As said before, the c
 
 Following the TDD methodology the first thing that I write are the tests. Create the `tests/domain/test_room.py` and put this code inside it
 
+{line-numbers: false}
 ``` python
 import uuid
 from rentomatic.domain import room as r
@@ -59,10 +62,11 @@ def test_room_model_init():
     assert room.latitude == 51.75436293
 ```
 
-Remember to create an `__init__.py` file in subdirectory of `tests/`, so in this case create `tests/domain/__init__.py`. This test ensures that the model can be initialised with the correct values. All the parameters of the model are mandatory. Later we could want to make some of them optional, and in that case we will have to add the relevant tests.
+Remember to create an `__init__.py` file in every subdirectory of `tests/`, so in this case create `tests/domain/__init__.py`. This test ensures that the model can be initialised with the correct values. All the parameters of the model are mandatory. Later we could want to make some of them optional, and in that case we will have to add the relevant tests.
 
 Now let's write the `Room` class in the `rentomatic/domain/room.py` file.
 
+{line-numbers: false}
 ``` python
 class Room:
     def __init__(self, code, size, price, longitude, latitude):
@@ -73,8 +77,11 @@ class Room:
         self.longitude = longitude
 ```
 
+T> Git tag: [chapter-2-domain-models-step-1](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-2-domain-models-step-1)
+
 The model is very simple, and requires no further explanation. Given that we will receive data to initialise this model from other layers, and that this data is likely to be a dictionary, it is useful to create a method that initialises the model from this type of structure. The test for this method is 
 
+{line-numbers: false}
 ``` python
 def test_room_model_from_dict():
     code = uuid.uuid4()
@@ -96,6 +103,7 @@ def test_room_model_from_dict():
 
 while the implementation inside the `Room` class is
 
+{line-numbers: false}
 ``` python
     @classmethod
     def from_dict(cls, adict):
@@ -108,10 +116,13 @@ while the implementation inside the `Room` class is
         )
 ```
 
+T> Git tag: [chapter-2-domain-models-step-2](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-2-domain-models-step-2)
+
 As you can see one of the benefits of a clean architecture is that each layer contains small pieces of code that, being isolated, shall perform simple tasks. In this case the model provides an initialisation API and stores the information inside the class.
 
 It is often useful to compare models, and we will use this feature later in the project. The comparison operator can be added to any Python object through the `__eq__` method that receives another object and returns either `True` or `False`. Comparing `Room` fields might however result in a very big `and` chain of statements, so the first things I will do is to write a method to convert the object in a dictionary. The test goes in `tests/domain/test_room.py`
 
+{line-numbers: false}
 ``` python
 def test_room_model_to_dict():
     room_dict = {
@@ -124,11 +135,12 @@ def test_room_model_to_dict():
 
     room = r.Room.from_dict(room_dict)
 
-    assert room.to_dict == room_dict
+    assert room.to_dict() == room_dict
 ```
 
 and the implementation of the `to_dict` method is
 
+{line-numbers: false}
 ``` python
     def to_dict(self):
         return {
@@ -140,10 +152,13 @@ and the implementation of the `to_dict` method is
         }
 ```
 
+T> Git tag: [chapter-2-domain-models-step-3](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-2-domain-models-step-3)
+
 Note that this is not yet a serialisation of the object, as the result is still a Python data structure and not a string.
 
 At this point writing the comparison operator is very simple. The test goes in the same file as the previous test
 
+{line-numbers: false}
 ``` python
 def test_room_model_comparison():
     room_dict = {
@@ -161,10 +176,13 @@ def test_room_model_comparison():
 
 and the method of the `Room` class is
 
+{line-numbers: false}
 ``` python
     def __eq__(self, other):
         return self.to_dict() == other.to_dict()
 ```
+
+T> Git tag: [chapter-2-domain-models-step-4](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-2-domain-models-step-4)
 
 ## Serializers
 
@@ -174,6 +192,7 @@ The typical serialization format is JSON, as this is a broadly accepted standard
 
 To test the JSON serialization of our `Room` class put in the `tests/serializers/test_room_json_serializer.py` file the following code
 
+{line-numbers: false}
 ``` python
 import json
 import uuid
@@ -212,6 +231,7 @@ Here, we create the `Room` object and write the expected JSON output (with some 
 
 Put in the `rentomatic/serializers/room_json_serializer.py` file the code that makes the test pass
 
+{line-numbers: false}
 ``` python
 import json
 
@@ -232,6 +252,8 @@ class RoomJsonEncoder(json.JSONEncoder):
             return super().default(o)
 ```
 
+T> Git tag: [chapter-2-serializers](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-2-serializers)
+
 Providing a class that inherits from `json.JSONEncoder` let us use the `json.dumps(room, cls=RoomEncoder)` syntax to serialize the model. Note that we are not using the `to_dict` method, as the UUID code is not directly JSON serialisable. This means that there is a slight degree of code repetition in the two classes, which in my opinion is acceptable, being covered by tests. If you prefer, however, you can call the `to_dict` method and then adjust the code field with the `str` conversion.
 
 ## Use cases
@@ -244,6 +266,7 @@ The repository is our storage component, and according to the clean architecture
 
 TODO point to fixtures documentation
 
+{line-numbers: false}
 ``` python
 import pytest
 import uuid
@@ -307,6 +330,7 @@ Calling the `list` method of the repository is an outgoing query action that the
 
 Put the implementation of the use case in the `rentomatic/use_cases/room_list_use_case.py`
 
+{line-numbers: false}
 ``` python
 class RoomListUseCase:
 
@@ -318,6 +342,8 @@ class RoomListUseCase:
 ```
 
 This might seem too simple, but this particular use case is just a wrapper around a specific function of the repository. As a matter of fact, this use case doesn't contain any error check, which is something we didn't take into account yet. In the next chapter we will discuss requests and responses, and the use case will become slightly more complicated.
+
+T> Git tag: [chapter-2-use-cases](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-2-use-cases)
 
 ## The storage system
 
@@ -333,6 +359,7 @@ For the sake of this simple example we will not deploy and use a real database s
 
 The first thing to do is to write some tests that document the public API of the repository. The file containing the tests is `tests/repository/test_memrepo.py`.
 
+{line-numbers: false}
 ``` python
 import pytest
 
@@ -384,6 +411,7 @@ def test_repository_list_without_parameters(room_dicts):
 
 In this case we need a single test that checks the behaviour of the `list` method. The implementation that passes the test goes in the file `rentomatic/repository/memrepo.py`
 
+{line-numbers: false}
 ``` python
 from rentomatic.domain import room as r
 
@@ -395,6 +423,8 @@ class MemRepo:
     def list(self):
         return [r.Room.from_dict(i) for i in self.data]
 ```
+
+T> Git tag: [chapter-2-storage-system](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-2-storage-system)
 
 You can easily imagine this class being the wrapper around a real database or any other storage type. While the code might become more complex, the structure of the repository is the same, with a single public method `list`. I will dig into database repositories in a later chapter.
 
@@ -408,6 +438,7 @@ Later we will create a REST endpoint and we will expose it though a Web server, 
 
 For the time being, create a file `cli.py` in the same directory that contains `setup.py`. This is a simple Python script that doesn't need any specific option to run, as it just queries the storage for all the domain models contained there. The content of the file is the following
 
+{line-numbers: false}
 ``` python
 #!/usr/bin/env python
 
@@ -421,6 +452,8 @@ result = use_case.execute()
 print(result)
 ```
 
+T> Git tag: [hapter-2-command-line-interface-step-1](https://github.com/lgiordani/cabook_rentomatic/tree/hapter-2-command-line-interface-step-1)
+
 You can execute this file with `python cli.py` or, if you prefer, run `chmod +x cli.py` (which make it executable) and then run it with `./cli.py` directly. The expected result is an empty list
 
 {line-numbers: false}
@@ -433,6 +466,7 @@ which is correct as the `MemRepo` class in the `cli.py` file has been initialise
 
 The important part of the script are the three lines
 
+{line-numbers: false}
 ``` python
 repo = mr.MemRepo([])
 use_case = uc.RoomListUseCase(repo)
@@ -443,6 +477,7 @@ which initialise the repository, use it to initialise the use case, and run this
 
 For the sake of demonstration, let's define some data in the file and load them in the repository
 
+{line-numbers: false}
 ``` python
 #!/usr/bin/env python
 
@@ -481,6 +516,8 @@ result = use_case.execute()
 print([room.to_dict() for room in result])
 ```
 
+T> Git tag: [chapter-2-command-line-interface-step-2](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-2-command-line-interface-step-2)
+
 Again, remember that this is due to the trivial nature of our storage, and not to the architecture of the system. Note that I changed the `print` instruction as the repository returns domain models and it printing them would result in a list of strings like `<rentomatic.domain.room.Room object at 0x7fb815ec04e0>`, which is not really helpful.
 
 If you run the command line tool now, you will get a richer result than before
@@ -502,16 +539,9 @@ The semantic of URLs, that is their structure and the requests they can accept, 
 
 To expose the HTTP endpoint we need a web server written in Python, and in this case I chose Flask. Flask is a lightweight web server with a modular structure that provides just the parts that the user needs. In particular, we will not use any database/ORM, since we already implemented our own repository layer. The clean architecture works perfectly with other frameworks, like Django, web2py, Pylons, and so on.
 
-Let us start updating the requirements files. The `requirements/dev.txt` file shall contain Flask, as this package contains a script that runs a local webserver that we can use to expose the endpoint
+Let us start updating the requirements files. The `requirements/prod.txt` file shall contain Flask, as this package contains a script that runs a local webserver that we can use to expose the endpoint
 
-```text
--r test.txt
-pip
-punch.py
-wheel
-watchdog
-flake8
-Sphinx
+``` text
 Flask
 ```
 
@@ -519,7 +549,6 @@ The `requirements/test.txt` file will contain the pytest extension to work with 
 
 ``` text
 -r prod.txt
-
 pytest
 tox
 coverage
@@ -527,12 +556,15 @@ pytest-cov
 pytest-flask
 ```
 
+T> Git tag: [chapter-2-http-api-step-1](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-2-http-api-step-1)
+
 Remember to run `pip install -r requirements/dev.txt` again after those changes to install the new packages in your virtual environment.
 
 The setup of a Flask application is not complex, but a lot of concepts are involved, and since this is not a tutorial on Flask I will run quickly through these steps. I will however provide links to the Flask documentation for every concept.
 
 I usually define different configurations for my testing, development, and production environments. Since the Flask application can be configured using a plain Python object ([documentation](http://flask.pocoo.org/docs/latest/api/#flask.Config.from_object)), I created the file `rentomatic/flask_settings.py` to host those objects
 
+{line-numbers: false}
 ``` python
 class Config(object):
     """Base configuration."""
@@ -561,6 +593,7 @@ Read [this page](http://flask.pocoo.org/docs/latest/config/) to know more about 
 
 Now we need a function that initialises the Flask application ([documentation](http://flask.pocoo.org/docs/latest/patterns/appfactories/)), configures it, and registers the blueprints ([documentation](http://flask.pocoo.org/docs/latest/blueprints/)). The file `rentomatic/app.py` contains the following code, which is an app factory
 
+{line-numbers: false}
 ``` python
 from flask import Flask
 
@@ -585,6 +618,7 @@ Fixtures can be defined directly in your tests file, but if we want a fixture to
 
 Lets create the file `tests/conftest.py`
 
+{line-numbers: false}
 ``` python
 import pytest
 
@@ -604,6 +638,7 @@ The function itself runs the app factory to create a Flask app, using the `TestC
 
 At this point we can write the test for our endpoint. Create the file `tests/rest/test_get_rooms_list.py`
 
+{line-numbers: false}
 ``` python
 import json
 from unittest import mock
@@ -637,6 +672,7 @@ def test_get(mock_use_case, client):
 
 Let's comment it section by section.
 
+{line-numbers: false}
 ``` python
 import json
 from unittest import mock
@@ -658,6 +694,7 @@ rooms = [room]
 
 The first part contains imports and sets up a room from a dictionary. This way we can later directly compare the content of the initial dictionary with the result of the API endpoint. Remember that the API returns JSON content, and we can easily convert JSON data into simple Python structures, so starting from a dictionary can come in handy.
 
+{line-numbers: false}
 ``` python
 @mock.patch('rentomatic.use_cases.room_list_use_case.RoomListUseCase')
 def test_get(mock_use_case, client):
@@ -665,6 +702,7 @@ def test_get(mock_use_case, client):
 
 This is the only test that we have for the time being. During the whole test we mock the use case, as we are not interested in running it. We are however interested in checking the arguments it is called with, and a mock can provide this information. The test receives the mock from the the `patch` decorator and `client`, which is one of the fixtures provided by `pytest-flask`. The `client` fixture automatically loads the `app` one, which we defined in `conftst.py`, and is an object that simulates an HTTP client that can access the API endpoints and store the responses of the server.
 
+{line-numbers: false}
 ``` python
     mock_use_case().execute.return_value = rooms
 
@@ -684,6 +722,7 @@ After this we check that the data contained in the response is actually a JSON t
 
 It's time to write the endpoint, where we will finally see all the pieces of the architecture working together. Let me show you a template for the minimal Flask endpoint we can create
 
+{line-numbers: false}
 ``` python
 blueprint = Blueprint('room', __name__)
 
@@ -698,8 +737,11 @@ def room():
 
 As you can see the structure is really simple. Apart from setting the blueprint, which is the way Flask registers endpoints, we create a simple function that runs the endpoint, and we decorate it assigning the `/rooms` endpoint that serves `GET` requests. The function will run some logic and eventually return a `Response` that contains JSON data, the correct mimetype, and an HTTP status that represents the success or failure of the logic.
 
-The above template becomes the following code that you can put in `rentomatic/rest/room.py`
+The above template becomes the following code that you can put in `rentomatic/rest/room.py` [^restroom]
 
+[^restroom]: The Rent-o-matic rest/room is obviously connected with the original TODO
+
+{line-numbers: false}
 ``` python
 import json
 
@@ -747,8 +789,11 @@ def room():
                     status=200)
 ```
 
+T> Git tag: [chapter-2-http-api-step-2](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-2-http-api-step-2)
+
 As I did before, I initialised the memory storage with some data to give the use case something to return. Please note that the code that runs the use case is
 
+{line-numbers: false}
 ``` python
     repo = mr.MemRepo([room1, room2, room3])
     use_case = uc.RoomListUseCase(repo)
@@ -757,6 +802,7 @@ As I did before, I initialised the memory storage with some data to give the use
 
 which is exactly the same code that we run in the command line interface. The rest of the code creates a proper HTTP response, serializing the result of the use case using the specific serializer that matches the domain model, and setting the HTTP status to 200 (success)
 
+{line-numbers: false}
 ``` python
     return Response(json.dumps(result, cls=ser.RoomJsonEncoder),
                     mimetype='application/json',
@@ -771,12 +817,17 @@ Now that we defined the endpoint we can finalise the configuration of the webser
 
 Create a `wsgi.py` file in the main folder of the project, i.e. in the same directory of the `cli.py` file
 
+TODO Add resource for WSGI
+
+{line-numbers: false}
 ``` python
 from rentomatic.app import create_app
 
 
 app = create_app()
 ```
+
+T> Git tag: [chapter-2-http-api-step-3](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-2-http-api-step-3)
 
 When the Flask Command Line Interface (http://flask.pocoo.org/docs/1.0/cli/) runs it looks for a file named `wsgi.py` and lods it, expecting it to contain an `app` variable that is an instance of the `Flask` object. As the `create_app` is a factory we just need to execute it.
 

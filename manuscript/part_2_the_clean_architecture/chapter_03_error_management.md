@@ -50,6 +50,8 @@ class RoomListRequestObject:
         return True
 ```
 
+T> Git tag: [chapter-3-basic-requests-and-responses-step-1](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-3-basic-requests-and-responses-step-1)
+
 The response object is also very simple, since for the moment we just need to return a successful result. Unlike the request, the response is not linked to any particular use case, so the test file can be named `tests/response_objects/test_response_objects.py`
 
 ``` python
@@ -62,10 +64,10 @@ def test_response_success_is_true():
 
 and the actual response object is in the file `rentomatic/response_objects/response_objects.py`
 
-TODO(this is missing the type, which means that cannot be easily converted into an HTTP code)
+TODO(this is missing the type, which means that cannot be easily converted into an HTTP code, but this is not required by the test now, let's add it when I introduce the ResponseFailure)
+
 ``` python
 class ResponseSuccess:
-
 
     def __init__(self, value=None):
         self.value = value
@@ -73,6 +75,8 @@ class ResponseSuccess:
     def __bool__(self):
         return True
 ```
+
+T> Git tag: [chapter-3-basic-requests-and-responses-step-2](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-3-basic-requests-and-responses-step-2)
 
 With these two object we just laid the foundations for a richer management of input and outputs of the use case, especially in the case of error conditions.
 
@@ -157,6 +161,8 @@ class RoomListUseCase:
         return res.ResponseSuccess(rooms)
 ```
 
+T> Git tag: [chapter-3-requests-and-responses-in-a-use-case](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-3-requests-and-responses-in-a-use-case)
+
 Now we have a standard way to pack input and output values, and the above pattern is valid for every use case we can create. We are still missing some features however, because so far requests and responses are not used to perform error management.
 
 ## Request validation
@@ -224,7 +230,7 @@ def test_build_room_list_request_object_from_dict_with_invalid_filters():
 @pytest.mark.parametrize(
     'key',
     ['code__eq', 'price__eq', 'price__lt', 'price__gt']
-    )
+)
 def test_build_room_list_request_object_accepted_filters(key):
     filters = {key: 1}
 
@@ -237,7 +243,7 @@ def test_build_room_list_request_object_accepted_filters(key):
 @pytest.mark.parametrize(
     'key',
     ['code__lt', 'code__gt']
-    )
+)
 def test_build_room_list_request_object_rejected_filters(key):
     filters = {key: 1}
 
@@ -246,7 +252,6 @@ def test_build_room_list_request_object_rejected_filters(key):
     assert request.has_errors()
     assert request.errors[0]['parameter'] == 'filters'
     assert bool(request) is False
-
 ```
 
 As you can see I added the `assert request.filters is None` check to the original two tests, then I added 6 tests for the filters syntax. Remember that if you are following TDD you should add these tests one at a time and change the code accordingly, here I am only showing you the final result of the process.
@@ -315,6 +320,8 @@ class RoomListRequestObject(ValidRequestObject):
         return cls(filters=adict.get('filters', None))
 ```
 
+T> Git tag: [chapter-3-request-validation](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-3-request-validation)
+
 Let me review this new code bit by bit.
 
 First of all, two helper classes have been introduced, `ValidRequestObject` and `InvalidRequestObject`. They are different because an invalid request shall contain the validation errors, but both can be used as booleans. 
@@ -357,9 +364,10 @@ def test_response_success_is_true(response_value):
     assert bool(res.ResponseSuccess(response_value)) is True
 
 
-def test_response_success_contains_value(response_value):
+def test_response_success_has_type_and_value(response_value):
     response = res.ResponseSuccess(response_value)
 
+    assert response.type == res.ResponseSuccess.SUCCESS
     assert response.value == response_value
 
 
@@ -460,16 +468,17 @@ def response_message():
     return 'This is a response error'
 ```
 
-The first two tests check that `ResponseSuccess` can be used as a boolean (this test was already present) and that it can store a value
+The first two tests check that `ResponseSuccess` can be used as a boolean (this test was already present), that it provides a type, and that it can store a value.
 
 ``` python
 def test_response_success_is_true(response_value):
     assert bool(res.ResponseSuccess(response_value)) is True
 
 
-def test_response_success_contains_value(response_value):
+def test_response_success_has_type_and_value(response_value):
     response = res.ResponseSuccess(response_value)
 
+    assert response.type == res.ResponseSuccess.SUCCESS
     assert response.value == response_value
 ```
 
@@ -511,7 +520,6 @@ def test_response_failure_initialisation_with_exception():
 ```
 
 We want to be able to build a response directly from an invalid request, getting all the errors contained in the latter.
-
 
 ``` python
 def test_response_failure_from_empty_invalid_request_object():
@@ -606,13 +614,17 @@ class ResponseFailure:
 
 
 class ResponseSuccess:
+    SUCCESS = 'Success'
 
     def __init__(self, value=None):
+        self.type = self.SUCCESS
         self.value = value
 
     def __bool__(self):
         return True
 ```
+
+T> Git tag: [chapter-3-responses-and-failures](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-3-responses-and-failures)
 
 Through the `_format_message()` method we enable the class to accept both string messages and Python exceptions, which is very handy when dealing with external libraries that can raise exceptions we do not know or do not want to manage.
 
@@ -620,7 +632,7 @@ As explained before, the `PARAMETERS_ERROR` type encompasses all those errors th
 
 ## Error management in a use case
 
-Our implementation of requests and responses is finally complete, so now we can implement the last version of our use case. The `RoomListUseCase` class is still missing a proper validation of the incoming request.
+Our implementation of requests and responses is finally complete, so we can now implement the last version of our use case. The `RoomListUseCase` class is still missing a proper validation of the incoming request.
 
 Let's change the `test_room_list_without_parameters` test in the `tests/use_cases/test_room_list_use_case.py` file, adding `filters=None` to `assert_called_with`, to match the new API
 
@@ -717,14 +729,343 @@ class RoomListUseCase(object):
                 "{}: {}".format(exc.__class__.__name__, "{}".format(exc)))
 ```
 
+T> Git tag: [chapter-3-error-management-in-a-use-case](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-3-error-management-in-a-use-case)
+
 As you can see the first thing that the `execute()` method does is to check if the request is valid, otherwise it returns a `ResponseFailure` built with the same request object. Then the actual business logic is implemented, calling the repository and returning a successful response. If something goes wrong in this phase the exception is caught and returned as an aptly formatted `ResponseFailure`.
 
-## The REST server TODO TODO TODO
+## Integrating external systems
+
+I want to point out a big problem represented by mocks. As qwe are testing objects using mocks for external systems, like the repository, no tests fail at the moment, but trying to run the Flask development server would certainly return an error. As a matter of fact, neither the repository nor the HTTP server are in sync with the new API, but this cannot be shown by unit tests, if these are properly written. This is the reason why we need integration tests, since the real components are running only at that point, and this can raise issues that were masked by mocks.
+
+For this simple project my integration test is represented by the Flask development server, which at this point crashes with this exception
+
+``` python
+TypeError: execute() missing 1 required positional argument: 'request_object'
+```
+
+Actually, after the introduction of requests and responses, we didn't change the REST endpoint, which is one of the connections between the external world and the use case. Given that the API of the use case changed, we surely need to change the endpoint code, which calls the use case.
+
+
+## The HTTP server
+
+As we can see from the above exception the `execute` method is called with the wrong parameters in the REST endpoint. The new version of `tests/rest/test_get_rooms_list.py` is
+
+``` python
+import json
+from unittest import mock
+
+from rentomatic.domain.room import Room
+from rentomatic.response_objects import response_objects as res
+
+room_dict = {
+    'code': '3251a5bd-86be-428d-8ae9-6e51a8048c33',
+    'size': 200,
+    'price': 10,
+    'longitude': -0.09998975,
+    'latitude': 51.75436293
+}
+
+room = Room.from_dict(room_dict)
+
+rooms = [room]
+
+
+@mock.patch('rentomatic.use_cases.room_list_use_case.RoomListUseCase')
+def test_get(mock_use_case, client):
+    mock_use_case().execute.return_value = res.ResponseSuccess(rooms)
+
+    http_response = client.get('/rooms')
+
+    assert json.loads(http_response.data.decode('UTF-8')) == [room_dict]
+
+    mock_use_case().execute.assert_called
+    args, kwargs = mock_use_case().execute.call_args
+    assert args[0].filters == {}
+
+    assert http_response.status_code == 200
+    assert http_response.mimetype == 'application/json'
+
+
+@mock.patch('rentomatic.use_cases.room_list_use_case.RoomListUseCase')
+def test_get_with_filters(mock_use_case, client):
+    mock_use_case().execute.return_value = res.ResponseSuccess(rooms)
+
+    http_response = client.get('/rooms?filter_price__gt=2&filter_price__lt=6')
+
+    assert json.loads(http_response.data.decode('UTF-8')) == [room_dict]
+
+    mock_use_case().execute.assert_called
+    args, kwargs = mock_use_case().execute.call_args
+    assert args[0].filters == {'price__gt': '2', 'price__lt': '6'}
+
+    assert http_response.status_code == 200
+    assert http_response.mimetype == 'application/json'
+```
+
+The `test_get` function was already present but has been changed to reflect the use of requests and responses. The first change is that the `execute` method in the mock has to return a proper response
+
+``` python
+from rentomatic.response_objects import response_objects as res
+
+[...]
+
+def test_get(mock_use_case, client):
+    mock_use_case().execute.return_value = res.ResponseSuccess(rooms)
+```
+
+and the second is the assertion on the call of the same method. It should be called with a properly formatted request, but since we can't compare requests we need a way to look into the call arguments. This can be done with
+
+``` python
+    mock_use_case().execute.assert_called
+    args, kwargs = mock_use_case().execute.call_args
+    assert args[0].filters == {}
+```
+
+as `execute` should receive as an argument a request with empty filters. The `test_get_with_filters` functions performs the same operation, but passing a querystring to the `/rooms` URL, which requires a different assertion
+
+``` python
+    assert args[0].filters == {'price__gt': '2', 'price__lt': '6'}
+```
+Both the tests are passed by a new version of the `room` endpoint in the `rentomatic/rest/room.py` file
+
+``` python
+import json
+
+from flask import Blueprint, request, Response
+
+from rentomatic.repository import memrepo as mr
+from rentomatic.use_cases import room_list_use_case as uc
+from rentomatic.serializers import room_json_serializer as ser
+from rentomatic.request_objects import room_list_request_object as req
+from rentomatic.response_objects import response_objects as res
+
+blueprint = Blueprint('room', __name__)
+
+STATUS_CODES = {
+    res.ResponseSuccess.SUCCESS: 200,
+    res.ResponseFailure.RESOURCE_ERROR: 404,
+    res.ResponseFailure.PARAMETERS_ERROR: 400,
+    res.ResponseFailure.SYSTEM_ERROR: 500
+}
+
+room1 = {
+    'code': 'f853578c-fc0f-4e65-81b8-566c5dffa35a',
+    'size': 215,
+    'price': 39,
+    'longitude': -0.09998975,
+    'latitude': 51.75436293,
+}
+
+room2 = {
+    'code': 'fe2c3195-aeff-487a-a08f-e0bdc0ec6e9a',
+    'size': 405,
+    'price': 66,
+    'longitude': 0.18228006,
+    'latitude': 51.74640997,
+}
+
+room3 = {
+    'code': '913694c6-435a-4366-ba0d-da5334a611b2',
+    'size': 56,
+    'price': 60,
+    'longitude': 0.27891577,
+    'latitude': 51.45994069,
+}
+
+
+@blueprint.route('/rooms', methods=['GET'])
+def room():
+    qrystr_params = {
+        'filters': {},
+    }
+
+    for arg, values in request.args.items():
+        if arg.startswith('filter_'):
+            qrystr_params['filters'][arg.replace('filter_', '')] = values
+
+    request_object = req.RoomListRequestObject.from_dict(qrystr_params)
+
+    repo = mr.MemRepo([room1, room2, room3])
+    use_case = uc.RoomListUseCase(repo)
+
+    response = use_case.execute(request_object)
+
+    return Response(json.dumps(response.value, cls=ser.RoomJsonEncoder),
+                    mimetype='application/json',
+                    status=STATUS_CODES[response.type])
+```
+
+T> Git tag: [chapter-3-the-http-server](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-3-the-http-server)
+
+## The repository
+
+If we run the Flask development webserver now and try to access the `/rooms` endpoint, we will get a nice response that says
+
+``` json
+{"type": "SystemError", "message": "TypeError: list() got an unexpected keyword argument 'filters'"}
+```
+
+and if you look at the HTTP response[^devtools] you can see an HTTP 500 error, which is exactly the mapping of our `SystemError` use case error, which in turn signals a Python exception, which is in the `message` part of the error.
+
+[^devtools]: For example using the browser developer tools. In Chrome, press F12 and open the Network tab, then refresh the page.
+
+This error comes from the repository, which has not been migrated to the new API. We need then to change the `list` method of the `MemRepo` class to accept the `filters` parameter and to act accordingly. The new version of the `tests/repository/test_memrepo.py` file is
+
+``` python
+import pytest
+
+from rentomatic.domain import room as r
+from rentomatic.repository import memrepo
+
+
+@pytest.fixture
+def room_dicts():
+    return [
+        {
+            'code': 'f853578c-fc0f-4e65-81b8-566c5dffa35a',
+            'size': 215,
+            'price': 39,
+            'longitude': -0.09998975,
+            'latitude': 51.75436293,
+        },
+        {
+            'code': 'fe2c3195-aeff-487a-a08f-e0bdc0ec6e9a',
+            'size': 405,
+            'price': 66,
+            'longitude': 0.18228006,
+            'latitude': 51.74640997,
+        },
+        {
+            'code': '913694c6-435a-4366-ba0d-da5334a611b2',
+            'size': 56,
+            'price': 60,
+            'longitude': 0.27891577,
+            'latitude': 51.45994069,
+        },
+        {
+            'code': 'eed76e77-55c1-41ce-985d-ca49bf6c0585',
+            'size': 93,
+            'price': 48,
+            'longitude': 0.33894476,
+            'latitude': 51.39916678,
+        }
+    ]
+
+
+def test_repository_list_without_parameters(room_dicts):
+    repo = memrepo.MemRepo(room_dicts)
+
+    rooms = [r.Room.from_dict(i) for i in room_dicts]
+
+    assert repo.list() == rooms
+
+
+def test_repository_list_with_code_equal_filter(room_dicts):
+    repo = memrepo.MemRepo(room_dicts)
+
+    repo_rooms = repo.list(
+        filters={'code__eq': 'fe2c3195-aeff-487a-a08f-e0bdc0ec6e9a'}
+    )
+
+    assert len(repo_rooms) == 1
+    assert repo_rooms[0].code == 'fe2c3195-aeff-487a-a08f-e0bdc0ec6e9a'
+
+
+def test_repository_list_with_price_equal_filter(room_dicts):
+    repo = memrepo.MemRepo(room_dicts)
+
+    repo_rooms = repo.list(
+        filters={'price__eq': 60}
+    )
+
+    assert len(repo_rooms) == 1
+    assert repo_rooms[0].code == '913694c6-435a-4366-ba0d-da5334a611b2'
+
+
+def test_repository_list_with_price_less_than_filter(room_dicts):
+    repo = memrepo.MemRepo(room_dicts)
+
+    repo_rooms = repo.list(
+        filters={'price__lt': 60}
+    )
+
+    assert len(repo_rooms) == 2
+    assert set([r.code for r in repo_rooms]) ==\
+        {
+            'f853578c-fc0f-4e65-81b8-566c5dffa35a',
+            'eed76e77-55c1-41ce-985d-ca49bf6c0585'
+    }
+
+
+def test_repository_list_with_price_greater_than_filter(room_dicts):
+    repo = memrepo.MemRepo(room_dicts)
+
+    repo_rooms = repo.list(
+        filters={'price__gt': 48}
+    )
+
+    assert len(repo_rooms) == 2
+    assert set([r.code for r in repo_rooms]) ==\
+        {
+            '913694c6-435a-4366-ba0d-da5334a611b2',
+            'fe2c3195-aeff-487a-a08f-e0bdc0ec6e9a'
+    }
+
+
+def test_repository_list_with_price_between_filter(room_dicts):
+    repo = memrepo.MemRepo(room_dicts)
+
+    repo_rooms = repo.list(
+        filters={
+            'price__lt': 66,
+            'price__gt': 48
+        }
+    )
+
+    assert len(repo_rooms) == 1
+    assert repo_rooms[0].code == '913694c6-435a-4366-ba0d-da5334a611b2'
+```
+
+As you can see, I added many tests. One test for each of the four accepted filters (`code__eq`, `price__eq`, `price__lt`, `price__gt`, see `rentomatic/request_objects/room_list_request_object.py`), and one final test that tries two fidderent filters at the same time. The new version of the `rentomatic/repository/memrepo.py` file that passes all the tests is
+
+``` python
+from rentomatic.domain import room as r
+
+
+class MemRepo:
+    def __init__(self, data):
+        self.data = data
+
+    def list(self, filters=None):
+
+        result = [r.Room.from_dict(i) for i in self.data]
+
+        if filters is None:
+            return result
+
+        if 'code__eq' in filters:
+            result = [r for r in result if r.code == filters['code__eq']]
+
+        if 'price__eq' in filters:
+            result = [r for r in result if r.price == filters['price__eq']]
+
+        if 'price__lt' in filters:
+            result = [r for r in result if r.price < filters['price__lt']]
+
+        if 'price__gt' in filters:
+            result = [r for r in result if r.price > filters['price__gt']]
+
+        return result
+```
+
+T> Git tag: [chapter-3-the-repository](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-3-the-repository)
+
+At this point you can fire up the Flask development webserver with `flask run`, head to http://localhost:5000/rooms and get the list of all your rooms, while http://localhost:5000/rooms?filter_code__eq=f853578c-fc0f-4e65-81b8-566c5dffa35a returns the filtered results.
+
+TODO ^^
 
 ## Conclusions
 
-We now have a very robust system to manage input validation and error conditions. This system is generic enough to be used with any possible use case. Obviously we are free to add new types of errors to increase the granularity with which we manage failures, but the present version already covers everything that can happen inside a use case.
+We now have a very robust system to manage input validation and error conditions, and it is generic enough to be used with any possible use case. Obviously we are free to add new types of errors to increase the granularity with which we manage failures, but the present version already covers everything that can happen inside a use case.
 
-The repository, however, has not yet been modified to expose the right API. The `list` method doesn't accept the `filters` attribute, and the `RoomListUseCase` passes all the tests because we mocked the repository. This shows you why we need other types of tests like integration tests, as mocking and isolating do not take into account the consistency of the whole system.
-
-In the next chapter we will have a look at proper repositories based on real database engines, where we can easily implement the `list` method exposing an API that accepts and uses the `filters` dictionary.
+In the next chapter we will have a look at repositories based on real database engines TODO
