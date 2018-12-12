@@ -103,7 +103,7 @@ The second function is a hook into the pytest setup of each single test. The `it
 
 So, if the test is marked with `integration` (`'integration' in item.keywords`) and the `--integration` option is not present (`not item.config.getvalue("integration")`) the test is skipped.
 
-TODO GIT chapter-4-label-integration-tests
+T> Git tag: [chapter-4-label-integration-tests](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-4-label-integration-tests)
 
 ### Create the SQLalchemy classes
 
@@ -164,7 +164,7 @@ This is the class that represents the `Room` in the database. It is important to
 
 Obviously this means that you have to keep in sync the storage and the domain levels, and that you need to manage migrations on your own. You can obviously use tools like Alembic, but the migrations will not come directly from domain model changes.
 
-TODO GIT chapter-4-create-the-sqlalchemy-classes
+T> Git tag: [chapter-4-create-the-sqlalchemy-classes](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-4-create-the-sqlalchemy-classes)
 
 ### Spin up and tear down the database container
 
@@ -309,7 +309,7 @@ Remember to run `pip` again to actually install the requirements after you edite
 $ pip install -r requirements/dev.txt
 ```
 
-TODO GIT chapter-4-the-database-container
+T> Git tag: [chapter-4-the-database-container](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-4-the-database-container)
 
 ### Database fixtures
 
@@ -402,7 +402,7 @@ def test_dummy(pg_session):
     assert len(pg_session.query(Room).all()) == 4
 ```
 
-TODO GIT chapter-4-database-fixtures
+T> Git tag: [chapter-4-database-fixtures](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-4-database-fixtures)
 
 ### Integration tests
 
@@ -557,7 +557,7 @@ class PostgresRepo:
         ]
 ```
 
-TODO GIT chapter-4-integration-tests
+T> Git tag: [chapter-4-integration-tests](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-4-integration-tests)
 
 I opted for a very simple solution with multiple `if` statements, but if this was a real world project the `list` method would require a smarter solution to manage a richer set of filters. This class is a good starting point, however, as it passes the whole tests suite. Note that the `list` method returns domain models, which is allowed as the repository is implemented in one of the outer layers of the architecture.
 
@@ -766,7 +766,7 @@ which becomes
 
 Now you can run the Flask development server with `flask run` and connect to http://localhost:5000/rooms to test the whole system. 
 
-TODO GIT chapter-4-running-the-web-server
+T> Git tag: [chapter-4-running-the-web-server](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-4-running-the-web-server)
 
 ## A repository based on MongoDB
 
