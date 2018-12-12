@@ -64,8 +64,6 @@ def test_response_success_is_true():
 
 and the actual response object is in the file `rentomatic/response_objects/response_objects.py`
 
-TODO(this is missing the type, which means that cannot be easily converted into an HTTP code, but this is not required by the test now, let's add it when I introduce the ResponseFailure)
-
 ``` python
 class ResponseSuccess:
 
@@ -1060,12 +1058,10 @@ class MemRepo:
 
 T> Git tag: [chapter-3-the-repository](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-3-the-repository)
 
-At this point you can fire up the Flask development webserver with `flask run`, head to http://localhost:5000/rooms and get the list of all your rooms, while http://localhost:5000/rooms?filter_code__eq=f853578c-fc0f-4e65-81b8-566c5dffa35a returns the filtered results.
-
-TODO ^^
+At this point you can fire up the Flask development webserver with `flask run`, head to http://localhost:5000/rooms and get the list of all your rooms. You can also use filters in the URL, like http://localhost:5000/rooms?filter_code__eq=f853578c-fc0f-4e65-81b8-566c5dffa35a which returns the room with the given code or http://localhost:5000/rooms?filter_price__lt=50 which return all the rooms with a price less than 50.
 
 ## Conclusions
 
 We now have a very robust system to manage input validation and error conditions, and it is generic enough to be used with any possible use case. Obviously we are free to add new types of errors to increase the granularity with which we manage failures, but the present version already covers everything that can happen inside a use case.
 
-In the next chapter we will have a look at repositories based on real database engines TODO
+In the next chapter we will have a look at repositories based on real database engines, showing how to test external systems with integration tests, and how the clean architecture allows us to simply switch between very different backends for services.

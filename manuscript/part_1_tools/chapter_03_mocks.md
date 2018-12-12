@@ -225,7 +225,6 @@ If we change the `setup` method to
 
 the test will fail with the following error
 
-{line-numbers: false}
 ``` sh
 E           AssertionError: Expected call: setup(cache=True, max_connections=256)
 E           Actual call: setup(cache=True)
@@ -661,7 +660,6 @@ def test_log(mock_now):
 
 When you try to execute this test you will get the following error
 
-{line-numbers: false}
 ``` txt
 TypeError: can't set attributes of built-in/extension type 'datetime.datetime'
 ```
@@ -714,4 +712,4 @@ The third advice is to consider mocks as "hooks" that you throw at the external 
 
 Mocks are a very powerful tool that allows us to test code that contains outgoing messages, in particular they allow us to test the arguments of outgoing commands. Patching is a good way to overcome the fact that some external components are hardcoded in our code and are thus unreachable through the arguments passed to the classes or the methods under analysis.
 
-Mocks are also the most complex part of testing, so don't be surprised if you are still a bit confused by them. Review the chapter once, maybe, but then try to go on, as in later chapters we will use mocks in very simple and practical examples, which may shed TODO(shed?) a light on the whole matter.
+Mocks are also the most complex part of testing, so don't be surprised if you are still a bit confused by them. Review the chapter once, maybe, but then try to go on, as in later chapters we will use mocks in very simple and practical examples, which may shed light upon the whole matter.

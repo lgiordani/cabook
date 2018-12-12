@@ -1,7 +1,5 @@
 # Chapter 1 - Introduction to TDD
 
-TODO(how many asserts in a test?)
-
 ## Introduction
 
 "Test-Driven Development" (TDD) is fortunately one of the names that I can spot most frequently when people talk about methodologies. Unfortunately, many programmers still do not follow it, fearing that it will impose a further burden on the already difficult life of the developer.
@@ -46,7 +44,6 @@ Pay attention. Nothing prevents you from changing the thresholds as a reaction t
 
 Going back to software and TDD, following this methodology you are forced to state clear goals like
 
-{line-numbers: false}
 ```
 sum(4, 5) == 9
 ```
@@ -73,16 +70,16 @@ Methodologies are like sports: you cannot learn them just by reading their descr
 
 ## Setup the project
 
-Following the instructions that you can find in the first chapter, create a virtual environment for the project, install Cookiecutter, and then create a project using the recommended template. After you created the project, enter the directory and install the requirements with `pip install -r requirements/dev.txt`. You should be able to run
+Following the instructions that you can find in the first chapter, create a virtual environment for the project, install Cookiecutter, and then create a project using the recommended template. After you created the project, enter the directory and install the requirements with `pip install -r requirements/dev.txt`[^requirements]. You should be able to run
 
-{line-numbers: false}
 ``` sh
 py.test -svv
 ```
 
+[^requirements]: this project template defines 3 different requirements files, `prod.txt`, `test.txt`, and `dev.txt`, in hierarchical order. `test.txt` includes `prod.txt`, and `dev.txt` includes `test.txt`.
+
 and get an output like
 
-{line-numbers: false}
 ``` txt
 =============================== test session starts ===============================
 platform linux -- Python 3.6.5, pytest-3.0.7, py-1.5.4, pluggy-0.4.0 --
@@ -131,7 +128,6 @@ And this is how pytest works: if your code doesn't raise any exception the test 
 
 Save the file and go back to the terminal. Execute `py.test -svv` and you should receive the following error message
 
-{line-numbers: false}
 ``` txt
 =============================== test session starts ===============================
 platform linux -- Python 3.6.5, pytest-3.0.7, py-1.5.4, pluggy-0.4.0 --
@@ -182,7 +178,6 @@ T> Add the reasonably minimum amount of code you need to pass the tests
 
 Run the test again, and this time you should receive a different error, that is
 
-{line-numbers: false}
 ``` txt
 =============================== test session starts ===============================
 platform linux -- Python 3.6.5, pytest-3.0.7, py-1.5.4, pluggy-0.4.0 --
@@ -209,7 +204,6 @@ tests/test_calc.py:10: AttributeError
 
 Since the last one is the first proper pytest failure report that we meet, it's time to learn how to read them. The first lines show you general information about the system where the tests are run
 
-{line-numbers: false}
 ``` txt
 =============================== test session starts ===============================
 platform linux -- Python 3.6.5, pytest-3.0.7, py-1.5.4, pluggy-0.4.0 --
@@ -223,7 +217,6 @@ In this case you can see that I'm using `linux` with `Python 3.6.5`, the version
 
 The second part of the output shows the list of files containing tests and the result of each test
 
-{line-numbers: false}
 ``` txt
 collected 1 items 
 
@@ -232,14 +225,12 @@ tests/test_calc.py::test_add_two_numbers FAILED
 
 This list is formatted with a syntax that can be given directly to pytest to run a single test. In this case we already have only one test, but later you might run a single failing test giving the name shown here on the command line, like for example
 
-{line-numbers: false}
 ``` sh
 pytest -svv tests/test_calc.py::test_add_two_numbers
 ```
 
 The third part shows details on the failing tests, if any.
 
-{line-numbers: false}
 ``` txt
 ______________________________ test_add_two_numbers _______________________________
 
@@ -264,7 +255,6 @@ class Calc:
 
 And again, as you notice, we made the smallest possible addition to the code to pass the test. Running this latter again the error message will be
 
-{line-numbers: false}
 ```
 _______________________________ test_add_two_numbers _______________________________
 
@@ -287,7 +277,6 @@ class Calc:
 
 Run the test again, and you will receive another error
 
-{line-numbers: false}
 ```
 ______________________________ test_add_two_numbers _______________________________
 
@@ -331,7 +320,6 @@ def test_add_three_numbers():
 
 This test fails when we run the test suite
 
-{line-numbers: false}
 ``` txt
 _____________________________ test_add_three_numbers ______________________________
 
@@ -354,7 +342,6 @@ class Calc:
 
 which solves the previous error, but creates a new one. If that wasn't enough, it also makes the first test fail!
 
-{line-numbers: false}
 ``` txt
 ______________________________ test_add_two_numbers _______________________________
 
@@ -409,7 +396,6 @@ def test_add_two_numbers():
 
 And running the test suite returns only one failure
 
-{line-numbers: false}
 ``` txt
 ______________________________ test_add_two_numbers _______________________________
 
@@ -432,7 +418,6 @@ class Calc:
 
 And this makes the failing test pass. At this point we can uncomment the second test and see what happens.
 
-{line-numbers: false}
 ``` txt
 _____________________________ test_add_three_numbers ______________________________
 
@@ -492,7 +477,6 @@ which creates an array[^iterable] of all the numbers from 0 to 99. The sum of al
 
 [^iterable]: strictly speaking this creates a `range`, which is an iterable.
 
-{line-numbers: false}
 ``` txt
 ______________________________ test_add_many_numbers ______________________________
 
@@ -539,7 +523,6 @@ def test_subtract_two_numbers():
 
 which doesn't pass with the following error
 
-{line-numbers: false}
 ``` txt
 ____________________________ test_subtract_two_numbers ____________________________
 
@@ -578,7 +561,6 @@ def test_mul_two_numbers():
 
 And the test suite fails as expected with the following error
 
-{line-numbers: false}
 ``` txt
 ______________________________ test_mul_two_numbers _______________________________
                                                                                                                                                                         
@@ -744,7 +726,6 @@ def test_div_by_zero_returns_inf():
 
 And the test suite fails now with this message
 
-{line-numbers: false}
 ``` txt
 __________________________ test_div_by_zero_returns_inf ___________________________
 
@@ -807,7 +788,6 @@ def test_mul_by_zero_raises_exception():
 
 In this case, thus, pytest runs the line `c.mul(3, 0)`. If it doesn't raise the `ValueError` exception the test will fail. Indeed, if you run the test suite now, you will get the following failure
 
-{line-numbers: false}
 ``` txt
 ________________________ test_mul_by_zero_raises_exception ________________________
 
@@ -868,7 +848,6 @@ def test_avg_correct_average():
 
 We feed the `avg` function a list of generic numbers, which average we calculated with an external tool. The first run of the test suite fails with the usual complaint about a missing function
 
-{line-numbers: false}
 ``` txt
 ____________________________ test_avg_correct_average _____________________________
 
@@ -908,7 +887,6 @@ As you can see the `ut=90` parameter is supposed to remove the element `98` from
 
 The test suite fails because the `avg` function doesn't accept the `ut` parameter
 
-{line-numbers: false}
 ``` txt
 _________________________ test_avg_removes_upper_outliers _________________________
 
@@ -1010,7 +988,6 @@ def test_avg_empty_list():
 
 and the test suite fails with the following error
 
-{line-numbers: false}
 ``` txt
 _______________________________ test_avg_empty_list _______________________________
 
@@ -1067,7 +1044,6 @@ def test_avg_manages_empty_list_after_outlier_removal():
 
 and the test suite fails with a `ZeroDivisionError`, because the length of the iterable is now 0.
 
-{line-numbers: false}
 ``` txt
 ________________ test_avg_manages_empty_list_after_outlier_removal ________________
 
@@ -1174,9 +1150,9 @@ I am frequently asked "How many assertions do you put in a test?", and I conside
 
 The whole point of automated tests is to run through a set of checkpoints that can quickly reveal that there is a problem in a specific area. Mind the words "quickly" and "specific". When I run the test suite and an error occurs I'd like to be able to understand as fast as possible where the problem lies. This doesn't (always) mean that the problem will have a quick resolution, but at least I can be immediately aware of which part of the system is misbehaving.
 
-On the other side, we don't want to have too many test for the same condition, on the contrary we want to avoid testing the same condition more than once as tests have to be maintained. A test suite that is too fine-grained might result in too many tests failing because of the same problem in the code which might be daunting TODO(?) and not very informative.
+On the other side, we don't want to have too many test for the same condition, on the contrary we want to avoid testing the same condition more than once as tests have to be maintained. A test suite that is too fine-grained might result in too many tests failing because of the same problem in the code, which might be daunting and not very informative.
 
-My advice is to group together assertions that can be done after the same setup, if they test the same process. For example, you might consider the two functions `add` and `sub` TODO(check) that we tested in this chapter. They require the same setup, which is to instantiate the `Calc` class (a setup that they share with many other tests), but they are actually testing two different processes. A good sign of this is that you should rename the test to `test_add_or_sub`, and a failure in this test would require a further investigation in the test output to check which method of the class is failing.
+My advice is to group together assertions that can be done after the same setup, if they test the same process. For example, you might consider the two functions `add` and `sub` that we tested in this chapter. They require the same setup, which is to instantiate the `Calc` class (a setup that they share with many other tests), but they are actually testing two different processes. A good sign of this is that you should rename the test to `test_add_or_sub`, and a failure in this test would require a further investigation in the test output to check which method of the class is failing.
 
 If you had to test that a method returns positive even numbers, instead, you might consider running the method and then writing two assertions, one that checks that the number is positive, and one that checks it is even. This makes sense, as a failure in one of the two means a failure of the whole process.
 
