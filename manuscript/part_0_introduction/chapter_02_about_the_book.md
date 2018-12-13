@@ -21,11 +21,11 @@ Errors: be aware there will be many. I'm not a native English speaker and a frie
 
 ## How this book is structured
 
-This book is divided into TODO parts.
+This book is divided into 3 parts.
 
-The first part is about **Test-driven Development (TDD)**, a programming technique that will help you more reliable and easily modifiable software. I will first guide you through a **very simple example** (chapter 1), demonstrating how to use TDD to approach a project, and how to properly create tests from requirements. I will then discuss unit testing from a more theoretical point of view, categorising functions and their tests (chapter 2). Chapter 3 will introduce **mocks**, a powerful tool that helps to test complex scenarios.
+The first part is about **Test-driven Development (TDD)**, a programming technique that will help you more reliable and easily modifiable software. I will first guide you through a **very simple example** in chapter 1, demonstrating how to use TDD to approach a project, and how to properly create tests from requirements. In chapter 2 I will then discuss unit testing from a more theoretical point of view, categorising functions and their tests. Chapter 3 will introduce **mocks**, a powerful tool that helps to test complex scenarios.
 
-The second part introduces **the clean architecture**. The first chapter discusses briefly the **components** and the ideas behind this software structure, while chapter 2 runs through **a concrete example** of clean architecture for a very simple Web service. Chapter 3 discusses **error management** and improvements to the Python code developed in the previous chapter.
+The second part introduces **the clean architecture**. The first chapter discusses briefly the **components** and the ideas behind this software structure, while chapter 2 runs through **a concrete example** of clean architecture for a very simple web service. Chapter 3 discusses **error management** and improvements to the Python code developed in the previous chapter. Finally, chapther 4 shows how to plug **different database systems** to the web service created previously.
 
 ## Why this book comes for free
 

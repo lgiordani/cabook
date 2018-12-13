@@ -236,7 +236,7 @@ As you can read in the official documentation, the `Mock` object provides other 
 
 ## A simple example
 
-To learn how to use mocks in a practical case, let's work together on a new module in the TODO package. The target is to write a class that downloads a JSON file with data on meteorites and computes some statistics on the dataset using the `Calc` class. The file is available at https://raw.githubusercontent.com/lgiordani/pytest_workshop/master/earth-meteorite-landings.json and is a copy of the file provided by NASA at https://data.nasa.gov/resource/y77d-th95.json (very slow server).
+To learn how to use mocks in a practical case, let's work together on a new module in the `calc` package. The target is to write a class that downloads a JSON file with data on meteorites and computes some statistics on the dataset using the `Calc` class. The file is available at https://raw.githubusercontent.com/lgiordani/pytest_workshop/master/earth-meteorite-landings.json and is a copy of the file provided by NASA at https://data.nasa.gov/resource/y77d-th95.json (very slow server).
 
 The class contains a `get_data` method that queries the remote server and returns the data, and a method `average_mass` that uses the `Calc.avg` method to compute the average mass of the meteorites and return it. In a real world case, like for example in a scientific application, I would probably split the class in two. One class manages the data, updating it whenever it is necessary, and another one manages the statistics. For the sake of simplicity, however, I will keep the two functionalities together in this example.
 

@@ -408,7 +408,7 @@ T> Git tag: [chapter-4-database-fixtures](https://github.com/lgiordani/cabook_re
 
 At this point we can create the real tests in the `tests/repository/postgres/test_postgresrepo.py` file, replacing the `test_dummy` one. The first function is `test_repository_list_without_parameters` which runs the `list` method without any argument. The test receives the `docker_setup` fixture that allows us to initialise the `PostgresRepo` class, the `pg_data` fixture with the test data that we put in the database, and the `pg_session` fixture that creates the actual test database in the background. The actual test code compares the codes of the rooms returned by the `list` method and the test data of the `pg_data` fixture.
 
-TODO This is now a copy of the test_memrepo.py file
+The file is basically a copy of `tests/repository/postgres/test_memrepo.py`, which is not surprising. Usually you want to test the very same conditions, whatever the storage system. Towards the end of the chapter we will see however that while these files are initially the same, they can evolve differently as we find bugs or corner cases that come from the specific implementation (in-memory storage, PostrgeSQL, ad so on).
 
 ``` python
 import pytest

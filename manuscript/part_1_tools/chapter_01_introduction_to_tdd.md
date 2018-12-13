@@ -62,7 +62,7 @@ As we will see with a practical example in the next chapter, what I explained in
 
 ## A simple TDD project
 
-The project we are going to develop is contained in the TODO directory in the book repository.
+The project we are going to develop is available at https://github.com/lgiordani/cabook_calc
 
 This project is purposefully extremely simple. You don't need to be an experienced Python programmer to follow this chapter, but you need to know the basics of the language. The goal of this chapter is not that of making you write the best Python code, but that of allowing you learn the TDD work flow, so don't be too worried if your code is not perfect.
 
@@ -70,13 +70,13 @@ Methodologies are like sports: you cannot learn them just by reading their descr
 
 ## Setup the project
 
-Following the instructions that you can find in the first chapter, create a virtual environment for the project, install Cookiecutter, and then create a project using the recommended template. After you created the project, enter the directory and install the requirements with `pip install -r requirements/dev.txt`[^requirements]. You should be able to run
+Following the instructions that you can find in the first chapter, create a virtual environment for the project, install Cookiecutter, and then create a project using the recommended template. I named the project `calc`, but you are free to give it another name. After you created the project, enter the directory and install the requirements with `pip install -r requirements/dev.txt`[^requirements]. You should be able to run
 
 ``` sh
 py.test -svv
 ```
 
-[^requirements]: this project template defines 3 different requirements files, `prod.txt`, `test.txt`, and `dev.txt`, in hierarchical order. `test.txt` includes `prod.txt`, and `dev.txt` includes `test.txt`.
+[^requirements]: this project template defines 3 different requirements files, `prod.txt`, `test.txt`, and `dev.txt`, in hierarchical order. `test.txt` includes `prod.txt`, and `dev.txt` includes `test.txt`. The reason is that when you test you want to be able to run the system with its production requirements, but you also need some tools to perform the tests, like the testing framework. When you develop, you want to test, but you also need tools to ease the development, like for example a linter or a version manager.
 
 and get an output like
 
