@@ -1060,9 +1060,7 @@ T> Git tag: [chapter-3-the-repository](https://github.com/lgiordani/cabook_rento
 
 At this point you can fire up the Flask development webserver with `flask run`, and get the list of all your rooms at
 
-```
-http://localhost:5000/rooms
-```
+[http://localhost:5000/rooms](http://localhost:5000/rooms)
 
 You can also use filters in the URL, like
 
