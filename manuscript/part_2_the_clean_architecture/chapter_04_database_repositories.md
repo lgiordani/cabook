@@ -764,7 +764,13 @@ which becomes
     repo = pr.PostgresRepo(connection_data)
 ```
 
-Now you can run the Flask development server with `flask run` and connect to http://localhost:5000/rooms to test the whole system. 
+Now you can run the Flask development server with `flask run` and connect to
+
+```
+http://localhost:5000/rooms
+```
+
+to test the whole system. 
 
 T> Git tag: [chapter-4-running-the-web-server](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-4-running-the-web-server)
 
@@ -1262,7 +1268,13 @@ but the actual changes are
 
 Please note that the second difference is due to choices in the database configuration, so the relevant changes are only two. This is what you can achieve with a well decoupled architecture. As I said in the introduction, this might be overkill for some applications, but if you want to provide support for multiple database backends this is definitely one of the best ways to achieve it.
 
-If you run now the Flask development server with `flask run`, and head to http://localhost:5000/rooms you will receive the very same result that the interface based on Postgres was returning.
+If you run now the Flask development server with `flask run`, and head to
+
+```
+http://localhost:5000/rooms
+```
+
+you will receive the very same result that the interface based on Postgres was returning.
 
 T> Git tag: [chapter-4-a-repository-based-on-mongodb-step-3](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-4-a-repository-based-on-mongodb-step-3)
 

@@ -1058,7 +1058,25 @@ class MemRepo:
 
 T> Git tag: [chapter-3-the-repository](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-3-the-repository)
 
-At this point you can fire up the Flask development webserver with `flask run`, head to http://localhost:5000/rooms and get the list of all your rooms. You can also use filters in the URL, like http://localhost:5000/rooms?filter_code__eq=f853578c-fc0f-4e65-81b8-566c5dffa35a which returns the room with the given code or http://localhost:5000/rooms?filter_price__lt=50 which return all the rooms with a price less than 50.
+At this point you can fire up the Flask development webserver with `flask run`, and get the list of all your rooms at
+
+```
+http://localhost:5000/rooms
+```
+
+You can also use filters in the URL, like
+
+```
+http://localhost:5000/rooms?filter_code__eq=f853578c-fc0f-4e65-81b8-566c5dffa35a
+```
+
+which returns the room with the given code or
+
+```
+http://localhost:5000/rooms?filter_price__lt=50
+```
+
+which return all the rooms with a price less than 50.
 
 ## Conclusions
 

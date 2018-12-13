@@ -799,7 +799,13 @@ At this point you can execute `flask run` in the directory that contains this fi
  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
 ```
 
-At this point you can point your browser to `http://localhost:5000/rooms` and enjoy the JSON returned by the first endpoint of your web application.
+At this point you can point your browser to
+
+```
+http://localhost:5000/rooms
+```
+
+and enjoy the JSON returned by the first endpoint of your web application.
 
 ## Conclusions
 
