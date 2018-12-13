@@ -870,7 +870,7 @@ def mg_database(mg_database_empty, mg_data):
 
 As you can see these functions are very similar to the ones that we defined for Postgres. The `mg_is_responsive` function is tasked with monitoring the MondoDB container and return True when this latter is ready. The specific way to do this is different from the one employed for PostgreSQL, as these are solutions tailored to the specific technology. The `mg_client` function is similar to the `pg_engine` developed for PostgreSQL, and the same happens for `mg_database_empty`, `mg_data`, and `mg_database`. While the SQLAlchemy package works through a session, PyMongo library creates a client and uses it directly, but the overall structure is the same.
 
-We need to change the `tests/repository/conftest.py` to add the configuration of the MongoDB container. Unfortunately, due to a limitation of the `pytest-docker` package it is impossible to define multiple versions of `docker_compose_file`, so we need to add the MongoDB configuration alongside the PostgreSQL one. The `docker_setup` fixture becomes
+SInce we are importing the PyMongo library, remember to add `pymongo` to the `requirements/prod.txt` file and run `pip` again. We need to change the `tests/repository/conftest.py` to add the configuration of the MongoDB container. Unfortunately, due to a limitation of the `pytest-docker` package it is impossible to define multiple versions of `docker_compose_file`, so we need to add the MongoDB configuration alongside the PostgreSQL one. The `docker_setup` fixture becomes
 
 ``` python
 @pytest.fixture(scope='session')
@@ -932,6 +932,8 @@ def docker_compose_file(docker_tmpfile, docker_setup):
     return docker_tmpfile[1]
 ```
 
+T> Git tag: [chapter-4-a-repository-based-on-mongodb-step-1](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-4-a-repository-based-on-mongodb-step-1)
+
 As you can see setting up MongoDB is not that different from PostgreSQL. Both systems are databases, and the way you connect to them is similar, at least in a testing environment, where you don't need specific settings for the engine.
 
 With the above fixtures we can write the `MongoRepo` class following TDD. The `tests/repository/mongodb/test_mongorepo.py` file contains all the tests for this class
@@ -943,7 +945,8 @@ from rentomatic.repository import mongorepo
 pytestmark = pytest.mark.integration
 
 
-def test_repository_list_without_parameters(docker_setup, mg_data, mg_database):
+def test_repository_list_without_parameters(
+        docker_setup, mg_data, mg_database):
     repo = mongorepo.MongoRepo(docker_setup['mongo'])
 
     repo_rooms = repo.list()
@@ -1021,9 +1024,29 @@ def test_repository_list_with_price_between_filter(
 
     assert len(repo_rooms) == 1
     assert repo_rooms[0].code == '913694c6-435a-4366-ba0d-da5334a611b2'
+
+
+def test_repository_list_with_price_as_string(
+        docker_setup, mg_data, mg_database):
+    repo = mongorepo.MongoRepo(docker_setup['mongo'])
+
+    repo_rooms = repo.list(
+        filters={
+            'price__lt': '60'
+        }
+    )
+
+    assert len(repo_rooms) == 2
+    assert set([r.code for r in repo_rooms]) ==\
+        {
+            'f853578c-fc0f-4e65-81b8-566c5dffa35a',
+            'eed76e77-55c1-41ce-985d-ca49bf6c0585'
+    }
 ```
 
 These tests obviously mirror the tests written for Postgres, as the Mongo interface has to provide the very same API. Actually, since the initialization of the `MongoRepo` class doesn't differ from the initialization of the `PostgresRepo` one, the test suite is exactly the same.
+
+I added a test called `test_repository_list_with_price_as_string` that checks what happens when the price in the filter is expressed as a string. Experimenting with the MongoDB shell I found that in this case the query wasn't working, so I included the test to be sure the implementation didn't forget to manage this condition.
 
 The `MongoRepo` class is obviously not the same as the Postgres interface, as the PyMongo library is different from SQLAlchemy, and the structure of a NoSQL database differs from the one of a relational one. The file `rentomatic/repository/mongorepo.py` is
 
@@ -1055,6 +1078,10 @@ class MongoRepo:
                 key, operator = key.split('__')
 
                 filter_value = mongo_filter.get(key, {})
+
+                if key == 'price':
+                    value = int(value)
+
                 filter_value['${}'.format(operator)] = value
                 mongo_filter[key] = filter_value
 
@@ -1063,5 +1090,184 @@ class MongoRepo:
         return [Room.from_dict(d) for d in result]
 ```
 
-which makes use of the similarity between the filter system of the Rent-o-matic project and the aggregation TODO framework of the MongoDB system.
+which makes use of the similarity between the filters of the Rent-o-matic project and the ones of the MongoDB system[^similar].
 
+[^similar]: The similitude between the two systems is not accidental, as I was studying MongoDB at the time I wrote the first article about clean architectures, so I was obviously influenced by it.
+
+T> Git tag: [chapter-4-a-repository-based-on-mongodb-step-2](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-4-a-repository-based-on-mongodb-step-2)
+
+At this point we can follow the same steps we did for Postgres, that is creating a stand-alone MongoDB container, filling it with real data, changing the REST endpoint to use `MongoRepo` and run the Flask webserver.
+
+To create a MongoDB container you can run this Docker command line
+
+``` sh
+$ docker run --name rentomatic -e MONGO_INITDB_ROOT_USERNAME=root -e MONGO_INITDB_ROOT_PASSWORD=rentomaticdb -p 27017:27017 -d mongo
+```
+
+To check the connectivity you may run the MongoDB shell in the same container (then exit with Ctrl-D)
+
+``` txt
+$ docker exec -it rentomatic mongo --port 27017 -u "root" -p "rentomaticdb" --authenticationDatabase "admin"
+MongoDB shell version v4.0.4
+connecting to: mongodb://127.0.0.1:27017/
+Implicit session: session { "id" : UUID("44f615e3-ec0b-4a16-8b58-f0ae1c48c187") }
+MongoDB server version: 4.0.4
+>
+```
+
+THe initialisation file is similar to the one I created for PostgreSQL, and like that one it borrows code from the fixtures that run in the test suite. The file is named `initial_mongo_setup.py` and is saved in the main project directory.
+
+``` python
+import pymongo
+
+setup = {
+    'dbname': 'rentomaticdb',
+    'user': 'root',
+    'password': 'rentomaticdb',
+    'host': 'localhost'
+}
+
+client = pymongo.MongoClient(
+    host=setup['host'],
+    username=setup['user'],
+    password=setup['password'],
+    authSource='admin'
+)
+
+db = client[setup['dbname']]
+
+data = [
+    {
+        'code': 'f853578c-fc0f-4e65-81b8-566c5dffa35a',
+        'size': 215,
+        'price': 39,
+        'longitude': -0.09998975,
+        'latitude': 51.75436293,
+    },
+    {
+        'code': 'fe2c3195-aeff-487a-a08f-e0bdc0ec6e9a',
+        'size': 405,
+        'price': 66,
+        'longitude': 0.18228006,
+        'latitude': 51.74640997,
+    },
+    {
+        'code': '913694c6-435a-4366-ba0d-da5334a611b2',
+        'size': 56,
+        'price': 60,
+        'longitude': 0.27891577,
+        'latitude': 51.45994069,
+    },
+    {
+        'code': 'eed76e77-55c1-41ce-985d-ca49bf6c0585',
+        'size': 93,
+        'price': 48,
+        'longitude': 0.33894476,
+        'latitude': 51.39916678,
+    }
+]
+
+collection = db.rooms
+
+collection.insert_many(data)
+```
+
+After you saved it, run it with
+
+``` sh
+$ python initial_mongo_setup.py
+```
+
+If you want to check what happened in the database you can connect again to the container and run a manual query that should return 4 rooms
+
+``` txt
+$ docker exec -it rentomatic mongo --port 27017 -u "root" -p "rentomaticdb" --authenticationDatabase "admin"
+MongoDB shell version v4.0.4
+connecting to: mongodb://127.0.0.1:27017/
+Implicit session: session { "id" : UUID("44f615e3-ec0b-4a16-8b58-f0ae1c48c187") }
+MongoDB server version: 4.0.4
+> use rentomaticdb
+switched to db rentomaticdb
+> db.rooms.find({})
+{ "_id" : ObjectId("5c123219a9a0ca3e85ab34b8"), "code" : "f853578c-fc0f-4e65-81b8-566c5dffa35a", "size" : 215, "price" : 39, "longitude" : -0.09998975, "latitude" : 51.75436293 }
+{ "_id" : ObjectId("5c123219a9a0ca3e85ab34b9"), "code" : "fe2c3195-aeff-487a-a08f-e0bdc0ec6e9a", "size" : 405, "price" : 66, "longitude" : 0.18228006, "latitude" : 51.74640997 }
+{ "_id" : ObjectId("5c123219a9a0ca3e85ab34ba"), "code" : "913694c6-435a-4366-ba0d-da5334a611b2", "size" : 56, "price" : 60, "longitude" : 0.27891577, "latitude" : 51.45994069 }
+{ "_id" : ObjectId("5c123219a9a0ca3e85ab34bb"), "code" : "eed76e77-55c1-41ce-985d-ca49bf6c0585", "size" : 93, "price" : 48, "longitude" : 0.33894476, "latitude" : 51.39916678 }
+```
+
+The last step is to modify the `rentomatic/rest/room.py` file to make it use the `MongoRepo` class. The new version of the file is
+
+``` python
+import json
+
+from flask import Blueprint, request, Response
+
+from rentomatic.repository import mongorepo as mr
+from rentomatic.use_cases import room_list_use_case as uc
+from rentomatic.serializers import room_json_serializer as ser
+from rentomatic.request_objects import room_list_request_object as req
+from rentomatic.response_objects import response_objects as res
+
+blueprint = Blueprint('room', __name__)
+
+STATUS_CODES = {
+    res.ResponseSuccess.SUCCESS: 200,
+    res.ResponseFailure.RESOURCE_ERROR: 404,
+    res.ResponseFailure.PARAMETERS_ERROR: 400,
+    res.ResponseFailure.SYSTEM_ERROR: 500
+}
+
+connection_data = {
+    'dbname': 'rentomaticdb',
+    'user': 'root',
+    'password': 'rentomaticdb',
+    'host': 'localhost'
+}
+
+
+@blueprint.route('/rooms', methods=['GET'])
+def room():
+    qrystr_params = {
+        'filters': {},
+    }
+
+    for arg, values in request.args.items():
+        if arg.startswith('filter_'):
+            qrystr_params['filters'][arg.replace('filter_', '')] = values
+
+    request_object = req.RoomListRequestObject.from_dict(qrystr_params)
+
+    repo = mr.MongoRepo(connection_data)
+    use_case = uc.RoomListUseCase(repo)
+
+    response = use_case.execute(request_object)
+
+    return Response(json.dumps(response.value, cls=ser.RoomJsonEncoder),
+                    mimetype='application/json',
+                    status=STATUS_CODES[response.type])
+```
+
+but the actual changes are
+
+``` diff
+-from rentomatic.repository import postgresrepo as pr
++from rentomatic.repository import mongorepo as mr
+[...]
+-    'user': 'postgres',
++    'user': 'root',
+[...]
+-    repo = pr.PostgresRepo(connection_data)
++    repo = mr.MongoRepo(connection_data)
+```
+
+Please note that the second difference is due to choices in the database configuration, so the relevant changes are only two. This is what you can achieve with a well decoupled architecture. As I said in the introduction, this might be overkill for some applications, but if you want to provide support for multiple database backends this is definitely one of the best ways to achieve it.
+
+If you run now the Flask development server with `flask run`, and head to http://localhost:5000/rooms you will receive the very same result that the interface based on Postgres was returning.
+
+T> Git tag: [chapter-4-a-repository-based-on-mongodb-step-3](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-4-a-repository-based-on-mongodb-step-3)
+
+## Conclusions
+
+This chapter concludes the overview of the clean architecture example. Starting from scratch, we created domain models, serializers, use cases, an in-memory storage system, a command line interface and an HTTP endpoint. We then improved the whole system with a very generic request/response management code, that provides robust support for errors. Last, we implemented two new storage systems, using both a relational and a NoSQL database.
+
+This is by no means a little achievement. Our architecture covers a very small use case, but is robust and fully tested. Whatever error we might find in the way we dealt with data, databases, requests, and so on, can be isolated and tamed much faster than in a system which doesn't have tests. Moreover, the decoupling philosophy allows us to provide support for multiple storage systems, but also to quickly implement new access protocols, or new serialisations for out objects.
