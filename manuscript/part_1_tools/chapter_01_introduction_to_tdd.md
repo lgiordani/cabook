@@ -82,11 +82,11 @@ and get an output like
 
 ``` txt
 =============================== test session starts ===============================
-platform linux -- Python 3.6.5, pytest-3.0.7, py-1.5.4, pluggy-0.4.0 --
+platform linux -- Python 3.6.7, pytest-4.0.1, py-1.7.0, pluggy-0.8.0 --
 /home/leo/devel/cabook/venv3/bin/python3
 cachedir: .cache
-rootdir: /home/leo/devel/cabook/calc, inifile: pytest.ini
-plugins: cov-2.4.0
+rootdir: /home/leo/devel/cabook/code/calc, inifile: pytest.ini
+plugins: cov-2.6.0
 collected 1 items 
 
 tests/test_calc.py::test_content PASSED
@@ -96,6 +96,8 @@ tests/test_calc.py::test_content PASSED
 
 If you use a different template or create the project manually you may need to install pytest explicitly and to properly format the project structure. I strongly recommend to use the template if you are a beginner, as the proper setup can be tricky to achieve.
 
+TODO Git tags on the whole project
+
 ## Requirements
 
 The goal of the project is to write a class `Calc` that performs calculations: addition, subtraction, multiplication, and division. Addition and multiplication shall accept multiple arguments. Division shall return a float value, and division by zero shall return the string `"inf"`. Multiplication by zero must raise a `ValueError` exception. The class will also provide a function to compute the average of an iterable like a list. This function gets two optional upper and lower thresholds and should remove from the computation the values that fall outside these boundaries.
@@ -104,7 +106,7 @@ As you can see the requirements are pretty simple, and a couple of them are defi
 
 ## Step 1 - Adding two numbers
 
-The first test we are going to write is one that checks if the `Calc` class can perform an addition. Create the file `tests/test_calc.py` that will contain all the tests and insert this code
+The first test we are going to write is one that checks if the `Calc` class can perform an addition. Remove the code in `tests/test_calc.py` (those functions are just templates for your tests) and insert this code
 
 ``` python
 from calc.calc import Calc
@@ -129,25 +131,17 @@ And this is how pytest works: if your code doesn't raise any exception the test 
 Save the file and go back to the terminal. Execute `py.test -svv` and you should receive the following error message
 
 ``` txt
-=============================== test session starts ===============================
-platform linux -- Python 3.6.5, pytest-3.0.7, py-1.5.4, pluggy-0.4.0 --
-/home/leo/devel/cabook/venv3/bin/python3
-cachedir: .cache
-rootdir: /home/leo/devel/cabook/calc, inifile: pytest.ini
-plugins: cov-2.4.0
-collected 0 items / 1 errors 
-
 ===================================== ERRORS ======================================
 _______________________ ERROR collecting tests/test_calc.py _______________________
 ImportError while importing test module
-'/home/leo/devel/cabook/calc/tests/test_calc.py'.
+'/home/leo/devel/cabook/code/calc/tests/test_calc.py'.
 Hint: make sure your test modules/packages have valid Python names.
 Traceback:
-../venv3/lib/python3.6/site-packages/_pytest/python.py:418: in _importtestmodule
+../../venv3/lib/python3.6/site-packages/_pytest/python.py:418: in _importtestmodule
     mod = self.fspath.pyimport(ensuresyspath=importmode)
-../venv3/lib/python3.6/site-packages/py/_path/local.py:668: in pyimport
+../../venv3/lib/python3.6/site-packages/py/_path/local.py:668: in pyimport
     __import__(modname)
-../venv3/lib/python3.6/site-packages/_pytest/assertion/rewrite.py:216:
+../../venv3/lib/python3.6/site-packages/_pytest/assertion/rewrite.py:216:
     in load_module
     py.builtin.exec_(co, mod.__dict__)
 tests/test_calc.py:4: in <module>
@@ -179,16 +173,6 @@ T> Add the reasonably minimum amount of code you need to pass the tests
 Run the test again, and this time you should receive a different error, that is
 
 ``` txt
-=============================== test session starts ===============================
-platform linux -- Python 3.6.5, pytest-3.0.7, py-1.5.4, pluggy-0.4.0 --
-/home/leo/devel/cabook/venv3/bin/python3
-cachedir: .cache
-rootdir: /home/leo/devel/cabook/calc, inifile: pytest.ini
-plugins: cov-2.4.0
-collected 1 items 
-
-tests/test_calc.py::test_add_two_numbers FAILED
-
 ==================================== FAILURES =====================================
 ______________________________ test_add_two_numbers _______________________________
 
@@ -198,7 +182,7 @@ ______________________________ test_add_two_numbers ____________________________
 >       res = c.add(4, 5)
 E       AttributeError: 'Calc' object has no attribute 'add'
 
-tests/test_calc.py:10: AttributeError
+tests/test_calc.py:7: AttributeError
 ============================ 1 failed in 0.04 seconds =============================
 ```
 
@@ -206,14 +190,14 @@ Since the last one is the first proper pytest failure report that we meet, it's 
 
 ``` txt
 =============================== test session starts ===============================
-platform linux -- Python 3.6.5, pytest-3.0.7, py-1.5.4, pluggy-0.4.0 --
+platform linux -- Python 3.6.7, pytest-4.0.1, py-1.7.0, pluggy-0.8.0 --
 /home/leo/devel/cabook/venv3/bin/python3
 cachedir: .cache
-rootdir: /home/leo/devel/cabook/calc, inifile: pytest.ini
-plugins: cov-2.4.0
+rootdir: /home/leo/devel/cabook/code/calc, inifile: pytest.ini
+plugins: cov-2.6.0
 ```
 
-In this case you can see that I'm using `linux` with `Python 3.6.5`, the version of pytest and of two packages used by this latter, `py` (https://py.readthedocs.io/en/latest/) and `pluggy` (https://pluggy.readthedocs.io/en/latest/). You can also see here where pytest is reading its configuration from (`pytest.ini`), and the pytest plugins that are installed (`cov-2.4.0`).
+In this case you can see that I'm using `linux` and get a quick list of the versions of the main packages involved in running pytest: Python, pytest itself, `py` (https://py.readthedocs.io/en/latest/) and `pluggy` (https://pluggy.readthedocs.io/en/latest/). You can also see here where pytest is reading its configuration from (`pytest.ini`), and the pytest plugins that are installed.
 
 The second part of the output shows the list of files containing tests and the result of each test
 
@@ -240,7 +224,7 @@ ______________________________ test_add_two_numbers ____________________________
 >       res = c.add(4, 5)
 E       AttributeError: 'Calc' object has no attribute 'add'
 
-tests/test_calc.py:10: AttributeError
+tests/test_calc.py:7: AttributeError
 ```
 
 For each failing test, pytest shows a header with the name of the test and the part of the code that raised the exception. The last line of each of these boxes shows at which line of the test file the error happened.
@@ -263,9 +247,11 @@ _______________________________ test_add_two_numbers ___________________________
     
 >       res = c.add(4, 5)
 E       TypeError: add() takes 1 positional argument but 3 were given
+
+tests/test_calc.py:7: TypeError
 ```
 
-(I will show from now on only the error part of the failure report).
+(Through the rest of the chapter I will only show the error part of the failure report).
 
 The function we defined doesn't accept any argument other than `self` (`def add(self)`), but in the test we pass three of them (`c.add(4, 5)`, remember that in Python `self` is implicit). Our move at this point is to change the function to accept the parameters that it is supposed to receive, namely two numbers. The code now becomes
 
@@ -278,7 +264,7 @@ class Calc:
 Run the test again, and you will receive another error
 
 ```
-______________________________ test_add_two_numbers _______________________________
+______________________________ test_add_two_numbers ________________________________
 
     def test_add_two_numbers():
         c = Calc()
@@ -287,6 +273,8 @@ ______________________________ test_add_two_numbers ____________________________
     
 >       assert res == 9
 E       assert None == 9
+
+tests/test_calc.py:9: AssertionError
 ```
 
 The function returns `None` as it doesn't contain any code, while the test expects it to return `9`. What do you think is the minimum code you can add to pass this test?
@@ -299,15 +287,17 @@ class Calc:
         return 9
 ```
 
-and this may surprise you (it should!). If you think about it you might have been tempted to add some code that performs an addition between `a` and `b`, but this would violate the TDD principle, because you would have been driven by the requirements and not by the tests.
+and this may surprise you (it should!). You might have been tempted to add some code that performs an addition between `a` and `b`, but this would violate the TDD principle, because you would have been driven by the requirements and not by the tests.
 
 I know this sound weird, but think about it: if your code works, for now you don't need anything more complex than this. Maybe in the future you will discover that this solution is not good enough, and at that point you will have to change it (this will happen with the next test, in this case). But for now everything works and you shouldn't implement more than this.
 
 Run again the test suite to check that no tests fail, after which you can move on to the second step.
 
+I> Git tag: [step-1-adding-two-numbers](https://github.com/lgiordani/cabook_calc/tree/step-1-adding-two-numbers)
+
 ## Step 2 - Adding three numbers
 
-The requirements state that "Addition and multiplication shall accept multiple arguments". This means that we should be able to execute not only `add(4, 5)` like we did, but also `add(4, 5, 11)`, `add(4, 5, 11, 2)`, and so on. We can start testing this behaviour with the following test
+The requirements state that "Addition and multiplication shall accept multiple arguments". This means that we should be able to execute not only `add(4, 5)` like we did, but also `add(4, 5, 11)`, `add(4, 5, 11, 2)`, and so on. We can start testing this behaviour with the following test, that you should put in `tests/test_calc.py`, after the previous test that we wrote.
 
 ``` python
 def test_add_three_numbers():
@@ -321,13 +311,13 @@ def test_add_three_numbers():
 This test fails when we run the test suite
 
 ``` txt
-_____________________________ test_add_three_numbers ______________________________
+_____________________________ test_add_three_numbers _______________________________
 
     def test_add_three_numbers():
 >       assert Calc().add(4, 5, 6) == 15
 E       TypeError: add() takes 3 positional arguments but 4 were given
 
-tests/test_calc.py:16: TypeError
+tests/test_calc.py:15: TypeError
 ```
 
 for the obvious reason that the function we wrote in the previous section accepts only 2 arguments other than `self`. What is the minimum code that you can write to fix this test?
@@ -343,7 +333,7 @@ class Calc:
 which solves the previous error, but creates a new one. If that wasn't enough, it also makes the first test fail!
 
 ``` txt
-______________________________ test_add_two_numbers _______________________________
+______________________________ test_add_two_numbers ________________________________
 
     def test_add_two_numbers():
         c = Calc()
@@ -351,8 +341,8 @@ ______________________________ test_add_two_numbers ____________________________
 >       res = c.add(4, 5)
 E       TypeError: add() missing 1 required positional argument: 'c'
 
-tests/test_calc.py:10: TypeError
-_____________________________ test_add_three_numbers ______________________________
+tests/test_calc.py:7: TypeError
+_____________________________ test_add_three_numbers _______________________________
 
     def test_add_three_numbers():
         c = Calc()
@@ -362,7 +352,7 @@ _____________________________ test_add_three_numbers ___________________________
 >       assert res == 15
 E       assert 9 == 15
 
-tests/test_calc.py:20: AssertionError
+tests/test_calc.py:17: AssertionError
 ```
 
 The first test now fails because the new `add` method requires three arguments and we are passing only two. The second tests fails because the `add` method returns `9` and not `15` as expected by the test.
@@ -397,7 +387,7 @@ def test_add_two_numbers():
 And running the test suite returns only one failure
 
 ``` txt
-______________________________ test_add_two_numbers _______________________________
+______________________________ test_add_two_numbers ________________________________
 
     def test_add_two_numbers():
         c = Calc()
@@ -405,10 +395,10 @@ ______________________________ test_add_two_numbers ____________________________
 >       res = c.add(4, 5)
 E       TypeError: add() missing 1 required positional argument: 'c'
 
-tests/test_calc.py:10: TypeError
+tests/test_calc.py:7: TypeError
 ```
 
-To fix this error we can add to the third argument a default value. The additive identity is `0`, so the new code of the `add` method is
+To fix this error we can obviously revert the addition of the third argument, but this would mean going back to the previous solution. Obviously, though tests focus on a very small part of the code, we have to keep in mind what we are doing in terms of the big picture. A better solution is to add to the third argument a default value. The additive identity is `0`, so the new code of the `add` method is
 
 ``` python
 class Calc:
@@ -429,7 +419,7 @@ _____________________________ test_add_three_numbers ___________________________
 >       assert res == 15
 E       assert 9 == 15
 
-tests/test_calc.py:20: AssertionError
+tests/test_calc.py:17: AssertionError
 ```
 
 The test suite fails, because the returned value is still not correct for the second test. At this point the tests show that our previous solution (`return 9`) is not sufficient anymore, and we have to try to implement something more complex.
@@ -443,6 +433,10 @@ class Calc:
 ```
 
 This solution makes both tests pass, so the entire suite runs without errors.
+
+I> Git tag: [step-2-adding-three-numbers](https://github.com/lgiordani/cabook_calc/tree/step-2-adding-three-numbers)
+
+I can see your face, your are probably frowning at the fact that it took us 10 minutes to write a method that performs the addition of two or three numbers. On the one hand, keep in mind that I'm going at a very slow pace, being this an introduction, and for these first tests it is better to take the time to properly understand every single step. Later, when you will be used to TDD, some of these steps will be implicit. On the other hand, TDD is slower than untested development. After all you will write tests (sometimes many tests) for just a couple of lines of code, but here you
 
 ## Step 3 - Adding multiple numbers
 
@@ -478,13 +472,15 @@ which creates an array[^iterable] of all the numbers from 0 to 99. The sum of al
 [^iterable]: strictly speaking this creates a `range`, which is an iterable.
 
 ``` txt
-______________________________ test_add_many_numbers ______________________________
+______________________________ test_add_many_numbers _______________________________
 
     def test_add_many_numbers():
         s = range(100)
     
 >       assert Calc().add(*s) == 4950
 E       TypeError: add() takes from 3 to 4 positional arguments but 101 were given
+
+tests/test_calc.py:23: TypeError
 ```
 
 The minimum amount of code that we can add, this time, will not be so trivial, as we have to pass three tests. Fortunately the tests that we wrote are still there and will check that the previous conditions are still satisfied.
@@ -498,6 +494,8 @@ class Calc:
 ```
 
 At that point we can use the `sum` built-in function to sum all the arguments. This solution makes the whole test suite pass without errors, so it is correct.
+
+I> Git tag: [step-3-adding-multiple-numbers](https://github.com/lgiordani/cabook_calc/tree/step-3-adding-multiple-numbers)
 
 Pay attention here, please. In TDD a solution is not correct when it is beautiful, when it is smart, or when it uses the latest feature of the language. All these things are good, but TDD wants your code to pass the tests. So, your code might be ugly, convoluted, and slow, but if it passes the test it is correct. This in turn means that TDD doesn't cover all the needs of your software project. Delivering fast routines, for example, might be part of the advantage you have on your competitors, but it is not really testable with the TDD methodology[^testit].
 
@@ -532,7 +530,7 @@ ____________________________ test_subtract_two_numbers _________________________
 >       res = c.sub(10, 3)
 E       AttributeError: 'Calc' object has no attribute 'sub'
 
-tests/test_calc.py:32: AttributeError
+tests/test_calc.py:29: AttributeError
 ```
 
 Now that you understood the TDD process, and that you know you should avoid over-engineering, you can also skip some of the passages that we run through in the previous sections. A good solution for this test is
@@ -543,6 +541,8 @@ Now that you understood the TDD process, and that you know you should avoid over
 ```
 
 which makes the test suite pass.
+
+I> Git tag: [step-4-subtraction](https://github.com/lgiordani/cabook_calc/tree/step-4-subtraction)
 
 ## Step 5 - Multiplication
 
@@ -570,7 +570,7 @@ ______________________________ test_mul_two_numbers ____________________________
 >       res = c.mul(6, 4)                                                 
 E       AttributeError: 'Calc' object has no attribute 'mul'
 
-tests/test_calc.py:40: AttributeError                                                 
+tests/test_calc.py:37: AttributeError
 ```
 
 We face now a classical TDD dilemma. Shall we implement the solution to this test as a function that multiplies two numbers, knowing that the next test will invalidate it, or shall we already consider that the target is that of implementing a variadic function and thus use `*args` directly?
@@ -583,6 +583,8 @@ If we decide to follow the strict TDD, that is implement the simplest first solu
     def mul(self, a, b):
         return a * b
 ```
+
+I> Git tag: [step-5-multiply-two-numbers](https://github.com/lgiordani/cabook_calc/tree/step-5-multiply-two-numbers)
 
 To show you how to deal with redundant tests I will in this case choose the second path, and implement a smarter solution for the present test. Keep in mind however that it is perfectly correct to implement that solution shown above and then move on and try to solve the problem of multiple arguments later.
 
@@ -634,6 +636,8 @@ class Calc:
         return reduce(mul2, args)
 ```
 
+I> Git tag: [step-5-multiply-two-numbers-smart](https://github.com/lgiordani/cabook_calc/tree/step-5-multiply-two-numbers-smart)
+
 [^reduce]: More information about the `reduce` algorithm can be found on the MapReduce Wikipedia page [https://en.wikipedia.org/wiki/MapReduce](https://en.wikipedia.org/wiki/MapReduce). The Python function documentation can be found at [https://docs.python.org/3.6/library/functools.html#functools.reduce](https://docs.python.org/3.6/library/functools.html#functools.reduce).
 
 [^closure]: We are actually defining a function inside a function. Dig the Internet for "closures", and you will learn something extremely powerful and interesting. TODO
@@ -646,6 +650,8 @@ def test_mul_many_numbers():
 
     assert Calc().mul(*s) == 362880
 ```
+
+I> Git tag: [step-5-multiply-many-numbers](https://github.com/lgiordani/cabook_calc/tree/step-5-multiply-many-numbers)
 
 We might use 100 arguments as we did with addition, but the multiplication of all numbers from 1 to 100 gives a result with 156 digits and I don't really need to clutter the tests file with such a monstrosity. As I said, testing multiple arguments is testing a boundary, and the idea is that if the algorithm works for 2 numbers and for 10 it will work for 10 thousands arguments as well.
 
@@ -683,6 +689,8 @@ class Calc:
         return reduce(lambda x, y: x*y, args)
 ```
 
+I> Git tag: [step-6-refactoring](https://github.com/lgiordani/cabook_calc/tree/step-6-refactoring)
+
 where I define an anonymous function that accepts two inputs `x, y` and returns their multiplication `x*y`. Running the test suite I can see that all the test pass, so my refactoring is correct.
 
 T> **TDD rule number 6**
@@ -711,6 +719,8 @@ class Calc:
         return a / b
 ```
 
+I> Git tag: [step-7-float-division](https://github.com/lgiordani/cabook_calc/tree/step-7-float-division)
+
 If you run the test suite again all the test should pass. There is a second requirement about this operation, however, that states that division by zero shall return the string `"inf"`. Now, this is obviously a requirement that I introduced for the sake of giving some interesting and simple problem to solve with TDD, as an API that returns either floats of strings is not really the best idea.
 
 The test that comes from the requirement is simple
@@ -734,7 +744,7 @@ __________________________ test_div_by_zero_returns_inf ________________________
     
 >       res = c.div(5, 0)
 
-tests/test_calc.py:62: 
+tests/test_calc.py:59: 
 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 
 self = <calc.calc.Calc object at 0x7f56c3dddb70>, a = 5, b = 0
@@ -743,7 +753,7 @@ self = <calc.calc.Calc object at 0x7f56c3dddb70>, a = 5, b = 0
 >       return a / b
 E       ZeroDivisionError: division by zero
 
-calc/calc.py:17: ZeroDivisionError
+calc/calc.py:15: ZeroDivisionError
 ```
 
 Note that when an exception happens in the code and not in the test, the pytest output changes slightly. The first part of the message shows where the test fails, but then there is a second part that shows the internal code that raised the exception and provides information about the value of local variables on the first line (`self = <calc.calc.Calc object at 0x7f56c3dddb70>, a = 5, b = 0`).
@@ -770,6 +780,8 @@ and the second one is to intercept the exception with a `try/except` block
 
 Both solutions make the test suite pass, so both are correct. I leave to you the decision about which is the best one, syntactically speaking.
 
+I> Git tag: [step-7-division-by-zero](https://github.com/lgiordani/cabook_calc/tree/step-7-division-by-zero)
+
 ## Step 8 - Testing exceptions
 
 A further requirement is that multiplication by zero must raise a `ValueError` exception. This means that we need a way to test if our code raises an exception, which is the opposite of what we did until now. In the previous tests, the condition to pass was that there was no exception in the code, while in this test the condition will be that an exception has been raised.
@@ -778,6 +790,8 @@ Pytest provides a `raises` context manager that runs the code contained in it an
 
 ``` python
 import pytest
+
+[...]
 
 def test_mul_by_zero_raises_exception():
     c = Calc()
@@ -798,7 +812,7 @@ ________________________ test_mul_by_zero_raises_exception _____________________
 >           c.mul(3, 0)
 E           Failed: DID NOT RAISE <class 'ValueError'>
 
-tests/test_calc.py:73: Failed
+tests/test_calc.py:70: Failed
 ```
 
 which explicitly signals that the code didn't raise the expected exception.
@@ -813,6 +827,8 @@ The code that makes the test pass needs to test if one of the inputs of the `mul
 ```
 
 and make the test suite pass. The if condition checks that there are no false values in the `args` tuples, that is there are no zeros.
+
+I> Git tag: [step-8-multiply-by-zero](https://github.com/lgiordani/cabook_calc/tree/step-8-multiply-by-zero)
 
 ## Step 9 - A more complex set of requirements
 
@@ -857,7 +873,7 @@ ____________________________ test_avg_correct_average __________________________
 >       res = c.avg([2, 5, 12, 98])
 E       AttributeError: 'Calc' object has no attribute 'avg'
 
-tests/test_calc.py:79: AttributeError
+tests/test_calc.py:76: AttributeError
 ```
 
 And we can make the test pass with a simple use of `sum` and `len`, as both built-in functions work on iterables
@@ -869,6 +885,8 @@ class Calc:
     def avg(self, it):
         return sum(it)/len(it)
 ```
+
+I> Git tag: [step-9-1-average-of-an-iterable](https://github.com/lgiordani/cabook_calc/tree/step-9-1-average-of-an-iterable)
 
 ### Step 9.2 - Upper threshold
 
@@ -896,7 +914,7 @@ _________________________ test_avg_removes_upper_outliers ______________________
 >       res = c.avg([2, 5, 12, 98], ut=90)
 E       TypeError: avg() got an unexpected keyword argument 'ut'
 
-tests/test_calc.py:86: TypeError
+tests/test_calc.py:84: TypeError
 ```
 
 There are two problems now that we have to solve, as it happened for the second test we wrote in this project. The new `ut` argument needs a default value, so we have to manage that case, and then we have to make the upper threshold work. My solution is
@@ -912,6 +930,8 @@ There are two problems now that we have to solve, as it happened for the second 
 ```
 
 The idea here is that `ut` is used to filter the iterable keeping all the elements that are less than or equal to the threshold. This means that the default value for the threshold has to be neutral with regards to this filtering operation. Using the maximum value of the iterable makes the whole algorithm work in every case, while for example using a big fixed value like `9999` would introduce a bug, as one of the elements of the iterable might be bigger than that value.
+
+I> Git tag: [step-9-2-upper-threshold](https://github.com/lgiordani/cabook_calc/tree/step-9-2-upper-threshold)
 
 ### Step 9.3 - Lower threshold
 
@@ -941,6 +961,8 @@ and the code of the `avg` function now becomes
         return sum(_it)/len(_it)
 ```
 
+I> Git tag: [step-9-3-lower-threshold](https://github.com/lgiordani/cabook_calc/tree/step-9-3-lower-threshold)
+
 ### Step 9.4 and 9.5 - Boundary inclusion
 
 As you can see from the code of the `avg` function, the upper and lower threshold are included in the comparison, so we might consider the requirements as already satisfied. TDD, however, pushes you to write a test for each requirement (as we saw it's not unusual to actually have multiple tests per requirements), and this is what we are going to do. 
@@ -958,6 +980,8 @@ def test_avg_uppper_threshold_is_included():
     assert res == 29.25
 ```
 
+I> Git tag: [step-9-4-upper-threshold-is-included](https://github.com/lgiordani/cabook_calc/tree/step-9-4-upper-threshold-is-included)
+
 while the test for the fifth one is
 
 ``` python
@@ -968,6 +992,8 @@ def test_avg_lower_threshold_is_included():
 
     assert res == 29.25
 ```
+
+I> Git tag: [step-9-5-lower-threshold-is-included](https://github.com/lgiordani/cabook_calc/tree/step-9-5-lower-threshold-is-included)
 
 And, as expected, both pass without any change in the code.
 
@@ -996,7 +1022,7 @@ _______________________________ test_avg_empty_list ____________________________
     
 >       res = c.avg([])
 
-tests/test_calc.py:119: 
+tests/test_calc.py:116: 
 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 
 self = <calc.calc.Calc object at 0x7f732ce8f6d8>, it = [], lt = None, ut = None
@@ -1006,10 +1032,10 @@ self = <calc.calc.Calc object at 0x7f732ce8f6d8>, it = [], lt = None, ut = None
 >           lt = min(it)
 E           ValueError: min() arg is an empty sequence
 
-calc/calc.py:26: ValueError
+calc/calc.py:24: ValueError
 ```
 
-The `min` function that we used to compute the default lower threshold doesn't work with an empty list, so the code raises an exception. The simple solution is to check for the length of the iterable before computing the default thresholds
+The `min` function that we used to compute the default lower threshold doesn't work with an empty list, so the code raises an exception. The simplest solution is to check for the length of the iterable before computing the default thresholds
 
 ``` python
     def avg(self, it, lt=None, ut=None):
@@ -1026,6 +1052,8 @@ The `min` function that we used to compute the default lower threshold doesn't w
 
         return sum(_it)/len(_it)
 ```
+
+I> Git tag: [step-9-6-empty-list](https://github.com/lgiordani/cabook_calc/tree/step-9-6-empty-list)
 
 As you can see the `avg` function is already pretty rich, but at the same time it is well structured and understandable. This obviously happens because the example is trivial, but cleaner code is definitely among the benefits of TDD.
 
@@ -1052,7 +1080,7 @@ ________________ test_avg_manages_empty_list_after_outlier_removal _____________
     
 >       res = c.avg([12, 98], lt=15, ut=90)
 
-tests/test_calc.py:127: 
+tests/test_calc.py:124: 
 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 
 self = <calc.calc.Calc object at 0x7f6f687a0a58>, it = [12, 98], lt = 15, ut = 90
@@ -1072,7 +1100,7 @@ self = <calc.calc.Calc object at 0x7f6f687a0a58>, it = [12, 98], lt = 15, ut = 9
 >       return sum(_it)/len(_it)
 E       ZeroDivisionError: division by zero
 
-calc/calc.py:36: ZeroDivisionError
+calc/calc.py:34: ZeroDivisionError
 ```
 
 The easiest solution is to introduce a new check on the length of the iterable
@@ -1118,6 +1146,8 @@ After some attempts I found this solution
 
 which looks reasonably clean, and makes the whole test suite pass.
 
+I> Git tag: [step-9-7-empty-list-after-thresholds](https://github.com/lgiordani/cabook_calc/tree/step-9-7-empty-list-after-thresholds)
+
 ### Step 9.8 - Empty list before applying the thresholds
 
 The last requirement checks another boundary case, which happens when the list is empty and we specify one of or both the thresholds. This test will check that the outlier removal code doesn't assume the list contains elements.
@@ -1132,6 +1162,8 @@ def test_avg_manages_empty_list_before_outlier_removal():
 ```
 
 This test doesn't fail. So, according to the TDD methodology, we should justify the reason why it doesn't fail, and decide if we want to keep it. The reason why it doesn't fail is because the two list comprehensions used to filter the elements work perfectly with empty lists. As for the test, it comes directly from a corner case, and it checks a behaviour which is not already covered by other tests. This makes me decide to keep the test.
+
+I> Git tag: [step-9-8-empty-list-before-thresholds](https://github.com/lgiordani/cabook_calc/tree/step-9-8-empty-list-before-thresholds)
 
 ## Recap of the TDD rules
 

@@ -84,11 +84,11 @@ Since private queries use the internal logic you shouldn't test them. This might
 
 As Sandi Metz says, however, this is not an inflexible rule. Whenever you see that testing an internal method makes the structure more robust feel free to do it. Be aware that you are locking the implementation, so do it only where it makes a real difference businesswise.
 
-#### Private commands
+### Private commands
 
 Private commands shouldn't be treated differently than private queries. They change the status of the component, but this is again part of the internal logic of the component itself, so you shouldn't test private commands either. As stated for private queries, feel free to do it if this makes a real difference.
 
-#### Outgoing queries and commands
+### Outgoing queries and commands
 
 An outgoing query is a message that the component under testing sends to an external actor asking for a value, without changing the status of the actor itself. The correctness of the returned value, given the inputs, is not part of what you want to test, because that is an incoming query for the external actor. Let me repeat this: you don't want to test that the external actor return the correct value given some inputs.
 
@@ -99,8 +99,16 @@ Outgoing commands are messages sent to external actors in order to change their 
 From this consideration it is evident that you shouldn't test the results of any outgoing query or command. Possibly, you should avoid running them at all, otherwise you will need the external system to be up and running when you run the test suite.
 
 We want to be sure, however, that our component uses the API of the external actor in a proper way and the standard technique to test this is to use mocks, that is components that simulate other components. Mocks are an important tool in the TDD methodology and for this reason they are the topic of the next chapter.
- 
-## Recap
 
-I have to admit that since the discovery of TDD few thing changed the way I write code more than these considerations on what I am supposed to test. Out of 6 different type of tests we discovered that 3 shouldn't be tested, 2 of them require a very simple technique based on assertions, and the last one is the only one that requires an advanced technique (mocks). This should cheer you up, as for once a good methodology doesn't add new rules and further worries, but removes half of them, forbidding you to implement them!
+|================|================|================|
+|Incoming        |Private         |Outgoing        |
+|================|================|================|
+|Queries|Commands|Queries|Commands|Queries|Commands|
+|=======|========|=======|========|=======|========|
+|Test   |Test    |Maybe  |Maybe   |Mock   |Mock    |
+|================|================|================|
+ 
+## Conclusions
+
+Since the discovery of TDD few thing changed the way I write code more than these considerations on what I am supposed to test. Out of 6 different type of tests we discovered that 2 shouldn't be tested, 2 of them require a very simple technique based on assertions, and the last 2 are the only ones that requires an advanced technique (mocks). This should cheer you up, as for once a good methodology doesn't add new rules and further worries, but removes one third of them, forbidding you to implement them!
 

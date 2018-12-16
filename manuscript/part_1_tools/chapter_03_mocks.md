@@ -170,6 +170,7 @@ Let's see a practical example
 from unittest import mock
 import myobj
 
+
 def test_connect():
     external_obj = mock.Mock()
     myobj.MyObj(external_obj)
@@ -236,9 +237,11 @@ As you can read in the official documentation, the `Mock` object provides other 
 
 ## A simple example
 
-To learn how to use mocks in a practical case, let's work together on a new module in the `calc` package. The target is to write a class that downloads a JSON file with data on meteorites and computes some statistics on the dataset using the `Calc` class. The file is available at https://raw.githubusercontent.com/lgiordani/pytest_workshop/master/earth-meteorite-landings.json and is a copy of the file provided by NASA at https://data.nasa.gov/resource/y77d-th95.json (very slow server).
+To learn how to use mocks in a practical case, let's work together on a new module in the `calc` package. The target is to write a class that downloads a JSON file with data on meteorites and computes some statistics on the dataset using the `Calc` class. The file is available in [the code repository](https://raw.githubusercontent.com/lgiordani/pytest_workshop/master/earth-meteorite-landings.json) TODO(Change the pytest_workshop) and is a copy of the file provided by [a very slow NASA server](https://data.nasa.gov/resource/y77d-th95.json).
 
 The class contains a `get_data` method that queries the remote server and returns the data, and a method `average_mass` that uses the `Calc.avg` method to compute the average mass of the meteorites and return it. In a real world case, like for example in a scientific application, I would probably split the class in two. One class manages the data, updating it whenever it is necessary, and another one manages the statistics. For the sake of simplicity, however, I will keep the two functionalities together in this example.
+
+TODO we go on with the Calc project
 
 Let's see a quick example of what is supposed to happend inside our code. An excerpt of the file provided from the server is
 
@@ -314,12 +317,12 @@ def test_average_mass():
 
 This little test contains however two big issues. First of all the `get_data` method is supposed to use the Internet connection to get the data from the server. This is a typical example of an outgoing query, as we are not trying to change the state of the web server providing the data. You already know that you should not test the return value of an outgoing query, but you can see here why you shouldn't use real data when testing either. The data coming from the server can change in time, and this can invalidate your tests. 
 
-In this case, however, testing the code is simple. Since the class has a public method `get_data` that interacts with the external component, it is enogh to temporarily replace it with a mock that provides sensible values.
+In this case, however, testing the code is simple. Since the class has a public method `get_data` that interacts with the external component, it is enogh to temporarily replace it with a mock that provides sensible values. Create the `tests/test_meteorites.py` file and put this code in it
 
 ``` python
 from unittest import mock
 
-from TODO pytest_workshop.meteorites import MeteoriteStats
+from calc.meteorites import MeteoriteStats
 
 
 def test_average_mass():
@@ -370,10 +373,12 @@ We can now write a class that passes this test
 import urllib.request
 import json
 
-from pytest_workshop import calc
+from calc import calc
+
+TODO FIX THE URL
 
 URL = ("https://raw.githubusercontent.com/lgiordani/"
-       "pytest_workshop/master/earth-meteorite-landings.json")
+       "cabook_calc/master/earth-meteorite-landings.json")
 
 
 class MeteoriteStats:
@@ -390,6 +395,8 @@ class MeteoriteStats:
 
 Please note that we are not testing the `get_data` method itself. That method uses the function `urllib.request.urlopen` that opens an Internet connection without passing through any other public object that we can replace at run time during the test. We need then a tool to replace "internal" parts of our objects when we run them, and this is provided by patching.
 
+I> Git tag: [metoritestats-class-added](https://github.com/lgiordani/cabook_calc/tree/metoritestats-class-added)
+
 ## Patching
 
 Mocks are very simple to introduce in your tests whenever your objects accept classes or instances from outside. In that case, as shown in the previous sections, you just have to instantiate the `Mock` class and pass the resulting object to your system. However, when the external classes instantiated by your library are hardcoded this simple trick does not work. In this case you have no chance to pass a fake object instead of the real one.
@@ -400,12 +407,12 @@ This is exactly the case addressed by patching. Patching, in a testing framework
 
 Let us start with a very simple example. Patching can be complex to grasp at the beginning so it is better to start learning it with trivial use cases.
 
-Create a new project following the instructions at the beginning of the previous chapter, calling this project `fileinfo`. The purpose of this library is to develop a simple class that returns information about a given file. The class shall be instantiated with the file path, which can be relative.
+Create a new project following the instructions at the beginning of the previous TODO(?) chapter, calling this project `fileinfo`. The purpose of this library is to develop a simple class that returns information about a given file. The class shall be instantiated with the file path, which can be relative.
 
-If you want you can develop the class using TDD, but for the sake of brevity I will not show here all the steps that I followed. This is the set of tests I have
+The starting point is the class with the `__init__` method. If you want you can develop the class using TDD, but for the sake of brevity I will not show here all the steps that I followed. This is the set of tests I have in `tests/test_fileinfo.py`
 
 ``` python
-from fileinfo import FileInfo
+from fileinfo.fileinfo import FileInfo
 
 
 def test_init():
@@ -421,7 +428,7 @@ def test_init_relative():
     assert fi.filename == filename
 ```
 
-and this is the code of the `FileInfo` class
+and this is the code of the `FileInfo` class in the `fileinfo/fileinfo.py` file
 
 ``` python
 import os
@@ -432,6 +439,8 @@ class FileInfo:
         self.original_path = path
         self.filename = os.path.basename(path)
 ```
+
+I> Git tag: [first-version](https://github.com/lgiordani/cabook_fileinfo/tree/first-version)
 
 As you can see the class is extremely simple, and the tests are straightforward. So far I didn't add anything new to what we discussed in the previous chapter.
 
@@ -492,12 +501,18 @@ class FileInfo:
     [...]
 
     def get_info(self):
-        return self.filename, self.original_path, os.path.abspath(self.filename)
+        return (
+            self.filename,
+            self.original_path,
+            os.path.abspath(self.filename)
+        )
 ```
 
 When this code is executed by the test the `os.path.abspath` function is replaced at run time by the mock that we prepared there, which basically ignores the input value `self.filename` and returns the fixed value it was instructed to use.
 
-It is worth at this point discussing outgoing messages again. The code that we are considering here is a clear example of an outgoing query, as the `get_info` method is not interested in changing the status of the external component. In the previous chapter we reached the conclusion that testing outgoing queries is pointless and should be avoided. With `patch` we are replacing the external component with something that we know, using it to test that our object correctly handles the value returned by the outgoing query. We are thus not testing the external component, as it got replaced, and definitely we are not testing the mock, as its return value is already known.
+I> Git tag: [patch-with-context-manager](https://github.com/lgiordani/cabook_fileinfo/tree/patch-with-context-manager)
+
+It is worth at this point discussing outgoing messages again. The code that we are considering here is a clear example of an outgoing query, as the `get_info` method is not interested in changing the status of the external component. TODO(Verify the following sentence) In the previous chapter we reached the conclusion that testing outgoing queries is pointless and should be avoided. With `patch` we are replacing the external component with something that we know, using it to test that our object correctly handles the value returned by the outgoing query. We are thus not testing the external component, as it got replaced, and definitely we are not testing the mock, as its return value is already known.
 
 Obviously to write the test you have to know that you are going to use the `os.path.abspath` function, so patching is somehow a "less pure" practice in TDD. In pure OOP/TDD you are only concerned with the external behaviour of the object, and not with its internal structure. This example, however, shows that this pure approach has some limitations that you have to cope with, and patching is a clean way to do it.
 
@@ -521,6 +536,8 @@ def test_get_info(abspath_mock):
     fi = FileInfo(original_path)
     assert fi.get_info() == (filename, original_path, test_abspath)
 ```
+
+I> Git tag: [patch-with-function-decorator](https://github.com/lgiordani/cabook_fileinfo/tree/patch-with-function-decorator)
 
 As you can see the `patch` decorator works like a big `with` statement for the whole function. The `abspath_mock` argument passed to the test becomes internally the mock that replaces `os.path.abspath`. Obviously this way you replace `os.path.abspath` for the whole function, so you have to decide case by case which form of the `patch` function you need to use.
 
@@ -573,8 +590,15 @@ class FileInfo:
     [...]
 
     def get_info(self):
-        return self.filename, self.original_path, os.path.abspath(self.filename), os.path.getsize(self.filename)
+        return (
+            self.filename,
+            self.original_path,
+            os.path.abspath(self.filename),
+            os.path.getsize(self.filename)
+        )
 ```
+
+I> Git tag: [multiple-patches](https://github.com/lgiordani/cabook_fileinfo/tree/multiple-patches)
 
 We can write the above test using two `with` statements as well
 
@@ -592,10 +616,15 @@ def test_get_info():
             getsize_mock.return_value = test_size
 
             fi = FileInfo(original_path)
-            assert fi.get_info() == (filename, original_path, test_abspath, test_size)
+            assert fi.get_info() == (
+                filename,
+                original_path,
+                test_abspath,
+                test_size
+            )
 ```
 
-Using more than one `with` statement, however, makes the code difficult to read, in my opinion, so in general I prefer to avoid complex `with` trees if I do not need to force a limited scope of the patching.
+Using more than one `with` statement, however, makes the code difficult to read, in my opinion, so in general I prefer to avoid complex `with` trees if I do not really need to use a limited scope of the patching.
 
 ## Patching immutable objects
 
@@ -617,13 +646,13 @@ AttributeError: 'int' object attribute 'conjugate' is read-only
 
 Here I'm trying to replace a method with an integer, which is pointless, but nevertheless shows the issue we are facing.
 
-What has this immutability to do with patching? What `patch` does is actually to temporarily replace an attibute of an object (method of a class, class of a module, etc), which also means that is we try to replace an attribute in an immutable object the patching action will fail.
+What has this immutability to do with patching? What `patch` does is actually to temporarily replace an attribute of an object (method of a class, class of a module, etc), which also means that is we try to replace an attribute in an immutable object the patching action will fail.
 
 A typical example of this problem is the `datetime` module, which is also one of the best candidates for patching, since the output of time functions is by definition time-varying.
 
 Let me show the problem with a simple class that logs operations. I will temporarily break the TDD methodology writing first the class and then the tests, so that you can appreciate the problem.
 
-Create a file called `logger.py` and put there the folowing code
+Create a file called `logger.py` and put there the following code
 
 ``` python
 import datetime
@@ -644,7 +673,7 @@ If we try to do it, however, we will have a bitter surprise. This is the test co
 ``` python
 from unittest.mock import patch
 
-from logger import Logger
+from fileinfo.logger import Logger
 
 
 @patch('datetime.datetime.now')
@@ -653,9 +682,9 @@ def test_log(mock_now):
     test_message = "A test message"
     mock_now.return_value = test_now
 
-    l = Logger()
-    l.log(test_message)
-    assert l.messages == [(test_now, test_message)]
+    test_logger = Logger()
+    test_logger.log(test_message)
+    assert test_logger.messages == [(test_now, test_message)]
 ```
 
 When you try to execute this test you will get the following error
@@ -666,23 +695,27 @@ TypeError: can't set attributes of built-in/extension type 'datetime.datetime'
 
 which is raised because patching tries to replace the `now` function in `datetime.datetime` with a mock, and being the module immutable this operation fails.
 
+I> Git tag: [initial-logger-not-working](https://github.com/lgiordani/cabook_fileinfo/tree/initial-logger-not-working)
+
 There are several ways to address this problem. All of them, however, start from the fact that importing or subclassing an immutable object gives you a mutable "copy" of that object.
 
 The easiest example in this case is the module `datetime` itself. In the `test_log` function we tried to patch directly the `datetime.datetime.now` object, affecting the builtin module `datetime`. The file `logger.py`, however, does import `datetime`, so this latter becomes a local symbol in the `logger` module. This is exactly the key for our patching. Let us change the code to
 
 ``` python
-@patch('logger.datetime.datetime')
+@patch('fileinfo.logger.datetime.datetime')
 def test_log(mock_datetime):
     test_now = 123
     test_message = "A test message"
     mock_datetime.now.return_value = test_now
 
-    l = Logger()
-    l.log(test_message)
-    assert l.messages == [(test_now, test_message)]
+    test_logger = Logger()
+    test_logger.log(test_message)
+    assert test_logger.messages == [(test_now, test_message)]
 ```
 
-If you run the test now, you can see that the patching works. What we did was to inject our mock in `logger.datetime.datetime` instead of `datetime.datetime.now`. Two things changed, thus, in our test. First, we are patching the module imported in the `logger.py` file and not the module provided globally by the Python interpreter. Second, we have to patch the whole module because this is what is imported by the `logger.py` file. If you try to patch `logger.datetime.datetime.now` you will find that it is still immutable.
+I> Git tag: [correct-patching](https://github.com/lgiordani/cabook_fileinfo/tree/correct-patching)
+
+If you run the test now, you can see that the patching works. What we did was to inject our mock in `fileinfo.logger.datetime.datetime` instead of `datetime.datetime.now`. Two things changed, thus, in our test. First, we are patching the module imported in the `logger.py` file and not the module provided globally by the Python interpreter. Second, we have to patch the whole module because this is what is imported by the `logger.py` file. If you try to patch `fileinfo.logger.datetime.datetime.now` you will find that it is still immutable.
 
 Another possible solution to this problem is to create a function that invokes the immutable object and returns its value. This last function can be easily patched, because it just uses the builtin objects and thus is not immutable. This solution, however, requires to change the source code to allow testing, which is far from being optimal. Obviously it is better to introduce a small change in the code and have it tested than to leave it untested, but whenever is possible I try as much as possible to avoid solutions that introduce code which wouldn't be required without tests.
 

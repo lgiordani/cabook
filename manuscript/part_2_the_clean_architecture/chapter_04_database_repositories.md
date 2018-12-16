@@ -103,7 +103,7 @@ The second function is a hook into the pytest setup of each single test. The `it
 
 So, if the test is marked with `integration` (`'integration' in item.keywords`) and the `--integration` option is not present (`not item.config.getvalue("integration")`) the test is skipped.
 
-T> Git tag: [chapter-4-label-integration-tests](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-4-label-integration-tests)
+I> Git tag: [chapter-4-label-integration-tests](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-4-label-integration-tests)
 
 ### Create the SQLalchemy classes
 
@@ -164,7 +164,7 @@ This is the class that represents the `Room` in the database. It is important to
 
 Obviously this means that you have to keep in sync the storage and the domain levels, and that you need to manage migrations on your own. You can obviously use tools like Alembic, but the migrations will not come directly from domain model changes.
 
-T> Git tag: [chapter-4-create-the-sqlalchemy-classes](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-4-create-the-sqlalchemy-classes)
+I> Git tag: [chapter-4-create-the-sqlalchemy-classes](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-4-create-the-sqlalchemy-classes)
 
 ### Spin up and tear down the database container
 
@@ -309,7 +309,7 @@ Remember to run `pip` again to actually install the requirements after you edite
 $ pip install -r requirements/dev.txt
 ```
 
-T> Git tag: [chapter-4-the-database-container](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-4-the-database-container)
+I> Git tag: [chapter-4-the-database-container](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-4-the-database-container)
 
 ### Database fixtures
 
@@ -402,7 +402,7 @@ def test_dummy(pg_session):
     assert len(pg_session.query(Room).all()) == 4
 ```
 
-T> Git tag: [chapter-4-database-fixtures](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-4-database-fixtures)
+I> Git tag: [chapter-4-database-fixtures](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-4-database-fixtures)
 
 ### Integration tests
 
@@ -557,7 +557,7 @@ class PostgresRepo:
         ]
 ```
 
-T> Git tag: [chapter-4-integration-tests](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-4-integration-tests)
+I> Git tag: [chapter-4-integration-tests](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-4-integration-tests)
 
 I opted for a very simple solution with multiple `if` statements, but if this was a real world project the `list` method would require a smarter solution to manage a richer set of filters. This class is a good starting point, however, as it passes the whole tests suite. Note that the `list` method returns domain models, which is allowed as the repository is implemented in one of the outer layers of the architecture.
 
@@ -772,7 +772,7 @@ http://localhost:5000/rooms
 
 to test the whole system. 
 
-T> Git tag: [chapter-4-running-the-web-server](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-4-running-the-web-server)
+I> Git tag: [chapter-4-running-the-web-server](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-4-running-the-web-server)
 
 ## A repository based on MongoDB
 
@@ -938,7 +938,7 @@ def docker_compose_file(docker_tmpfile, docker_setup):
     return docker_tmpfile[1]
 ```
 
-T> Git tag: [chapter-4-a-repository-based-on-mongodb-step-1](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-4-a-repository-based-on-mongodb-step-1)
+I> Git tag: [chapter-4-a-repository-based-on-mongodb-step-1](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-4-a-repository-based-on-mongodb-step-1)
 
 As you can see setting up MongoDB is not that different from PostgreSQL. Both systems are databases, and the way you connect to them is similar, at least in a testing environment, where you don't need specific settings for the engine.
 
@@ -1100,7 +1100,7 @@ which makes use of the similarity between the filters of the Rent-o-matic projec
 
 [^similar]: The similitude between the two systems is not accidental, as I was studying MongoDB at the time I wrote the first article about clean architectures, so I was obviously influenced by it.
 
-T> Git tag: [chapter-4-a-repository-based-on-mongodb-step-2](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-4-a-repository-based-on-mongodb-step-2)
+I> Git tag: [chapter-4-a-repository-based-on-mongodb-step-2](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-4-a-repository-based-on-mongodb-step-2)
 
 At this point we can follow the same steps we did for Postgres, that is creating a stand-alone MongoDB container, filling it with real data, changing the REST endpoint to use `MongoRepo` and run the Flask webserver.
 
@@ -1276,7 +1276,7 @@ http://localhost:5000/rooms
 
 you will receive the very same result that the interface based on Postgres was returning.
 
-T> Git tag: [chapter-4-a-repository-based-on-mongodb-step-3](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-4-a-repository-based-on-mongodb-step-3)
+I> Git tag: [chapter-4-a-repository-based-on-mongodb-step-3](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-4-a-repository-based-on-mongodb-step-3)
 
 ## Conclusions
 

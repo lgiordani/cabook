@@ -36,3 +36,7 @@ Much of what I know comes from personal investigations, but without the work of 
 So this book is a way to say thanks to everybody gave part of their time for free to write blog posts, free books, software, and to organise conferences, groups, meetups. This is why I teach people at conferences, this is why I write a technical blog, this is why I created this book for free.
 
 That said, if you want to acknowledge the effort with money, feel free. Anyone who publishes a book or travels to conferences is incurring expenses, and any help is welcome. However the best thing you can do is to become part of this process of shared knowledge; experiment, learn and share what you learn.
+
+## Submitting issues or patches
+
+This book is not a collaborative effort. It is the product of my work, and it expresses my personal view on some topics, and also follows my way of teaching. Both can be definitely improved, and they might also be wrong, so I am open to suggestions, and I will gladly receive any report about mistakes or any request for clarifications. Feel free to use the GitHub Issues of the [book repository](https://github.com/lgiordani/cabook/issues) TODO (check the URL) or of the projects presented in the book. I will answer or fix issues as soon as possible, and if needed I will publish a new version of the book with the correction. Thanks!
