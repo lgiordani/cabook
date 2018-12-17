@@ -68,8 +68,8 @@ The clean architecture concepts are independent from the language, but the imple
 
 ## Acknowledgments
 
-* Eleanor Mary De Veras: proof reading of the introduction.
-* Roberto Ciatti: introducing me to clean architecture.
+* Eleanor Mary De Veras: proof reading of the introduction. She doesn't know anything about software, but she definitely knows English, and she is not afraid of using it =) Any error you'll find in the introduction is due to my stubborness in not following her advice.
+* Roberto Ciatti: introducing me to clean architecture. We are not working together anymore, but I 
 * Łukasz Dziedzic: "Lato" cover font (http://www.latofonts.com).
 
-The cover photograph has been provided by pxhere (https://pxhere.com/en/photo/760437). A detail of the Sagrada Familia in Barcelona, one of the best works of art of the contemporary world, a bright example of architecture in which every single element has a meaning and a purpose. Praise to Antoni Gaudí, brilliant architect and man of great faith, who will always inspire me with his works and his life.
+The cover photograph has been provided by pxhere (https://pxhere.com/en/photo/760437). A detail of the Sagrada Familia in Barcelona, one of the best works of art of the contemporary world, a bright example of architecture in which every single element has a meaning and a purpose. Praise to Antoni Gaudí, brilliant architect and saint, who will always inspire me with his works and his life.

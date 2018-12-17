@@ -6,8 +6,8 @@ In 2015 I was introduced to the clean architecture by Roberto Ciatti, who is the
 
 Unfortunately the project was cancelled, but the clean architecture concepts stuck with me, so I revisited them for a simple open source project I started working on at the time [^punch]. Meanwhile I read a copy of "Object Oriented Software Engineering: A Use-Case Driven Approach" by Ivar Jacobson[^ivar-jacobson-book].
 
-[^punch]: https://github.com/lgiordani/punch
-[^ivar-jacobson-book]: https://www.amazon.com/Object-Oriented-Software-Engineering-Approach/dp/0201544350
+[^punch]: [https://github.com/lgiordani/punch](https://github.com/lgiordani/punch)
+[^ivar-jacobson-book]: [https://www.amazon.com/Object-Oriented-Software-Engineering-Approach/dp/0201544350](https://www.amazon.com/Object-Oriented-Software-Engineering-Approach/dp/0201544350)
 
 In 2013 I started writing a personal blog, [The Digital Cat](http://blog.thedigitalcatonline.com/), and after having published many Python-related posts I began working on a post to show other programmers the beauty of the clean architecture concepts: "Clean Architectures in Python: a step by step example", published in 2016, which was well received by the Python community. For a couple of years I considered expanding the post, but I couldn't find the time to do it, and in the meanwhile I realised that many things I had written needed to be corrected, clarified, or simply updated.
 
@@ -27,6 +27,10 @@ The first part is about **Test-driven Development (TDD)**, a programming techniq
 
 The second part introduces **the clean architecture**. The first chapter discusses briefly the **components** and the ideas behind this software structure, while chapter 2 runs through **a concrete example** of clean architecture for a very simple web service. Chapter 3 discusses **error management** and improvements to the Python code developed in the previous chapter. Finally, chapther 4 shows how to plug **different database systems** to the web service created previously.
 
+## Conventions
+
+TODO
+
 ## Why this book comes for free
 
 The first reason I started writing a technical blog was to share with others my discoveries, and to save them the hassle of going through processes I had already cracked. Moreover, I always enjoy the fact that explaining something forces me to better understand that topic, and writing requires even more study to get things clear in my mind, before attempting to introduce other people to the subject.
@@ -39,4 +43,4 @@ That said, if you want to acknowledge the effort with money, feel free. Anyone w
 
 ## Submitting issues or patches
 
-This book is not a collaborative effort. It is the product of my work, and it expresses my personal view on some topics, and also follows my way of teaching. Both can be definitely improved, and they might also be wrong, so I am open to suggestions, and I will gladly receive any report about mistakes or any request for clarifications. Feel free to use the GitHub Issues of the [book repository](https://github.com/lgiordani/cabook/issues) TODO (check the URL) or of the projects presented in the book. I will answer or fix issues as soon as possible, and if needed I will publish a new version of the book with the correction. Thanks!
+This book is not a collaborative effort. It is the product of my work, and it expresses my personal view on some topics, and also follows my way of teaching. Both can be definitely improved, and they might also be wrong, so I am open to suggestions, and I will gladly receive any report about mistakes or any request for clarifications. Feel free to use the GitHub Issues of the [book repository](https://github.com/lgiordani/cabook/issues) or of the projects presented in the book. I will answer or fix issues as soon as possible, and if needed I will publish a new version of the book with the correction. Thanks!

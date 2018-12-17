@@ -24,19 +24,19 @@ The programmer is in the office with other colleagues, trying to nail down an is
 
 I guess you feel very sorry for the poor programmer. Apart from the aggressive attitude of the boss, what is the real issue in this conversation? At the end of it there is no hint for the programmer and their colleagues about what to do next. They don't have any clue about what they have to change. They can definitely try to work harder, but the boss didn't refer to actual figures, so it will be definitely hard for the developers to understand if they improved "enough".
 
-The classical [sorites paradox](https://en.wikipedia.org/wiki/Sorites_paradox) may help to understand the issue. One of the standard formulations, that you can read on the Wikipedia page is
+The classical [sorites paradox](https://en.wikipedia.org/wiki/Sorites_paradox) may help to understand the issue. One of the standard formulations, taken from the Wikipedia page, is
 
-1,000,000 grains of sand is a heap of sand (Premise 1)
-A heap of sand minus one grain is still a heap. (Premise 2)
-So 999,999 grains is a heap of sand.
-A heap of sand minus one grain is still a heap. (Premise 2)
-So 999,998 grains is a heap of sand.
-...
-So one grain is a heap of sand.
+A> 1,000,000 grains of sand is a heap of sand (Premise 1)
+A> A heap of sand minus one grain is still a heap. (Premise 2)
+A> So 999,999 grains is a heap of sand.
+A> A heap of sand minus one grain is still a heap. (Premise 2)
+A> So 999,998 grains is a heap of sand.
+A> ...
+A> So one grain is a heap of sand.
 
-Where is the issue? The concept expressed by the word "heap" is nebulous, it is not clearly defined.
+Where is the issue? The concept expressed by the word "heap" is nebulous, it is not defined clearly enough to allow the process to find a stable point, or a solution.
 
-When you write a software you face that same challenge. You cannot conceive a function and just expect it "to work", because this is not clearly defined. How do you test if the function that you wrote "works"? What do you mean with "works"? TDD enforces you to clearly state your goal before you write the code. Actually the TDD mantra is "Test first, code later", and we will shortly see a practical example of this.
+When you write software you face that same challenge. You cannot conceive a function and just expect it "to work", because this is not clearly defined. How do you test if the function that you wrote "works"? What do you mean with "works"? TDD enforces you to clearly state your goal before you write the code. Actually the TDD mantra is "Test first, code later", and we will shortly see a practical example of this.
 
 For the time being, consider that this is a valid practice also outside the realm of software creation. Whoever runs a business knows that you need to be able to extract some numbers (KPIs) from the activity of your company, because it is comparing those numbers with some predefined thresholds that you can easily tell if the business is healthy or not. KPIs are a form of test, and you have to define them in advance, according to the expectations or needs that you have. 
 
@@ -73,7 +73,7 @@ Methodologies are like sports: you cannot learn them just by reading their descr
 Following the instructions that you can find in the first chapter, create a virtual environment for the project, install Cookiecutter, and then create a project using the recommended template. I named the project `calc`, but you are free to give it another name. After you created the project, enter the directory and install the requirements with `pip install -r requirements/dev.txt`[^requirements]. You should be able to run
 
 ``` sh
-py.test -svv
+$ py.test -svv
 ```
 
 [^requirements]: this project template defines 3 different requirements files, `prod.txt`, `test.txt`, and `dev.txt`, in hierarchical order. `test.txt` includes `prod.txt`, and `dev.txt` includes `test.txt`. The reason is that when you test you want to be able to run the system with its production requirements, but you also need some tools to perform the tests, like the testing framework. When you develop, you want to test, but you also need tools to ease the development, like for example a linter or a version manager.
@@ -95,8 +95,6 @@ tests/test_calc.py::test_content PASSED
 ```
 
 If you use a different template or create the project manually you may need to install pytest explicitly and to properly format the project structure. I strongly recommend to use the template if you are a beginner, as the proper setup can be tricky to achieve.
-
-TODO Git tags on the whole project
 
 ## Requirements
 
@@ -133,17 +131,9 @@ Save the file and go back to the terminal. Execute `py.test -svv` and you should
 ``` txt
 ===================================== ERRORS ======================================
 _______________________ ERROR collecting tests/test_calc.py _______________________
-ImportError while importing test module
-'/home/leo/devel/cabook/code/calc/tests/test_calc.py'.
-Hint: make sure your test modules/packages have valid Python names.
-Traceback:
-../../venv3/lib/python3.6/site-packages/_pytest/python.py:418: in _importtestmodule
-    mod = self.fspath.pyimport(ensuresyspath=importmode)
-../../venv3/lib/python3.6/site-packages/py/_path/local.py:668: in pyimport
-    __import__(modname)
-../../venv3/lib/python3.6/site-packages/_pytest/assertion/rewrite.py:216:
-    in load_module
-    py.builtin.exec_(co, mod.__dict__)
+
+[...]
+
 tests/test_calc.py:4: in <module>
     from calc.calc import Calc
 E   ImportError: cannot import name 'Calc'
@@ -156,7 +146,7 @@ No surprise here, actually, as we just tried to use something that doesn't exist
 T> **TDD rule number 1**
 T> Test first, code later
 
-This, by the way, is not yet an error in a test. The error happens very soon, in the tests collection phase (as shown by the message in the bottom line `Interrupted: 1 errors during collection`). Given this, the methodology is still valid, as we wrote a test and it fails because an error or a missing feature in the code.
+This, by the way, is not yet an error in a test. The error happens very soon, during the tests collection phase (as shown by the message in the bottom line `Interrupted: 1 errors during collection`). Given this, the methodology is still valid, as we wrote a test and it fails because an error or a missing feature in the code.
 
 Let's fix this issue. Open the `calc/calc.py` file and add write this code
 
@@ -165,7 +155,7 @@ class Calc:
     pass
 ```
 
-But, I hear you scream, this class doesn't implement any of the requirements that are in the project. Yes, this is the hardest lesson you have to learn when you start using TDD. The development is rules by the tests, not by the requirements. The requirements are used to write the tests, the tests are used to write the code. You shouldn't worry about something that is more than one level above the current one.
+But, I hear you scream, this class doesn't implement any of the requirements that are in the project. Yes, this is the hardest lesson you have to learn when you start using TDD. The development is ruled by the tests, not by the requirements. The requirements are used to write the tests, the tests are used to write the code. You shouldn't worry about something that is more than one level above the current one.
 
 T> **TDD rule number 2**
 T> Add the reasonably minimum amount of code you need to pass the tests
@@ -173,6 +163,16 @@ T> Add the reasonably minimum amount of code you need to pass the tests
 Run the test again, and this time you should receive a different error, that is
 
 ``` txt
+=============================== test session starts ===============================
+platform linux -- Python 3.6.7, pytest-4.0.1, py-1.7.0, pluggy-0.8.0 --
+/home/leo/devel/cabook/venv3/bin/python3
+cachedir: .cache
+rootdir: /home/leo/devel/cabook/code/calc, inifile: pytest.ini
+plugins: cov-2.6.0
+collected 1 items 
+
+tests/test_calc.py::test_add_two_numbers FAILED
+
 ==================================== FAILURES =====================================
 ______________________________ test_add_two_numbers _______________________________
 
@@ -620,7 +620,7 @@ The steps followed by the algorithm will be
 7. Apply the function to 384 (result of the previous step) and 3 (first element of the array). The new result is `384 * 3`, that is 1152
 8. Remove the first element, the array is now empty and the procedure ends
 
-Going back to our `Calc` class, we might import `reduce`[^reduce] form the `functools` module and use it on the `args` array. We need to provide a function[^closure] that we can define in the `mul` function itself.
+Going back to our `Calc` class, we might import `reduce`[^reduce] form the `functools` module and use it on the `args` array. We need to provide a function that we can define in the `mul` function itself.
 
 ``` python
 from functools import reduce
@@ -639,8 +639,6 @@ class Calc:
 I> Git tag: [step-5-multiply-two-numbers-smart](https://github.com/lgiordani/cabook_calc/tree/step-5-multiply-two-numbers-smart)
 
 [^reduce]: More information about the `reduce` algorithm can be found on the MapReduce Wikipedia page [https://en.wikipedia.org/wiki/MapReduce](https://en.wikipedia.org/wiki/MapReduce). The Python function documentation can be found at [https://docs.python.org/3.6/library/functools.html#functools.reduce](https://docs.python.org/3.6/library/functools.html#functools.reduce).
-
-[^closure]: We are actually defining a function inside a function. Dig the Internet for "closures", and you will learn something extremely powerful and interesting. TODO
 
 The above code makes the test suite pass, so we can move on and address the next problem. As happened with addition we cannot properly test that the function accepts a potentially infinite number of arguments, so we can test a reasonably high number of inputs.
 

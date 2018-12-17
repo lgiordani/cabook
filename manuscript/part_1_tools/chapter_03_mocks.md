@@ -237,11 +237,9 @@ As you can read in the official documentation, the `Mock` object provides other 
 
 ## A simple example
 
-To learn how to use mocks in a practical case, let's work together on a new module in the `calc` package. The target is to write a class that downloads a JSON file with data on meteorites and computes some statistics on the dataset using the `Calc` class. The file is available in [the code repository](https://raw.githubusercontent.com/lgiordani/pytest_workshop/master/earth-meteorite-landings.json) TODO(Change the pytest_workshop) and is a copy of the file provided by [a very slow NASA server](https://data.nasa.gov/resource/y77d-th95.json).
+To learn how to use mocks in a practical case, let's work together on a new module in the `calc` package. The target is to write a class that downloads a JSON file with data on meteorites and computes some statistics on the dataset using the `Calc` class. The file is provided by NASA at [this URL](https://data.nasa.gov/resource/y77d-th95.json).
 
 The class contains a `get_data` method that queries the remote server and returns the data, and a method `average_mass` that uses the `Calc.avg` method to compute the average mass of the meteorites and return it. In a real world case, like for example in a scientific application, I would probably split the class in two. One class manages the data, updating it whenever it is necessary, and another one manages the statistics. For the sake of simplicity, however, I will keep the two functionalities together in this example.
-
-TODO we go on with the Calc project
 
 Let's see a quick example of what is supposed to happend inside our code. An excerpt of the file provided from the server is
 
@@ -288,8 +286,7 @@ import json
 
 import calc
 
-URL = ("https://raw.githubusercontent.com/lgiordani/"
-       "pytest_workshop/master/earth-meteorite-landings.json")
+URL = ("https://data.nasa.gov/resource/y77d-th95.json")
 
 with urllib.request.urlopen(URL) as url:
     data = json.loads(url.read().decode())
@@ -375,10 +372,7 @@ import json
 
 from calc import calc
 
-TODO FIX THE URL
-
-URL = ("https://raw.githubusercontent.com/lgiordani/"
-       "cabook_calc/master/earth-meteorite-landings.json")
+URL = ("https://data.nasa.gov/resource/y77d-th95.json")
 
 
 class MeteoriteStats:
@@ -395,7 +389,7 @@ class MeteoriteStats:
 
 Please note that we are not testing the `get_data` method itself. That method uses the function `urllib.request.urlopen` that opens an Internet connection without passing through any other public object that we can replace at run time during the test. We need then a tool to replace "internal" parts of our objects when we run them, and this is provided by patching.
 
-I> Git tag: [metoritestats-class-added](https://github.com/lgiordani/cabook_calc/tree/metoritestats-class-added)
+I> Git tag: [meteoritestats-class-added](https://github.com/lgiordani/cabook_calc/tree/meteoritestats-class-added)
 
 ## Patching
 
@@ -407,7 +401,7 @@ This is exactly the case addressed by patching. Patching, in a testing framework
 
 Let us start with a very simple example. Patching can be complex to grasp at the beginning so it is better to start learning it with trivial use cases.
 
-Create a new project following the instructions at the beginning of the previous TODO(?) chapter, calling this project `fileinfo`. The purpose of this library is to develop a simple class that returns information about a given file. The class shall be instantiated with the file path, which can be relative.
+Create a new project following the instructions given previously in the book, calling this project `fileinfo`. The purpose of this library is to develop a simple class that returns information about a given file. The class shall be instantiated with the file path, which can be relative.
 
 The starting point is the class with the `__init__` method. If you want you can develop the class using TDD, but for the sake of brevity I will not show here all the steps that I followed. This is the set of tests I have in `tests/test_fileinfo.py`
 
@@ -512,7 +506,7 @@ When this code is executed by the test the `os.path.abspath` function is replace
 
 I> Git tag: [patch-with-context-manager](https://github.com/lgiordani/cabook_fileinfo/tree/patch-with-context-manager)
 
-It is worth at this point discussing outgoing messages again. The code that we are considering here is a clear example of an outgoing query, as the `get_info` method is not interested in changing the status of the external component. TODO(Verify the following sentence) In the previous chapter we reached the conclusion that testing outgoing queries is pointless and should be avoided. With `patch` we are replacing the external component with something that we know, using it to test that our object correctly handles the value returned by the outgoing query. We are thus not testing the external component, as it got replaced, and definitely we are not testing the mock, as its return value is already known.
+It is worth at this point discussing outgoing messages again. The code that we are considering here is a clear example of an outgoing query, as the `get_info` method is not interested in changing the status of the external component. In the previous chapter we reached the conclusion that testing the return value of outgoing queries is pointless and should be avoided. With `patch` we are replacing the external component with something that we know, using it to test that our object correctly handles the value returned by the outgoing query. We are thus not testing the external component, as it got replaced, and definitely we are not testing the mock, as its return value is already known.
 
 Obviously to write the test you have to know that you are going to use the `os.path.abspath` function, so patching is somehow a "less pure" practice in TDD. In pure OOP/TDD you are only concerned with the external behaviour of the object, and not with its internal structure. This example, however, shows that this pure approach has some limitations that you have to cope with, and patching is a clean way to do it.
 
