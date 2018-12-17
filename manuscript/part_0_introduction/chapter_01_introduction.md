@@ -2,8 +2,6 @@
 
 # Introduction
 
-## On methodologies
-
 This book is about a software design methodology. A methodology is a set of guidelines that help you reach your goal effectively, thus saving time, implementing far-sighted solutions, and avoiding the need to reinvent the wheel time and again.
 
 As other professionals around the world face problems and try to solve them, some of them, having discovered a good way to solve a problem, decide to share their experience, usually in the form of a "best practices" post on a blog, or talk at a conference. We also speak of _patterns_[^design-patterns-book], which are formalised best practices, and _anti-patterns_, when it comes to advice about what not to do and why it is better to avoid a certain solution.

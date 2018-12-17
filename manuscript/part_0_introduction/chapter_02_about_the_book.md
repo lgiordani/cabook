@@ -60,8 +60,8 @@ This book is not a collaborative effort. It is the product of my work, and it ex
 
 My name is Leonardo Giordani, I was born in 1977 with Star Wars, bash, Apple ][, BSD, Dire Straits, The Police, Rumours, The Silmarillion. I'm interested in operating systems and computer languages, photography, fantasy and science fiction, video- and boardgames, guitar playing, and (too) many other things.
 
-I studied and used several programming languages, from the Z80 and x86 Assembly to Python and Scala. I love mathematics and cryptography. I’m mainly interested in open source software, and I like both the theoretical and practical aspects of computer science.
+I studied and used several programming languages, from the Z80 and x86 Assembly to Python and Scala. I love mathematics and cryptography. I'm mainly interested in open source software, and I like both the theoretical and practical aspects of computer science.
 
-After having worked for 13 years in the field of satellite imagery, I am now working at [WeGotPOP](www.wegotpop.com), a London-based company that creates software for film productions.
+After having worked for 13 years in the field of satellite imagery, I am now working at [WeGotPOP](https://www.wegotpop.com), a UK company based in London and New York that creates software for film productions.
 
 In 2013 I started publishing some technical thoughts at [The Digital Cat](http://thedigitalcatonline.com).
