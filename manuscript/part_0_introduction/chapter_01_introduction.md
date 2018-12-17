@@ -1,3 +1,5 @@
+{:: encoding="UTF-8" /}
+
 # Introduction
 
 ## On methodologies
@@ -8,9 +10,7 @@ As other professionals around the world face problems and try to solve them, som
 
 [^design-patterns-book]: from the seminal book "Design Patterns: Elements of Reusable Object-Oriented Software" by Gamma, Vlissides, Johnson, and Helm.
 
-Often, when best practices encompass a wide scope, they are designated a _methodology_. The definition of a methodology is to convey a method, more than a specific solution to a problem. The very nature of methodologies means they are not connected to any specific case, in favour of a wider and more generic approach to the subject matter.
-
-This also means that applying methodologies without thinking shows that one didn't grasp the nature of a methodology, which is to help to find a solution and not to provide it.
+Often, when best practices encompass a wide scope, they are designated a _methodology_. The definition of a methodology is to convey a method, more than a specific solution to a problem. The very nature of methodologies means they are not connected to any specific case, in favour of a wider and more generic approach to the subject matter. This also means that applying methodologies without thinking shows that one didn't grasp the nature of a methodology, which is to help to find a solution and not to provide it.
 
 This is why the main advice I have to give is: be reasonable; try to understand why a methodology leads to a solution and adopt it if it fits your need. I'm saying this at the very beginning of this book because this is how I'd like you to approach this work of mine.
 
@@ -68,8 +68,8 @@ The clean architecture concepts are independent from the language, but the imple
 
 ## Acknowledgments
 
-* Eleanor Mary De Veras: proof reading of the introduction. She doesn't know anything about software, but she definitely knows English, and she is not afraid of using it =) Any error you'll find in the introduction is due to my stubborness in not following her advice.
-* Roberto Ciatti: introducing me to clean architecture. We are not working together anymore, but I 
+* Eleanor Mary De Veras: proof reading of the introduction.
+* Roberto Ciatti: introducing me to clean architectures.
 * Łukasz Dziedzic: "Lato" cover font (http://www.latofonts.com).
 
 The cover photograph has been provided by pxhere (https://pxhere.com/en/photo/760437). A detail of the Sagrada Familia in Barcelona, one of the best works of art of the contemporary world, a bright example of architecture in which every single element has a meaning and a purpose. Praise to Antoni Gaudí, brilliant architect and saint, who will always inspire me with his works and his life.

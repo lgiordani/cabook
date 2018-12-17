@@ -49,6 +49,6 @@ If you are using my project template the questions you will be asked are
 **version** [0.1.0]: The current version of the package
 **use_pytest** [n]: If you want to use pytest to test the package (in this book always "y")
 **use_pypi_deployment_with_travis** [y]: Publish on PyPI when test pass (you usually don't want this feature turned on when you are testing or in the initial stages of the development)
-**Select command_line_interface** This creates a command line interface using [click](https://github.com/pallets/click)
+**command_line_interface** This allows to create a command line interface using [click](https://github.com/pallets/click). We are not going to use this feature in the projects presented in the book
 **create_author_file**: The file that lists the authors of the package
-**Select open_source_license**: If you are unsure select the MIT license
+**open_source_license**: If you are unsure select the MIT license

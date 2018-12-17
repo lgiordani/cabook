@@ -27,9 +27,20 @@ The first part is about **Test-driven Development (TDD)**, a programming techniq
 
 The second part introduces **the clean architecture**. The first chapter discusses briefly the **components** and the ideas behind this software structure, while chapter 2 runs through **a concrete example** of clean architecture for a very simple web service. Chapter 3 discusses **error management** and improvements to the Python code developed in the previous chapter. Finally, chapther 4 shows how to plug **different database systems** to the web service created previously.
 
-## Conventions
+## Typographic conventions
 
-TODO
+This book uses Python, so the majority of the code samples will bein this language, either `inline` or in a specific code block
+
+``` python
+def example():
+    print("This is a code block")
+```
+
+Code blocks don't include line numbers, as the part of code that are being discussed are usually repeated in the text. This also makes it possible to copy the code from the PDF directly.
+
+I> This aside provides extra information, like a link to a specific tag in the repository
+
+T> This is a tip aside, and it is used to highlight an important concept explained in the section
 
 ## Why this book comes for free
 
@@ -43,4 +54,14 @@ That said, if you want to acknowledge the effort with money, feel free. Anyone w
 
 ## Submitting issues or patches
 
-This book is not a collaborative effort. It is the product of my work, and it expresses my personal view on some topics, and also follows my way of teaching. Both can be definitely improved, and they might also be wrong, so I am open to suggestions, and I will gladly receive any report about mistakes or any request for clarifications. Feel free to use the GitHub Issues of the [book repository](https://github.com/lgiordani/cabook/issues) or of the projects presented in the book. I will answer or fix issues as soon as possible, and if needed I will publish a new version of the book with the correction. Thanks!
+This book is not a collaborative effort. It is the product of my work, and it expresses my personal view on some topics, and also follows my way of teaching. Both can definitely be improved, and they might also be wrong, so I am open to suggestions, and I will gladly receive any report about mistakes or any request for clarifications. Feel free to use the GitHub Issues of the [book repository](https://github.com/lgiordani/cabook/issues) or of the projects presented in the book. I will answer or fix issues as soon as possible, and if needed I will publish a new version of the book with the correction. Thanks!
+
+## About the author
+
+My name is Leonardo Giordani, I was born in 1977 with Star Wars, bash, Apple ][, BSD, Dire Straits, The Police, Rumours, The Silmarillion. I'm interested in operating systems and computer languages, photography, fantasy and science fiction, video- and boardgames, guitar playing, and (too) many other things.
+
+I studied and used several programming languages, from the Z80 and x86 Assembly to Python and Scala. I love mathematics and cryptography. I’m mainly interested in open source software, and I like both the theoretical and practical aspects of computer science.
+
+After having worked for 13 years in the field of satellite imagery, I am now working at [WeGotPOP](www.wegotpop.com), a London-based company that creates software for film productions.
+
+In 2013 I started publishing some technical thoughts at [The Digital Cat](http://thedigitalcatonline.com).

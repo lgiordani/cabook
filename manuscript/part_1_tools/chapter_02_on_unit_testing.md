@@ -100,14 +100,15 @@ From this consideration it is evident that you shouldn't test the results of any
 
 We want to be sure, however, that our component uses the API of the external actor in a proper way and the standard technique to test this is to use mocks, that is components that simulate other components. Mocks are an important tool in the TDD methodology and for this reason they are the topic of the next chapter.
 
-|================|================|================|
-|Incoming        |Private         |Outgoing        |
-|================|================|================|
-|Queries|Commands|Queries|Commands|Queries|Commands|
-|=======|========|=======|========|=======|========|
-|Test   |Test    |Maybe  |Maybe   |Mock   |Mock    |
-|================|================|================|
- 
+|Flow    |Type   |Test?|
+|--------|-------|-----|
+|Incoming|Query  |Yes  |
+|Incoming|Command|Yes  |
+|Private |Query  |Maybe|
+|Private |Command|Maybe|
+|Outgoing|Query  |Mock |
+|Outgoing|Command|Mock |
+
 ## Conclusions
 
 Since the discovery of TDD few thing changed the way I write code more than these considerations on what I am supposed to test. Out of 6 different type of tests we discovered that 2 shouldn't be tested, 2 of them require a very simple technique based on assertions, and the last 2 are the only ones that requires an advanced technique (mocks). This should cheer you up, as for once a good methodology doesn't add new rules and further worries, but removes one third of them, forbidding you to implement them!
