@@ -3,8 +3,8 @@
 # Introduction
 
 {icon=quote-right}
-G> _“Space,” it says, “is big. Really big. You just won’t believe how vastly hugely mindboggingly big it is.“_
-G> The Hitchhiker’s Guide to the Galaxy
+B> _“Space,” it says, “is big. Really big. You just won’t believe how vastly hugely mindboggingly big it is.“_
+B> The Hitchhiker’s Guide to the Galaxy
 
 This book is about a software design methodology. A methodology is a set of guidelines that help you reach your goal effectively, thus saving time, implementing far-sighted solutions, and avoiding the need to reinvent the wheel time and again.
 
