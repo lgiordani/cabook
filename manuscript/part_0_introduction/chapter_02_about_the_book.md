@@ -2,6 +2,8 @@
 
 ## A brief history of this book
 
+TODO QUOTE history
+
 In 2015 I was introduced to the clean architecture by Roberto Ciatti. I started working with him following a strict Test-Driven Development (TDD) approach and learning or better understanding many things I consider pillars of my programming knowledge now.
 
 Unfortunately the project was cancelled, but the clean architecture concepts stuck with me, so I revisited them for a simple open source project I started working on at the time [^punch]. Meanwhile I read "Object Oriented Software Engineering: A Use-Case Driven Approach" by Ivar Jacobson[^ivar-jacobson-book].
@@ -19,6 +21,8 @@ Errors: be aware there will be many. I'm not a native English speaker and a frie
 
 ## How this book is structured
 
+TODO QUOTE structure
+
 This book is divided into two parts.
 
 The first part is about **Test-driven Development (TDD)**, a programming technique that will help you more reliable and easily modifiable software. I will first guide you through a **very simple example** in chapter 1, demonstrating how to use TDD to approach a project, and how to properly create tests from requirements. In chapter 2 I will then discuss **unit testing** from a more theoretical point of view, categorising functions and their tests. Chapter 3 will introduce **mocks**, a powerful tool that helps to test complex scenarios.
@@ -26,6 +30,8 @@ The first part is about **Test-driven Development (TDD)**, a programming techniq
 The second part introduces **the clean architecture**. The first chapter discusses briefly the **components** and the ideas behind this software structure, while chapter 2 runs through **a concrete example** of clean architecture for a very simple web service. Chapter 3 discusses **error management** and improvements to the Python code developed in the previous chapter. Finally, chapter 4 shows how to plug **different database systems** to the web service created previously.
 
 ## Typographic conventions
+
+TODO QUOTE conventions
 
 This book uses Python, so the majority of the code samples will being this language, either `inline` or in a specific code block
 
@@ -42,6 +48,8 @@ T> This is a tip aside, and it is used to highlight an important concept explain
 
 ## Why this book comes for free
 
+TODO QUOTE free
+
 The first reason I started writing a technical blog was to share with others my discoveries, and to save them the hassle of going through processes I had already cracked. Moreover, I always enjoy the fact that explaining something forces me to better understand that topic, and writing requires even more study to get things clear in my mind, before attempting to introduce other people to the subject.
 
 Much of what I know comes from personal investigations, but without the work of people who shared their knowledge for free I would not have been able to make much progress. The Free Software Movement didn't start with Internet, and I got a taste of it during the 80s and 90s, but the World Wide Web undeniably gave an impressive boost to the speed and quality of this knowledge sharing.
@@ -52,9 +60,13 @@ That said, if you want to acknowledge the effort with money, feel free. Anyone w
 
 ## Submitting issues or patches
 
+TODO QUOTE issues
+
 This book is not a collaborative effort. It is the product of my work, and it expresses my personal view on some topics, and also follows my way of teaching. Both can definitely be improved, and they might also be wrong, so I am open to suggestions, and I will gladly receive any report about mistakes or any request for clarifications. Feel free to use the GitHub Issues of the [book repository](https://github.com/lgiordani/cabook/issues) or of the projects presented in the book. I will answer or fix issues as soon as possible, and if needed I will publish a new version of the book with the correction. Thanks!
 
 ## About the author
+
+TODO QUOTE author
 
 My name is Leonardo Giordani, I was born in 1977 with Star Wars, bash, Apple ][, BSD, Dire Straits, The Silmarillion. I'm interested in operating systems and computer languages, photography, fantasy and science fiction, video and board games, guitar playing, and (too) many other things.
 

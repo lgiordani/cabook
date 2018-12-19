@@ -2,6 +2,8 @@
 
 ## Virtual environments
 
+TODO QUOTE virtual
+
 One of the first things you have to learn as a Python programmer is how to create, manage, and use your virtual environments. A virtual environment is just a directory (with many subdirectories) that mirrors a Python installation like the one that you can find in your operating system. This is a good way to isolate a specific version of Python and the packages that are not part of the standard library.
 
 This is handy for many reasons. First of all, the Python version installed system-wide (your Linux distribution, your version of Mac OS, Windows, or other operating system) shouldn't be tampered with. That Python installation and its modules are managed by the maintainer of the operating system, and in general it's not a good idea to make changes there unless you are certain of what you are doing. Having a single personal installation of Python, however, is usually not enough, as different projects may have different requirements. For example, the newest version of a package might break the API compatibility and unless we are ready to move the whole project to the new API, we want to keep the version of that package fixed and avoid any update. At the same time another project may require the bleeding edge or even a fork of that package: for example when you have to patch a security issue, or if you need a new feature and can't wait for the usual release cycle that can take weeks.
@@ -17,6 +19,8 @@ I used to create my virtual environments inside the directory of my Python proje
 If you create the virtual environment in the project directory you have to configure your version control and other tools to ignore it. In particular, add it to [`.gitignore`](https://git-scm.com/docs/gitignore) if you use Git and to [`pytest.ini`](https://docs.pytest.org/en/latest/reference.html#confval-norecursedirs) if you use the pytest testing framework (as I do in the rest of this book).
 
 ## Python projects with Cookiecutter
+
+TODO QUOTE cookies
 
 Creating a Python project from scratch is not easy. There are many things to configure and I would only suggest manually writing all the files if you strongly need to understand how the Python distribution code works. If you want to focus on your project, instead, it's better to use a template.
 
