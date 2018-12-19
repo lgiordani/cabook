@@ -77,7 +77,8 @@ class Room:
         self.longitude = longitude
 ```
 
-T> Git tag: [chapter-2-domain-models-step-1](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-2-domain-models-step-1)
+{icon: github}
+B> Git tag: [chapter-2-domain-models-step-1](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-2-domain-models-step-1)
 
 The model is very simple, and requires no further explanation. Given that we will receive data to initialise this model from other layers, and that this data is likely to be a dictionary, it is useful to create a method that initialises the model from this type of structure. The test for this method is 
 
@@ -114,7 +115,8 @@ while the implementation inside the `Room` class is
         )
 ```
 
-T> Git tag: [chapter-2-domain-models-step-2](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-2-domain-models-step-2)
+{icon: github}
+B> Git tag: [chapter-2-domain-models-step-2](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-2-domain-models-step-2)
 
 As you can see one of the benefits of a clean architecture is that each layer contains small pieces of code that, being isolated, shall perform simple tasks. In this case the model provides an initialisation API and stores the information inside the class.
 
@@ -148,7 +150,8 @@ and the implementation of the `to_dict` method is
         }
 ```
 
-T> Git tag: [chapter-2-domain-models-step-3](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-2-domain-models-step-3)
+{icon: github}
+B> Git tag: [chapter-2-domain-models-step-3](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-2-domain-models-step-3)
 
 Note that this is not yet a serialisation of the object, as the result is still a Python data structure and not a string.
 
@@ -176,7 +179,8 @@ and the method of the `Room` class is
         return self.to_dict() == other.to_dict()
 ```
 
-T> Git tag: [chapter-2-domain-models-step-4](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-2-domain-models-step-4)
+{icon: github}
+B> Git tag: [chapter-2-domain-models-step-4](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-2-domain-models-step-4)
 
 ## Serializers
 
@@ -244,7 +248,8 @@ class RoomJsonEncoder(json.JSONEncoder):
             return super().default(o)
 ```
 
-T> Git tag: [chapter-2-serializers](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-2-serializers)
+{icon: github}
+B> Git tag: [chapter-2-serializers](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-2-serializers)
 
 Providing a class that inherits from `json.JSONEncoder` let us use the `json.dumps(room, cls=RoomEncoder)` syntax to serialize the model. Note that we are not using the `to_dict` method, as the UUID code is not directly JSON serialisable. This means that there is a slight degree of code repetition in the two classes, which in my opinion is acceptable, being covered by tests. If you prefer, however, you can call the `to_dict` method and then adjust the code field with the `str` conversion.
 
@@ -333,7 +338,8 @@ class RoomListUseCase:
 
 This might seem too simple, but this particular use case is just a wrapper around a specific function of the repository. As a matter of fact, this use case doesn't contain any error check, which is something we didn't take into account yet. In the next chapter we will discuss requests and responses, and the use case will become slightly more complicated.
 
-T> Git tag: [chapter-2-use-cases](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-2-use-cases)
+{icon: github}
+B> Git tag: [chapter-2-use-cases](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-2-use-cases)
 
 ## The storage system
 
@@ -412,7 +418,8 @@ class MemRepo:
         return [r.Room.from_dict(i) for i in self.data]
 ```
 
-T> Git tag: [chapter-2-storage-system](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-2-storage-system)
+{icon: github}
+B> Git tag: [chapter-2-storage-system](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-2-storage-system)
 
 You can easily imagine this class being the wrapper around a real database or any other storage type. While the code might become more complex, the structure of the repository is the same, with a single public method `list`. I will dig into database repositories in a later chapter.
 
@@ -439,7 +446,8 @@ result = use_case.execute()
 print(result)
 ```
 
-T> Git tag: [hapter-2-command-line-interface-step-1](https://github.com/lgiordani/cabook_rentomatic/tree/hapter-2-command-line-interface-step-1)
+{icon: github}
+B> Git tag: [hapter-2-command-line-interface-step-1](https://github.com/lgiordani/cabook_rentomatic/tree/hapter-2-command-line-interface-step-1)
 
 You can execute this file with `python cli.py` or, if you prefer, run `chmod +x cli.py` (which make it executable) and then run it with `./cli.py` directly. The expected result is an empty list
 
@@ -500,7 +508,8 @@ result = use_case.execute()
 print([room.to_dict() for room in result])
 ```
 
-T> Git tag: [chapter-2-command-line-interface-step-2](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-2-command-line-interface-step-2)
+{icon: github}
+B> Git tag: [chapter-2-command-line-interface-step-2](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-2-command-line-interface-step-2)
 
 Again, remember that this is due to the trivial nature of our storage, and not to the architecture of the system. Note that I changed the `print` instruction as the repository returns domain models and it printing them would result in a list of strings like `<rentomatic.domain.room.Room object at 0x7fb815ec04e0>`, which is not really helpful.
 
@@ -539,7 +548,8 @@ pytest-cov
 pytest-flask
 ```
 
-T> Git tag: [chapter-2-http-api-step-1](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-2-http-api-step-1)
+{icon: github}
+B> Git tag: [chapter-2-http-api-step-1](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-2-http-api-step-1)
 
 Remember to run `pip install -r requirements/dev.txt` again after those changes to install the new packages in your virtual environment.
 
@@ -763,7 +773,8 @@ def room():
                     status=200)
 ```
 
-T> Git tag: [chapter-2-http-api-step-2](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-2-http-api-step-2)
+{icon: github}
+B> Git tag: [chapter-2-http-api-step-2](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-2-http-api-step-2)
 
 As I did before, I initialised the memory storage with some data to give the use case something to return. Please note that the code that runs the use case is
 
@@ -794,7 +805,8 @@ from rentomatic.app import create_app
 app = create_app()
 ```
 
-T> Git tag: [chapter-2-http-api-step-3](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-2-http-api-step-3)
+{icon: github}
+B> Git tag: [chapter-2-http-api-step-3](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-2-http-api-step-3)
 
 When the Flask Command Line Interface (http://flask.pocoo.org/docs/1.0/cli/) runs it looks for a file named `wsgi.py` and lods it, expecting it to contain an `app` variable that is an instance of the `Flask` object. As the `create_app` is a factory we just need to execute it.
 

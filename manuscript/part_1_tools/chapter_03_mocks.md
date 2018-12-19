@@ -393,7 +393,8 @@ class MeteoriteStats:
 
 Please note that we are not testing the `get_data` method itself. That method uses the function `urllib.request.urlopen` that opens an Internet connection without passing through any other public object that we can replace at run time during the test. We need then a tool to replace "internal" parts of our objects when we run them, and this is provided by patching.
 
-I> Git tag: [meteoritestats-class-added](https://github.com/lgiordani/cabook_calc/tree/meteoritestats-class-added)
+{icon: github}
+B> Git tag: [meteoritestats-class-added](https://github.com/lgiordani/cabook_calc/tree/meteoritestats-class-added)
 
 ## Patching
 
@@ -438,7 +439,8 @@ class FileInfo:
         self.filename = os.path.basename(path)
 ```
 
-I> Git tag: [first-version](https://github.com/lgiordani/cabook_fileinfo/tree/first-version)
+{icon: github}
+B> Git tag: [first-version](https://github.com/lgiordani/cabook_fileinfo/tree/first-version)
 
 As you can see the class is extremely simple, and the tests are straightforward. So far I didn't add anything new to what we discussed in the previous chapter.
 
@@ -508,7 +510,8 @@ class FileInfo:
 
 When this code is executed by the test the `os.path.abspath` function is replaced at run time by the mock that we prepared there, which basically ignores the input value `self.filename` and returns the fixed value it was instructed to use.
 
-I> Git tag: [patch-with-context-manager](https://github.com/lgiordani/cabook_fileinfo/tree/patch-with-context-manager)
+{icon: github}
+B> Git tag: [patch-with-context-manager](https://github.com/lgiordani/cabook_fileinfo/tree/patch-with-context-manager)
 
 It is worth at this point discussing outgoing messages again. The code that we are considering here is a clear example of an outgoing query, as the `get_info` method is not interested in changing the status of the external component. In the previous chapter we reached the conclusion that testing the return value of outgoing queries is pointless and should be avoided. With `patch` we are replacing the external component with something that we know, using it to test that our object correctly handles the value returned by the outgoing query. We are thus not testing the external component, as it got replaced, and definitely we are not testing the mock, as its return value is already known.
 
@@ -535,7 +538,8 @@ def test_get_info(abspath_mock):
     assert fi.get_info() == (filename, original_path, test_abspath)
 ```
 
-I> Git tag: [patch-with-function-decorator](https://github.com/lgiordani/cabook_fileinfo/tree/patch-with-function-decorator)
+{icon: github}
+B> Git tag: [patch-with-function-decorator](https://github.com/lgiordani/cabook_fileinfo/tree/patch-with-function-decorator)
 
 As you can see the `patch` decorator works like a big `with` statement for the whole function. The `abspath_mock` argument passed to the test becomes internally the mock that replaces `os.path.abspath`. Obviously this way you replace `os.path.abspath` for the whole function, so you have to decide case by case which form of the `patch` function you need to use.
 
@@ -596,7 +600,8 @@ class FileInfo:
         )
 ```
 
-I> Git tag: [multiple-patches](https://github.com/lgiordani/cabook_fileinfo/tree/multiple-patches)
+{icon: github}
+B> Git tag: [multiple-patches](https://github.com/lgiordani/cabook_fileinfo/tree/multiple-patches)
 
 We can write the above test using two `with` statements as well
 
@@ -693,7 +698,8 @@ TypeError: can't set attributes of built-in/extension type 'datetime.datetime'
 
 which is raised because patching tries to replace the `now` function in `datetime.datetime` with a mock, and being the module immutable this operation fails.
 
-I> Git tag: [initial-logger-not-working](https://github.com/lgiordani/cabook_fileinfo/tree/initial-logger-not-working)
+{icon: github}
+B> Git tag: [initial-logger-not-working](https://github.com/lgiordani/cabook_fileinfo/tree/initial-logger-not-working)
 
 There are several ways to address this problem. All of them, however, start from the fact that importing or subclassing an immutable object gives you a mutable "copy" of that object.
 
@@ -711,7 +717,8 @@ def test_log(mock_datetime):
     assert test_logger.messages == [(test_now, test_message)]
 ```
 
-I> Git tag: [correct-patching](https://github.com/lgiordani/cabook_fileinfo/tree/correct-patching)
+{icon: github}
+B> Git tag: [correct-patching](https://github.com/lgiordani/cabook_fileinfo/tree/correct-patching)
 
 If you run the test now, you can see that the patching works. What we did was to inject our mock in `fileinfo.logger.datetime.datetime` instead of `datetime.datetime.now`. Two things changed, thus, in our test. First, we are patching the module imported in the `logger.py` file and not the module provided globally by the Python interpreter. Second, we have to patch the whole module because this is what is imported by the `logger.py` file. If you try to patch `fileinfo.logger.datetime.datetime.now` you will find that it is still immutable.
 

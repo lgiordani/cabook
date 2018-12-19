@@ -147,8 +147,9 @@ E   ImportError: cannot import name 'Calc'
 
 No surprise here, actually, as we just tried to use something that doesn't exist. This is good, the test is showing us that something we suppose exists actually doesn't.
 
-T> **TDD rule number 1**
-T> Test first, code later
+{icon: graduation-cap}
+B> **TDD rule number 1**
+B> Test first, code later
 
 This, by the way, is not yet an error in a test. The error happens very soon, during the tests collection phase (as shown by the message in the bottom line `Interrupted: 1 errors during collection`). Given this, the methodology is still valid, as we wrote a test and it fails because an error or a missing feature in the code.
 
@@ -161,8 +162,9 @@ class Calc:
 
 But, I hear you scream, this class doesn't implement any of the requirements that are in the project. Yes, this is the hardest lesson you have to learn when you start using TDD. The development is ruled by the tests, not by the requirements. The requirements are used to write the tests, the tests are used to write the code. You shouldn't worry about something that is more than one level above the current one.
 
-T> **TDD rule number 2**
-T> Add the reasonably minimum amount of code you need to pass the tests
+{icon: graduation-cap}
+B> **TDD rule number 2**
+B> Add the reasonably minimum amount of code you need to pass the tests
 
 Run the test again, and this time you should receive a different error, that is
 
@@ -297,7 +299,8 @@ I know this sound weird, but think about it: if your code works, for now you don
 
 Run again the test suite to check that no tests fail, after which you can move on to the second step.
 
-I> Git tag: [step-1-adding-two-numbers](https://github.com/lgiordani/cabook_calc/tree/step-1-adding-two-numbers)
+{icon: github}
+B> Git tag: [step-1-adding-two-numbers](https://github.com/lgiordani/cabook_calc/tree/step-1-adding-two-numbers)
 
 ## Step 2 - Adding three numbers
 
@@ -363,8 +366,9 @@ The first test now fails because the new `add` method requires three arguments a
 
 When multiple tests fail it's easy to feel discomforted and lost. Where are you supposed to start fixing this? Well, one possible solution is to undo the previous change and to try a different solution, but in general you should try to get to a situation in which only one test fails.
 
-T> **TDD rule number 3**
-T> You shouldn't have more than one failing test at a time
+{icon: graduation-cap}
+B> **TDD rule number 3**
+B> You shouldn't have more than one failing test at a time
 
 This is very important as it allows you to focus on one single test and thus one single problem. And remember, commenting tests to make them inactive is a perfectly valid way to have only one failing test. In this case I will comment the second test, so my tests file is now
 
@@ -438,7 +442,8 @@ class Calc:
 
 This solution makes both tests pass, so the entire suite runs without errors.
 
-I> Git tag: [step-2-adding-three-numbers](https://github.com/lgiordani/cabook_calc/tree/step-2-adding-three-numbers)
+{icon: github}
+B> Git tag: [step-2-adding-three-numbers](https://github.com/lgiordani/cabook_calc/tree/step-2-adding-three-numbers)
 
 I can see your face, your are probably frowning at the fact that it took us 10 minutes to write a method that performs the addition of two or three numbers. On the one hand, keep in mind that I'm going at a very slow pace, being this an introduction, and for these first tests it is better to take the time to properly understand every single step. Later, when you will be used to TDD, some of these steps will be implicit. On the other hand, TDD is slower than untested development. After all you will write tests (sometimes many tests) for just a couple of lines of code, but here you
 
@@ -499,7 +504,8 @@ class Calc:
 
 At that point we can use the `sum` built-in function to sum all the arguments. This solution makes the whole test suite pass without errors, so it is correct.
 
-I> Git tag: [step-3-adding-multiple-numbers](https://github.com/lgiordani/cabook_calc/tree/step-3-adding-multiple-numbers)
+{icon: github}
+B> Git tag: [step-3-adding-multiple-numbers](https://github.com/lgiordani/cabook_calc/tree/step-3-adding-multiple-numbers)
 
 Pay attention here, please. In TDD a solution is not correct when it is beautiful, when it is smart, or when it uses the latest feature of the language. All these things are good, but TDD wants your code to pass the tests. So, your code might be ugly, convoluted, and slow, but if it passes the test it is correct. This in turn means that TDD doesn't cover all the needs of your software project. Delivering fast routines, for example, might be part of the advantage you have on your competitors, but it is not really testable with the TDD methodology[^testit].
 
@@ -507,8 +513,9 @@ Pay attention here, please. In TDD a solution is not correct when it is beautifu
 
 Part of the TDD methodology, then, deals with "refactoring", which means changing the code in a way that doesn't change the outputs, which in turns means that all your tests keep passing. Once you have a proper test suite in place, you can focus on the beauty of the code, or you can introduce smart solutions according to which the language allows you to do.
 
-T> **TDD rule number 4**
-T> Write code that passes the test. Then refactor it.
+{icon: graduation-cap}
+B> **TDD rule number 4**
+B> Write code that passes the test. Then refactor it.
 
 ## Step 4 - Subtraction
 
@@ -546,7 +553,8 @@ Now that you understood the TDD process, and that you know you should avoid over
 
 which makes the test suite pass.
 
-I> Git tag: [step-4-subtraction](https://github.com/lgiordani/cabook_calc/tree/step-4-subtraction)
+{icon: github}
+B> Git tag: [step-4-subtraction](https://github.com/lgiordani/cabook_calc/tree/step-4-subtraction)
 
 ## Step 5 - Multiplication
 
@@ -588,7 +596,8 @@ If we decide to follow the strict TDD, that is implement the simplest first solu
         return a * b
 ```
 
-I> Git tag: [step-5-multiply-two-numbers](https://github.com/lgiordani/cabook_calc/tree/step-5-multiply-two-numbers)
+{icon: github}
+B> Git tag: [step-5-multiply-two-numbers](https://github.com/lgiordani/cabook_calc/tree/step-5-multiply-two-numbers)
 
 To show you how to deal with redundant tests I will in this case choose the second path, and implement a smarter solution for the present test. Keep in mind however that it is perfectly correct to implement that solution shown above and then move on and try to solve the problem of multiple arguments later.
 
@@ -640,7 +649,8 @@ class Calc:
         return reduce(mul2, args)
 ```
 
-I> Git tag: [step-5-multiply-two-numbers-smart](https://github.com/lgiordani/cabook_calc/tree/step-5-multiply-two-numbers-smart)
+{icon: github}
+B> Git tag: [step-5-multiply-two-numbers-smart](https://github.com/lgiordani/cabook_calc/tree/step-5-multiply-two-numbers-smart)
 
 [^reduce]: More information about the `reduce` algorithm can be found on the MapReduce Wikipedia page [https://en.wikipedia.org/wiki/MapReduce](https://en.wikipedia.org/wiki/MapReduce). The Python function documentation can be found at [https://docs.python.org/3.6/library/functools.html#functools.reduce](https://docs.python.org/3.6/library/functools.html#functools.reduce).
 
@@ -653,7 +663,8 @@ def test_mul_many_numbers():
     assert Calc().mul(*s) == 362880
 ```
 
-I> Git tag: [step-5-multiply-many-numbers](https://github.com/lgiordani/cabook_calc/tree/step-5-multiply-many-numbers)
+{icon: github}
+B> Git tag: [step-5-multiply-many-numbers](https://github.com/lgiordani/cabook_calc/tree/step-5-multiply-many-numbers)
 
 We might use 100 arguments as we did with addition, but the multiplication of all numbers from 1 to 100 gives a result with 156 digits and I don't really need to clutter the tests file with such a monstrosity. As I said, testing multiple arguments is testing a boundary, and the idea is that if the algorithm works for 2 numbers and for 10 it will work for 10 thousands arguments as well.
 
@@ -665,8 +676,9 @@ In this case, however, we know why the test already passes. We implemented a sma
 
 So, after this considerations, we can be happy that the second test already passes.
 
-T> **TDD rule number 5**
-T> A test should fail the first time you run it. If it doesn't, ask yourself why you are adding it.
+{icon: graduation-cap}
+B> **TDD rule number 5**
+B> A test should fail the first time you run it. If it doesn't, ask yourself why you are adding it.
 
 ## Step 6 - Refactoring
 
@@ -691,12 +703,14 @@ class Calc:
         return reduce(lambda x, y: x*y, args)
 ```
 
-I> Git tag: [step-6-refactoring](https://github.com/lgiordani/cabook_calc/tree/step-6-refactoring)
+{icon: github}
+B> Git tag: [step-6-refactoring](https://github.com/lgiordani/cabook_calc/tree/step-6-refactoring)
 
 where I define an anonymous function that accepts two inputs `x, y` and returns their multiplication `x*y`. Running the test suite I can see that all the test pass, so my refactoring is correct.
 
-T> **TDD rule number 6**
-T> Never refactor without tests.
+{icon: graduation-cap}
+B> **TDD rule number 6**
+B> Never refactor without tests.
 
 ## Step 7 - Division
 
@@ -721,7 +735,8 @@ class Calc:
         return a / b
 ```
 
-I> Git tag: [step-7-float-division](https://github.com/lgiordani/cabook_calc/tree/step-7-float-division)
+{icon: github}
+B> Git tag: [step-7-float-division](https://github.com/lgiordani/cabook_calc/tree/step-7-float-division)
 
 If you run the test suite again all the test should pass. There is a second requirement about this operation, however, that states that division by zero shall return the string `"inf"`. Now, this is obviously a requirement that I introduced for the sake of giving some interesting and simple problem to solve with TDD, as an API that returns either floats of strings is not really the best idea.
 
@@ -782,7 +797,8 @@ and the second one is to intercept the exception with a `try/except` block
 
 Both solutions make the test suite pass, so both are correct. I leave to you the decision about which is the best one, syntactically speaking.
 
-I> Git tag: [step-7-division-by-zero](https://github.com/lgiordani/cabook_calc/tree/step-7-division-by-zero)
+{icon: github}
+B> Git tag: [step-7-division-by-zero](https://github.com/lgiordani/cabook_calc/tree/step-7-division-by-zero)
 
 ## Step 8 - Testing exceptions
 
@@ -830,7 +846,8 @@ The code that makes the test pass needs to test if one of the inputs of the `mul
 
 and make the test suite pass. The if condition checks that there are no false values in the `args` tuples, that is there are no zeros.
 
-I> Git tag: [step-8-multiply-by-zero](https://github.com/lgiordani/cabook_calc/tree/step-8-multiply-by-zero)
+{icon: github}
+B> Git tag: [step-8-multiply-by-zero](https://github.com/lgiordani/cabook_calc/tree/step-8-multiply-by-zero)
 
 ## Step 9 - A more complex set of requirements
 
@@ -888,7 +905,8 @@ class Calc:
         return sum(it)/len(it)
 ```
 
-I> Git tag: [step-9-1-average-of-an-iterable](https://github.com/lgiordani/cabook_calc/tree/step-9-1-average-of-an-iterable)
+{icon: github}
+B> Git tag: [step-9-1-average-of-an-iterable](https://github.com/lgiordani/cabook_calc/tree/step-9-1-average-of-an-iterable)
 
 ### Step 9.2 - Upper threshold
 
@@ -933,7 +951,8 @@ There are two problems now that we have to solve, as it happened for the second 
 
 The idea here is that `ut` is used to filter the iterable keeping all the elements that are less than or equal to the threshold. This means that the default value for the threshold has to be neutral with regards to this filtering operation. Using the maximum value of the iterable makes the whole algorithm work in every case, while for example using a big fixed value like `9999` would introduce a bug, as one of the elements of the iterable might be bigger than that value.
 
-I> Git tag: [step-9-2-upper-threshold](https://github.com/lgiordani/cabook_calc/tree/step-9-2-upper-threshold)
+{icon: github}
+B> Git tag: [step-9-2-upper-threshold](https://github.com/lgiordani/cabook_calc/tree/step-9-2-upper-threshold)
 
 ### Step 9.3 - Lower threshold
 
@@ -963,7 +982,8 @@ and the code of the `avg` function now becomes
         return sum(_it)/len(_it)
 ```
 
-I> Git tag: [step-9-3-lower-threshold](https://github.com/lgiordani/cabook_calc/tree/step-9-3-lower-threshold)
+{icon: github}
+B> Git tag: [step-9-3-lower-threshold](https://github.com/lgiordani/cabook_calc/tree/step-9-3-lower-threshold)
 
 ### Step 9.4 and 9.5 - Boundary inclusion
 
@@ -982,7 +1002,8 @@ def test_avg_uppper_threshold_is_included():
     assert res == 29.25
 ```
 
-I> Git tag: [step-9-4-upper-threshold-is-included](https://github.com/lgiordani/cabook_calc/tree/step-9-4-upper-threshold-is-included)
+{icon: github}
+B> Git tag: [step-9-4-upper-threshold-is-included](https://github.com/lgiordani/cabook_calc/tree/step-9-4-upper-threshold-is-included)
 
 while the test for the fifth one is
 
@@ -995,7 +1016,8 @@ def test_avg_lower_threshold_is_included():
     assert res == 29.25
 ```
 
-I> Git tag: [step-9-5-lower-threshold-is-included](https://github.com/lgiordani/cabook_calc/tree/step-9-5-lower-threshold-is-included)
+{icon: github}
+B> Git tag: [step-9-5-lower-threshold-is-included](https://github.com/lgiordani/cabook_calc/tree/step-9-5-lower-threshold-is-included)
 
 And, as expected, both pass without any change in the code.
 
@@ -1055,7 +1077,8 @@ The `min` function that we used to compute the default lower threshold doesn't w
         return sum(_it)/len(_it)
 ```
 
-I> Git tag: [step-9-6-empty-list](https://github.com/lgiordani/cabook_calc/tree/step-9-6-empty-list)
+{icon: github}
+B> Git tag: [step-9-6-empty-list](https://github.com/lgiordani/cabook_calc/tree/step-9-6-empty-list)
 
 As you can see the `avg` function is already pretty rich, but at the same time it is well structured and understandable. This obviously happens because the example is trivial, but cleaner code is definitely among the benefits of TDD.
 
@@ -1148,7 +1171,8 @@ After some attempts I found this solution
 
 which looks reasonably clean, and makes the whole test suite pass.
 
-I> Git tag: [step-9-7-empty-list-after-thresholds](https://github.com/lgiordani/cabook_calc/tree/step-9-7-empty-list-after-thresholds)
+{icon: github}
+B> Git tag: [step-9-7-empty-list-after-thresholds](https://github.com/lgiordani/cabook_calc/tree/step-9-7-empty-list-after-thresholds)
 
 ### Step 9.8 - Empty list before applying the thresholds
 
@@ -1165,7 +1189,8 @@ def test_avg_manages_empty_list_before_outlier_removal():
 
 This test doesn't fail. So, according to the TDD methodology, we should justify the reason why it doesn't fail, and decide if we want to keep it. The reason why it doesn't fail is because the two list comprehensions used to filter the elements work perfectly with empty lists. As for the test, it comes directly from a corner case, and it checks a behaviour which is not already covered by other tests. This makes me decide to keep the test.
 
-I> Git tag: [step-9-8-empty-list-before-thresholds](https://github.com/lgiordani/cabook_calc/tree/step-9-8-empty-list-before-thresholds)
+{icon: github}
+B> Git tag: [step-9-8-empty-list-before-thresholds](https://github.com/lgiordani/cabook_calc/tree/step-9-8-empty-list-before-thresholds)
 
 ## Recap of the TDD rules
 

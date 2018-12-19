@@ -40,9 +40,11 @@ def example():
 
 Code blocks don't include line numbers, as the part of code that are being discussed are usually repeated in the text. This also makes it possible to copy the code from the PDF directly.
 
-I> This aside provides extra information, like a link to a specific tag in the repository
+{icon: github}
+B> This aside provides the link to the repository tag that contains the code that was presented
 
-T> This is a tip aside, and it is used to highlight an important concept explained in the section
+{icon: graduation-cap}
+B> This is a recap of a rule that was explained and exemplified
 
 ## Why this book comes for free
 

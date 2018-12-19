@@ -54,7 +54,8 @@ class RoomListRequestObject:
         return True
 ```
 
-I> Git tag: [chapter-3-basic-requests-and-responses-step-1](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-3-basic-requests-and-responses-step-1)
+{icon: github}
+B> Git tag: [chapter-3-basic-requests-and-responses-step-1](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-3-basic-requests-and-responses-step-1)
 
 The response object is also very simple, since for the moment we just need to return a successful result. Unlike the request, the response is not linked to any particular use case, so the test file can be named `tests/response_objects/test_response_objects.py`
 
@@ -78,7 +79,8 @@ class ResponseSuccess:
         return True
 ```
 
-I> Git tag: [chapter-3-basic-requests-and-responses-step-2](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-3-basic-requests-and-responses-step-2)
+{icon: github}
+B> Git tag: [chapter-3-basic-requests-and-responses-step-2](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-3-basic-requests-and-responses-step-2)
 
 With these two object we just laid the foundations for a richer management of input and outputs of the use case, especially in the case of error conditions.
 
@@ -163,7 +165,8 @@ class RoomListUseCase:
         return res.ResponseSuccess(rooms)
 ```
 
-I> Git tag: [chapter-3-requests-and-responses-in-a-use-case](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-3-requests-and-responses-in-a-use-case)
+{icon: github}
+B> Git tag: [chapter-3-requests-and-responses-in-a-use-case](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-3-requests-and-responses-in-a-use-case)
 
 Now we have a standard way to pack input and output values, and the above pattern is valid for every use case we can create. We are still missing some features however, because so far requests and responses are not used to perform error management.
 
@@ -322,7 +325,8 @@ class RoomListRequestObject(ValidRequestObject):
         return cls(filters=adict.get('filters', None))
 ```
 
-I> Git tag: [chapter-3-request-validation](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-3-request-validation)
+{icon: github}
+B> Git tag: [chapter-3-request-validation](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-3-request-validation)
 
 Let me review this new code bit by bit.
 
@@ -626,7 +630,8 @@ class ResponseSuccess:
         return True
 ```
 
-I> Git tag: [chapter-3-responses-and-failures](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-3-responses-and-failures)
+{icon: github}
+B> Git tag: [chapter-3-responses-and-failures](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-3-responses-and-failures)
 
 Through the `_format_message()` method we enable the class to accept both string messages and Python exceptions, which is very handy when dealing with external libraries that can raise exceptions we do not know or do not want to manage.
 
@@ -731,7 +736,8 @@ class RoomListUseCase(object):
                 "{}: {}".format(exc.__class__.__name__, "{}".format(exc)))
 ```
 
-I> Git tag: [chapter-3-error-management-in-a-use-case](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-3-error-management-in-a-use-case)
+{icon: github}
+B> Git tag: [chapter-3-error-management-in-a-use-case](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-3-error-management-in-a-use-case)
 
 As you can see the first thing that the `execute()` method does is to check if the request is valid, otherwise it returns a `ResponseFailure` built with the same request object. Then the actual business logic is implemented, calling the repository and returning a successful response. If something goes wrong in this phase the exception is caught and returned as an aptly formatted `ResponseFailure`.
 
@@ -897,7 +903,8 @@ def room():
                     status=STATUS_CODES[response.type])
 ```
 
-I> Git tag: [chapter-3-the-http-server](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-3-the-http-server)
+{icon: github}
+B> Git tag: [chapter-3-the-http-server](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-3-the-http-server)
 
 ## The repository
 
@@ -1060,7 +1067,8 @@ class MemRepo:
         return result
 ```
 
-I> Git tag: [chapter-3-the-repository](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-3-the-repository)
+{icon: github}
+B> Git tag: [chapter-3-the-repository](https://github.com/lgiordani/cabook_rentomatic/tree/chapter-3-the-repository)
 
 At this point you can fire up the Flask development webserver with `flask run`, and get the list of all your rooms at
 
