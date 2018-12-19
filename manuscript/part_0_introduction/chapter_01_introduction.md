@@ -64,7 +64,7 @@ The clean architecture concepts are independent from the language, but the imple
 
 ## Acknowledgments
 
-* Eleanor De Veras: proofreading of the introduction.
+* Eleanor de Veras: proofreading of the introduction.
 * Roberto Ciatti: introducing me to clean architectures.
 * Łukasz Dziedzic: "Lato" cover font (http://www.latofonts.com).
 

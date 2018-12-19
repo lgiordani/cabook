@@ -60,6 +60,6 @@ My name is Leonardo Giordani, I was born in 1977 with Star Wars, bash, Apple ][,
 
 I studied and used several programming languages, from the Z80 and x86 Assembly to Python and Scala. I love mathematics and cryptography. I'm mainly interested in open source software, and I like both the theoretical and practical aspects of computer science.
 
-I have worked for 13 years as a C/Python programmer and devops in a company that specialises in satellite imagery. I am currently infrastructure engineer at [WeGotPOP](https://www.wegotpop.com), a UK company based in London and New York that creates innovative software for film productions.
+For 13 years I was a C/Python programmer and devops for a satellite imagery company. and I am currently infrastructure engineer at [WeGotPOP](https://www.wegotpop.com), a UK company based in London and New York that creates innovative software for film productions.
 
 In 2013 I started publishing some technical thoughts on my blog, [The Digital Cat](http://thedigitalcatonline.com).
