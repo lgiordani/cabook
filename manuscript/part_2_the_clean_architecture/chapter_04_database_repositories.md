@@ -389,7 +389,9 @@ def pg_session(pg_session_empty, pg_data):
 
 Note that this last fixture has a `function` scope, thus it is run for every test. Therefore, we delete all rooms after the yield returns, leaving the database in the same state it had before the test. This is not strictly necessary in this particular case, as during the tests we are only reading from the database, so we might add the rooms at the beginning of the test session and just destroy the container at the end of it. This doesn't however work in general, for instance when tests add entries to the database, so I preferred to show you a more generic solution.
 
-We can test this whole setup changing the `test_dummy` function so that is fetches all the rows of the `Room` table and verifying that the query returns 4 values. The new version of `tests/repository/postgres/test_postgresrepo.py` is 
+We can test this whole setup changing the `test_dummy` function so that is fetches all the rows of the `Room` table and verifying that the query returns 4 values.
+
+The new version of `tests/repository/postgres/test_postgresrepo.py` is 
 
 ``` python
 import pytest
@@ -942,7 +944,8 @@ I> Git tag: [chapter-4-a-repository-based-on-mongodb-step-1](https://github.com/
 
 As you can see setting up MongoDB is not that different from PostgreSQL. Both systems are databases, and the way you connect to them is similar, at least in a testing environment, where you don't need specific settings for the engine.
 
-With the above fixtures we can write the `MongoRepo` class following TDD. The `tests/repository/mongodb/test_mongorepo.py` file contains all the tests for this class
+With the above fixtures we can write the `MongoRepo` class following TDD.
+The `tests/repository/mongodb/test_mongorepo.py` file contains all the tests for this class
 
 ``` python
 import pytest

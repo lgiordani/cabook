@@ -14,7 +14,7 @@ In general, my advice is to have a different virtual environment for each Python
 
 I used to create my virtual environments inside the directory of my Python projects. Since I started using Cookiecutter (see next section) to create new projects, however, I switched to a different setup. Keeping the virtual environment outside the project allows me to install Cookiecutter in the virtualenv, instead of being forced to install it system-wide, which sometimes prevents me from using the latest version.
 
-If you create the virtual environment in the project directory you have to configure your version control and other tools to ignore it. In particular, add it to [`.gitignore`](https://git-scm.com/docs/gitignore) if you use Git and to [`pytest.ini`](https://docs.pytest.org/en/latest/reference.html#confval-norecursedirs) if you use the pytest testing framework (like I do in the rest of this book).
+If you create the virtual environment in the project directory you have to configure your version control and other tools to ignore it. In particular, add it to [`.gitignore`](https://git-scm.com/docs/gitignore) if you use Git and to [`pytest.ini`](https://docs.pytest.org/en/latest/reference.html#confval-norecursedirs) if you use the pytest testing framework (as I do in the rest of this book).
 
 ## Python projects with Cookiecutter
 

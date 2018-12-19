@@ -16,7 +16,7 @@ The clean architecture, for example, pushes abstraction to its limits. One of th
 
 In these cases, break the rules. You are always free to keep the parts you consider useful and discard the rest, but if you have understood the reason behind the methodology, you will also know why you do something different. My advice is to keep track of such reasons, either in design documents or simply in code comments, as a future reference for you or for any other programmer who might be surprised by a "wrong" solution and be tempted to fix it.
 
-I will try as much as possible to give reasons for the proposed solutions, so you can judge whether those reasons are valid in your case. In general let's consider this book contains possible contributions to your job, it's not an attempt to dictate THE best way to work.
+I will try as much as possible to give reasons for the proposed solutions, so you can judge whether those reasons are valid in your case. In general let's say this book contains possible contributions to your job, it's not an attempt to dictate THE best way to work.
 
 Spoiler alert: there is no such a thing.
 
@@ -36,9 +36,9 @@ This process is virtually unlimited, so there is never one single architecture t
 
 Let me give you a very simple example that has nothing to do with software. Let's consider a shop as a system and let's discuss its architecture.
 
-A shop, as a black box, is a place where people enter with money and exit with items. The input of the system are people and their money, and the outputs are the same people and items. The shop itself needs to buy what it sells first, so another input is represented by the stock the shop buys from the wholesaler and another output by the money it pays for them. At this level the internal structure of the shop is unknown, we don't even know what it sells. We can however already devise a simple performance analysis, for example comparing the amount of money that goes out (to pay the wholesale) and the amount of money that comes in (from the customers). If the former is higher than the latter the business is not profitable.
+A shop, as a black box, is a place where people enter with money and exit with items. The input of the system are people and their money, and the outputs are the same people and items. The shop itself needs to buy what it sells first, so another input is represented by the stock the shop buys from the wholesaler and another output by the money it pays for them. At this level the internal structure of the shop is unknown, we don't even know what it sells. We can however already devise a simple performance analysis, for example comparing the amount of money that goes out (to pay the wholesaler) and the amount of money that comes in (from the customers). If the former is higher than the latter the business is not profitable.
 
-Even in the case of a shop that has positive results we might want to increase its performances, and to do this chances are that we need to understand its internal structure and what we can change to increase its productivity. This may reveal, for example, that the shop has too many workers, that are underemployed waiting for clients because we overestimated the size of the business. Or it might show that the time taken to serve is too long and many clients walk away without buying anything. Or maybe there are not enough shelves to display goods and the staff carries stock around all day searching for display space so the shop is in a chaos and clients cannot find what they need.
+Even in the case of a shop that has positive results we might want to increase its performances, and to do this chances are that we need to understand its internal structure and what we can change to increase its productivity. This may reveal, for example, that the shop has too many workers, that are underemployed waiting for clients because we overestimated the size of the business. Or it might show that the time taken to serve is too long and many clients walk away without buying anything. Or maybe there are not enough shelves to display goods and the staff carries stock around all day searching for display space so the shop is in chaos and clients cannot find what they need.
 
 At this level, however, workers are pure entities, and still we don't know much about the shop. To better understand the reasons behind a problem we might need to increase the zoom level and look at the workers for what they are, human beings, and start understanding what their needs are and how to help them work better.
 
@@ -66,8 +66,8 @@ The clean architecture concepts are independent from the language, but the imple
 
 ## Acknowledgments
 
-* Eleanor Mary De Veras: proof reading of the introduction.
+* Eleanor De Veras: proofreading of the introduction.
 * Roberto Ciatti: introducing me to clean architectures.
 * Łukasz Dziedzic: "Lato" cover font (http://www.latofonts.com).
 
-The cover photograph has been provided by pxhere (https://pxhere.com/en/photo/760437). A detail of the Sagrada Familia in Barcelona, one of the best works of art of the contemporary world, a bright example of architecture in which every single element has a meaning and a purpose. Praise to Antoni Gaudí, brilliant architect and saint, who will always inspire me with his works and his life.
+The cover photograph is by pxhere (https://pxhere.com/en/photo/760437). A detail of the Sagrada Familia in Barcelona, one of the world's best contemporary artworks, a bright example of architecture in which every single element has a meaning and a purpose. Praise to Antoni Gaudí, brilliant architect and saint, who will always inspire me with his works and his life.
