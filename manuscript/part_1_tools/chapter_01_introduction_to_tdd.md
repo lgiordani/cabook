@@ -83,9 +83,9 @@ and get an output like
 ``` txt
 =============================== test session starts ===============================
 platform linux -- Python 3.6.7, pytest-4.0.1, py-1.7.0, pluggy-0.8.0 --
-/home/leo/devel/cabook/venv3/bin/python3
+cabook/venv3/bin/python3
 cachedir: .cache
-rootdir: /home/leo/devel/cabook/code/calc, inifile: pytest.ini
+rootdir: cabook/code/calc, inifile: pytest.ini
 plugins: cov-2.6.0
 collected 1 items 
 
@@ -165,9 +165,9 @@ Run the test again, and this time you should receive a different error, that is
 ``` txt
 =============================== test session starts ===============================
 platform linux -- Python 3.6.7, pytest-4.0.1, py-1.7.0, pluggy-0.8.0 --
-/home/leo/devel/cabook/venv3/bin/python3
+cabook/venv3/bin/python3
 cachedir: .cache
-rootdir: /home/leo/devel/cabook/code/calc, inifile: pytest.ini
+rootdir: cabook/code/calc, inifile: pytest.ini
 plugins: cov-2.6.0
 collected 1 items 
 
@@ -191,9 +191,9 @@ Since the last one is the first proper pytest failure report that we meet, it's 
 ``` txt
 =============================== test session starts ===============================
 platform linux -- Python 3.6.7, pytest-4.0.1, py-1.7.0, pluggy-0.8.0 --
-/home/leo/devel/cabook/venv3/bin/python3
+cabook/venv3/bin/python3
 cachedir: .cache
-rootdir: /home/leo/devel/cabook/code/calc, inifile: pytest.ini
+rootdir: cabook/code/calc, inifile: pytest.ini
 plugins: cov-2.6.0
 ```
 
