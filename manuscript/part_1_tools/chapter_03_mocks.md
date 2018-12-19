@@ -1,5 +1,9 @@
 # Chapter 3 - Mocks
 
+{icon: quote-right}
+B> _We're gonna get bloody on this one, Rog._
+B> - Lethal Weapon (1987)
+
 ## Basic concepts
 
 As we saw in the previous chapter the relationship between the component that we are testing and other components of the system can be complex. Sometimes idempotency and isolation are not easy to achieve, and testing outgoing commands requires to check the parameters sent to the external component, which is not trivial.

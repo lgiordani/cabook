@@ -1,5 +1,9 @@
 # Chapter 4 - Database repositories
 
+{icon: quote-right}
+B> _Ooooh, I'm very sorry Hans. I didn't get that memo. Maybe you should've put it on the bulletin board._
+B> - Die Hard (1988)
+
 The basic in-memory repository I implemented for the project is enough to show the concept of the repository layer abstraction, and any other type of repository will follow the same idea. In the spirit of providing a simple but realistic solution, however, I believe it is worth reimplementing the repository layer with a proper database.
 
 This gives me the chance to show you one of the big advantages of a clean architecture, namely the simplicity with which you can replace existing components with others, possibly based on a completely different technology.

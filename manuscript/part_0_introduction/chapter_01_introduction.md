@@ -2,9 +2,9 @@
 
 # Introduction
 
-{icon=quote-right}
-B> _“Space,” it says, “is big. Really big. You just won’t believe how vastly hugely mindboggingly big it is.“_
-B> The Hitchhiker’s Guide to the Galaxy
+{icon: quote-right}
+B> _Learn about the Force, Luke._
+B> - Star Wars (1977)
 
 This book is about a software design methodology. A methodology is a set of guidelines that help you reach your goal effectively, thus saving time, implementing far-sighted solutions, and avoiding the need to reinvent the wheel time and again.
 
@@ -25,8 +25,6 @@ I will try as much as possible to give reasons for the proposed solutions, so yo
 Spoiler alert: there is no such a thing.
 
 ## What is a software architecture?
-
-TODO QUOTE architecture
 
 Every production system, be it a software package, a mechanical device, or a simple procedure, is made of components and connections between them. The purpose of the connections is to use the output of some components as inputs of other components, in order to perform a certain action or set of actions.
 
@@ -54,8 +52,6 @@ Remember that an architecture tries to detail how a process is implemented at a 
 
 ## Why is it called "clean" architecture?
 
-TODO QUOTE clean
-
 The architecture explained in this book has many names, but the one that is mainly in use nowadays is "clean architecture". This is the name used by Robert Martin in [his seminal post](http://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html) where he clearly states this structure is not a novelty, but has been promoted by many software designers over the years. I believe the adjective "clean" describes one of the fundamental aspects of both the software structure and the development approach of this architecture. It is clean, that is, it is easy to understand what happens.
 
 The clean architecture is the opposite of spaghetti code, where everything is interlaced and there are no single elements that can be easily detached from the rest and replaced without the whole system collapsing. The main point of the clean architecture is to make clear "what is where and why", and this should be your first concern while you design and implement a software system, whatever architecture or development methodology you want to follow.
@@ -64,8 +60,6 @@ The clean architecture is not the perfect architecture and cannot be applied unt
 
 ## Why Python?
 
-TODO QUOTE snake
-
 I have been working with Python for 20 years, along with other languages, but I came to love its simplicity and power and so I ended up using it on many projects. When I was first introduced to the clean architecture I was working on a Python application that was meant to glue together the steps of a processing chain for satellite imagery, so my journey with the concepts I will explain started with this language.
 
 I will therefore speak of Python in this book, but the main concepts are valid for any other language, especially object-oriented ones. I will not introduce Python here, so a minimal knowledge of the language syntax is needed to understand the examples and the projects I will discuss.
@@ -73,8 +67,6 @@ I will therefore speak of Python in this book, but the main concepts are valid f
 The clean architecture concepts are independent from the language, but the implementation obviously leverages what a specific language allows you to do, so this book is about the clean architecture and an implementation of it that I devised using Python. I really look forward to seeing more books about the clean architecture that explore other implementations in Python and in other languages.
 
 ## Acknowledgments
-
-TODO QUOTE acknowledgments
 
 * Eleanor de Veras: proofreading of the introduction.
 * Roberto Ciatti: introducing me to clean architectures.

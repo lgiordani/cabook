@@ -1,5 +1,9 @@
 # Chapter 3 - Error management
 
+{icon: quote-right}
+B> _You sent them out there and you didn't even warn them! Why didn't you warn them, Burke?_
+B> - Aliens (1986)
+
 ## Introduction
 
 In every software project, a great part of the code is dedicated to error management, and this code has to be rock solid. Error management is a complex topic, and there is always a corner case that we left out, or a condition that we supposed could never fail, while it does.

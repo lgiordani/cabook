@@ -1,5 +1,9 @@
 # Chapter 1 - Introduction to TDD
 
+{icon: quote-right}
+B> _Why worry? Each one of us is wearing an unlicensed nuclear accelerator on his back._
+B> - Ghostbusters (1984)
+
 ## Introduction
 
 "Test-Driven Development" (TDD) is fortunately one of the names that I can spot most frequently when people talk about methodologies. Unfortunately, many programmers still do not follow it, fearing that it will impose a further burden on the already difficult life of the developer.
@@ -664,7 +668,7 @@ So, after this considerations, we can be happy that the second test already pass
 T> **TDD rule number 5**
 T> A test should fail the first time you run it. If it doesn't, ask yourself why you are adding it.
 
-## Step 6 - A first example of refactoring
+## Step 6 - Refactoring
 
 Previously, I introduced the concept of refactoring, which means changing the code without altering the results. How can you be sure you are not altering the behaviour of your code? Well, this is what the tests are for. If the new code keeps passing the test suite you can be sure that you didn't remove any feature[^refactoring].
 

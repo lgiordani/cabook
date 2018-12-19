@@ -1,5 +1,9 @@
 # Chapter 2 - On unit testing
 
+{icon: quote-right}
+B> _Describe in single words, only the good things that come into your mind about your mother._
+B> - Blade Runner (1982)
+
 ## Introduction
 
 What I introduced in the previous chapter is commonly called "unit testing", since it focuses on testing a single and very small unit of code. As simple as it may seem, the TDD process has some caveats that are worth being discussed. In this chapter I discuss some aspects of TDD and unit testing that I consider extremely important.

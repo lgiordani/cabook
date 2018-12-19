@@ -1,5 +1,10 @@
 # Chapter 2 - A basic example
 
+{icon: quote-right}
+B> _Joshua/WOPR: Wouldn't you prefer a good game of chess?
+B> _David: Later. Let's play Global Thermonuclear War.__
+B> - Wargames (1983)
+
 ## Project overview
 
 The goal of the "Rent-o-matic" project (fans of "Day of the Tentacle" may get the reference) is to create a simple search engine on top of a dataset of objects which are described by some quantities. The search engine shall allow to set some filters to narrow the search.

@@ -1,5 +1,9 @@
 # Chapter 1 - Components of a clean architecture
 
+{icon: quote-right}
+B> _Wait a minute. Wait a minute Doc, uh, are you telling me you built a time machine... out of a DeLorean?_
+B> - Back to the Future (1985)
+
 ## Layers and data flow
 
 A clean architecture is a layered architecture, which means that the various elements of your system are categorised and have a specific place where to be, according to the category you assigned them. A clean architecture is also a spherical architecture, with inner (lower) layers completely encompassed by outer (higher) ones, and the former ones being oblivious of the existence of the latter ones.
